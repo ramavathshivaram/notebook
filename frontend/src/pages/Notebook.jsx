@@ -10,13 +10,14 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "../components/ui/resizable";
+import usePageStore from '../store/usePageStore'
 
 const Notebook = () => {
   const navigate = useNavigate();
   const user = useUserStore((s) => s.user);
+  const currentPage=usePageStore(s=>s.currentPage)
   console.log(user)
-  const { sections } = user;
-  const [currentPage, setCurrentPage] = useState(null);
+  const { section } = user;
   return (
     <div className="h-screen flex flex-col bg-background">
       {/* Header */}
@@ -32,10 +33,8 @@ const Notebook = () => {
       <div className="flex flex-1 overflow-hidden">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel>
-            {" "}
             <NotebookSidebar
-              sections_d={sections}
-              setCurrentPage={setCurrentPage}
+              sections_d={section}
             />
           </ResizablePanel>
           <ResizableHandle />

@@ -58,7 +58,7 @@ export const getSections = async () => {
 };
 export const getPage = async (pageId) => {
   const res = await API.get(`/page/${pageId}`);
-  console.log(res)
+  console.log("get-s",res)
   return res.data.page;
 };
 
@@ -70,6 +70,6 @@ export const updatePage = async (pageId, data) => {
 };
 
 export const renameSection = async (sectionId, title) => {
-  const res = await API.put(`/rename-sections/${sectionId}`, { title });
+  const res = await API.patch(`/rename-sections/${sectionId}`, { title });
   return res.data.section;
 };

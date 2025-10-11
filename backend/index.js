@@ -25,7 +25,7 @@ app.post("/create-section", createSection);
 
 app.get("/sections", getSections);
 
-router.put("/rename-sections/:sectionId", renameSection);
+app.patch("/rename-sections/:sectionId", renameSection);
 
 app.post("/create-page", createPage);
 
