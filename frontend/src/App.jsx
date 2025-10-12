@@ -3,22 +3,24 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import Auth from "./pages/Auth";
 import Notebook from "./pages/Notebook";
-import NotFound from './pages/NotFound'
+import NotFound from "./pages/NotFound";
 import ProjectDocs from "./pages/ProjectDocs";
 import { Toaster } from "sonner";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />}></Route>
-        <Route path="/notebook" element={<Notebook />} />
-        <Route path="/auth" element={<Auth />}></Route>
-        <Route path="/docs" element={<ProjectDocs />}></Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Toaster position="top-right" richColors duration={4000} />
-    </BrowserRouter>
+    <div className="select-none">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />}></Route>
+          <Route path="/notebook" element={<Notebook />} />
+          <Route path="/auth" element={<Auth />}></Route>
+          <Route path="/docs" element={<ProjectDocs />}></Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Toaster position="top-right" richColors duration={2000} />
+      </BrowserRouter>
+    </div>
   );
 };
 
