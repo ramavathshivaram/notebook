@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Home, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import NotebookSidebar from "@/components/NotebookSidebar";
 import NoteEditor from "@/components/NoteEditor";
@@ -11,49 +10,32 @@ import {
   ResizableHandle,
 } from "../components/ui/resizable";
 import usePageStore from "../store/usePageStore";
+import EmptyState from "../components/EmptyState";
+import Header from "../components/Header";
 
 const Notebook = () => {
   const navigate = useNavigate();
   const user = useUserStore((s) => s.user);
   const clearUser = useUserStore((s) => s.clearUser);
   const currentPage = usePageStore((s) => s.currentPage);
-  console.log(user);
+  if (!user) navigate("/auth");
   const { section } = user;
   return (
     <div className="h-screen flex flex-col bg-background">
       {/* Header */}
-      <header className="border-b border-border p-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold" onClick={() => navigate("/")}>
-          OneNote
-        </h1>
-        <Button
-          size="sm"
-          onClick={() => {
-            clearUser();
-            localStorage.removeItem("token");
-            navigate("/auth");
-          }}
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          logout
-        </Button>
-      </header>
 
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel>
-          <NotebookSidebar sections_d={section} />
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel>
-          {currentPage ? (
-            <NoteEditor pageId={currentPage} />
-          ) : (
-            <div className="flex-1 flex items-center justify-center text-muted-foreground">
-              Select a page to start writing
-            </div>
-          )}
-        </ResizablePanel>
-      </ResizablePanelGroup>
+      <Header clearUser={clearUser} />
+      <div className="max-w-6xl mx-auto w-full border shadow-md h-full">
+        <ResizablePanelGroup direction="horizontal">
+          <ResizablePanel defaultSize={30} minSize={20} maxSize={40}>
+            <NotebookSidebar sections_d={section} />
+          </ResizablePanel>
+          <ResizableHandle />
+          <ResizablePanel defaultSize={70} minSize={60} maxSize={80}>
+            {currentPage ? <NoteEditor pageId={currentPage} /> : <EmptyState />}
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
     </div>
   );
 };
