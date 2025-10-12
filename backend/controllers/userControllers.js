@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const Section = require("../models/sectionModel");
 const Page = require("../models/pageModel");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 const generateToken = (id) => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET_KEY, {
@@ -53,12 +54,12 @@ const createSection = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log(user)
+    console.log(user);
     const section = await Section.create({
       title: req.body.title || "New Section",
       user: userId,
     });
-    console.log("sec",section)
+    console.log("sec", section);
 
     user.sections.push(section._id);
     await user.save(); // save updated user
@@ -68,7 +69,6 @@ const createSection = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const getSections = async (req, res) => {
   try {
@@ -119,7 +119,6 @@ const renameSection = async (req, res) => {
   }
 };
 
-
 const createPage = async (req, res) => {
   try {
     const userId = req.user.id; // authenticated user
@@ -133,6 +132,7 @@ const createPage = async (req, res) => {
     const page = await Page.create({
       title: title || "New Page",
       user: userId,
+      section: sectionId,
     });
 
     // Find section and add page
@@ -194,6 +194,100 @@ const updatePage = async (req, res) => {
   }
 };
 
+const deleteSection = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const { sectionId } = req.params;
+    const userId = req.user.id; // from auth middleware
+
+    // 1️⃣ Check if section exists
+    const section = await Section.findById(sectionId).session(session);
+    if (!section) {
+      await session.abortTransaction();
+      return res.status(404).json({ message: "Section not found" });
+    }
+
+    // 2️⃣ Verify ownership
+    if (section.user.toString() !== userId) {
+      await session.abortTransaction();
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to delete this section" });
+    }
+
+    // 3️⃣ Remove section reference from User
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { sections: sectionId } },
+      { session }
+    );
+
+    // 4️⃣ Delete related pages
+    await Page.deleteMany({ section: sectionId }).session(session);
+
+    // 5️⃣ Delete the section itself
+    await Section.findByIdAndDelete(sectionId).session(session);
+
+    // ✅ Commit transaction
+    await session.commitTransaction();
+    session.endSession();
+
+    res.json({ message: "Section and related pages deleted successfully" });
+  } catch (error) {
+    console.error("❌ Transaction Error:", error);
+    await session.abortTransaction();
+    session.endSession();
+    res.status(500).json({ message: "Server error while deleting section" });
+  }
+};
+
+const deletePage = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const { sectionId, pageId } = req.params;
+    const userId = req.user.id; // from auth middleware
+
+    // 1️⃣ Verify section exists and belongs to the user
+    const section = await Section.findById(sectionId).session(session);
+    if (!section) {
+      await session.abortTransaction();
+      return res.status(404).json({ message: "Section not found" });
+    }
+
+    if (section.user.toString() !== userId) {
+      await session.abortTransaction();
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to delete this page" });
+    }
+
+    // 2️⃣ Remove page reference from the section
+    await Section.findByIdAndUpdate(
+      sectionId,
+      { $pull: { pages: pageId } },
+      { session }
+    );
+
+    // 3️⃣ Delete the page document
+    await Page.findByIdAndDelete(pageId).session(session);
+
+    // ✅ Commit if all succeeded
+    await session.commitTransaction();
+    session.endSession();
+
+    res.json({ message: "Page deleted successfully" });
+  } catch (error) {
+    console.error("❌ Transaction Error:", error);
+    await session.abortTransaction();
+    session.endSession();
+    res.status(500).json({ message: "Server error while deleting page" });
+  }
+};
+
 module.exports = {
   auth,
   createSection,
@@ -202,4 +296,6 @@ module.exports = {
   updatePage,
   getSections,
   renameSection,
+  deleteSection,
+  deletePage,
 };

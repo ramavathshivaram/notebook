@@ -39,14 +39,14 @@ export const auth_api = async (formData) => {
 
 export const createSection = async (title) => {
   const res = await API.post("/create-section", { title });
-  console.log(res)
+  console.log(res);
   return res.data;
 };
 
 // Page
 export const createPage = async (sectionId, title) => {
   const res = await API.post("/create-page", { sectionId, title });
-  console.log(res)
+  console.log(res);
   return res.data;
 };
 
@@ -58,18 +58,27 @@ export const getSections = async () => {
 };
 export const getPage = async (pageId) => {
   const res = await API.get(`/page/${pageId}`);
-  console.log("get-s",res)
+  console.log("get-s", res);
   return res.data.page;
 };
 
 // Update Page
 export const updatePage = async (pageId, data) => {
   const res = await API.put(`/page/${pageId}`, data);
-  console.log(res)
+  console.log(res);
   return res.data;
 };
 
 export const renameSection = async (sectionId, title) => {
   const res = await API.patch(`/rename-sections/${sectionId}`, { title });
   return res.data.section;
+};
+
+export const deleteSection = async (sectionId) => {
+  const res = await API.delete(`/sections/${sectionId}`);
+  return res.data;
+};
+export const deletePage = async (sectionId, pageId) => {
+  const res = await API.delete(`/pages/${sectionId}/${pageId}`);
+  return res.data;
 };
