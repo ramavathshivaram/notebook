@@ -1,25 +1,15 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-const usePageStore = create(
-  persist(
-    (set) => ({
-      currentPage: null,
-      setCurrentPage: (page) =>
-        set({
-          currentPage: page,
-        }),
-
-      clearCurrentPage: () =>
-        set({
-          currentPage: null,
-        }),
+const usePageStore = create((set) => ({
+  currentPage: null,
+  setCurrentPage: (page) =>
+    set({
+      currentPage: page,
     }),
-    {
-      name: "current-page-storage", // localStorage key
-      getStorage: () => localStorage, // optional, defaults to localStorage
-    }
-  )
-);
+  clearCurrentPage: () =>
+    set({
+      currentPage: null,
+    }),
+}));
 
 export default usePageStore;
