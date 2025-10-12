@@ -12,7 +12,11 @@ const NoteEditor = ({ pageId }) => {
     data: page,
     isLoading,
     error,
-  } = useQuery({ queryKey: ["page", pageId], queryFn: () => getPage(pageId) });
+  } = useQuery({
+    queryKey: ["page", pageId],
+    queryFn: () => getPage(pageId),
+    enabled: !!pageId,
+  });
 
   const { mutate: updatePageMutate } = useMutation({
     mutationFn: ({ pageId, updatedData }) => updatePage(pageId, updatedData),
