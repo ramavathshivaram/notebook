@@ -15,8 +15,23 @@ const AddSection = () => {
       setNewSectionTitle("");
       setAddingSection(false);
     },
-    onError: (err) => {
+    onMutate: async (title) => {
+      setNewSectionTitle("");
+      setAddingSection(false);
+      await queryClient.cancelQueries(["sections"]);
+      const previous = queryClient.getQueryData(["sections"]);
+      queryClient.setQueryData(["sections"], (old) => [
+        ...(old || []),
+        { title, id: Date.now() },
+      ]);
+      return { previous };
+    },
+    onError: (err, title, context) => {
+      queryClient.setQueryData(["sections"], context.previous);
       console.error("❌ Error creating section:", err);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["sections"]);
     },
   });
   const [addingSection, setAddingSection] = useState(false);
