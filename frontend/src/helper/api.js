@@ -21,7 +21,6 @@ API.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       localStorage.removeItem("user-storage");
-      localStorage.removeItem("current-page-storage");
       window.location.href = "/auth";
       toast.error("Session expired. Please log in again.");
     }

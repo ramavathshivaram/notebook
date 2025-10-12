@@ -18,6 +18,7 @@ const Page = ({ page, sectionId }) => {
       queryClient.invalidateQueries(["sections"]);
     },
     onMutate: async ({ sectionId, pageId }) => {
+      if (currentPage === pageId) setCurrentPage(null);
       const previousSections = queryClient.getQueryData(["sections"]);
       queryClient.setQueryData(["sections"], (old) =>
         old?.map((sec) =>
