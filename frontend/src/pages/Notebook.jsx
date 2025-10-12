@@ -17,7 +17,7 @@ const Notebook = () => {
   const clearUser = useUserStore((s) => s.clearUser);
   const currentPage = usePageStore((s) => s.currentPage);
   if (!user) navigate("/auth");
-  const { section } = user;
+  const section = user?.section;
   return (
     <div className="h-screen flex flex-col bg-background">
       {/* Header */}
