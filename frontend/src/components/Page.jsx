@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button";
 import { FileText, Trash2 } from "lucide-react";
 import { deletePage } from "../helper/api";
 import usePageStore from "../store/usePageStore";
+import {  motion } from "framer-motion";
 
 const Page = ({ page, sectionId }) => {
   const queryClient = useQueryClient();
@@ -41,7 +42,13 @@ const Page = ({ page, sectionId }) => {
   };
 
   return (
-    <div className="flex items-center mx-4 group">
+    <motion.div
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      exit={{ scale: 0 }}
+      transition={{duration:0.2}}
+      className="flex items-center mx-4 group"
+    >
       <Button
         variant="ghost"
         className="w-full justify-start text-sm mb-1 transition-all hover:translate-x-1"
@@ -66,7 +73,7 @@ const Page = ({ page, sectionId }) => {
       >
         <Trash2 className="w-3 h-3 text-red-500" />
       </Button>
-    </div>
+    </motion.div>
   );
 };
 

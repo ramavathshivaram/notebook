@@ -20,8 +20,6 @@ const Notebook = () => {
   const section = user?.section;
   return (
     <div className="h-screen flex flex-col bg-background">
-      {/* Header */}
-
       <Header clearUser={clearUser} />
       <div className="max-w-6xl mx-auto w-full border shadow-md h-full">
         <ResizablePanelGroup direction="horizontal">

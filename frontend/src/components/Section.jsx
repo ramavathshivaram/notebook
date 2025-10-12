@@ -91,7 +91,12 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
   };
 
   return (
-    <div className="mb-2 mr-5">
+    <motion.div
+      className="mb-2 mr-5"
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      exit={{ scale: 0 }}
+    >
       <div className="flex items-center px-2 group">
         <Button
           variant="ghost"
@@ -165,7 +170,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
             {/* 🔹 Add Page */}
             <Button
               size="sm"
-              className="w-full max-w-50 justify-start text-xs ml-7"
+              className="w-30 justify-start text-xs ml-7"
               onClick={() => handleAddPage(section._id)}
             >
               <Plus className="w-3 h-3 mr-2" />
@@ -174,7 +179,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 

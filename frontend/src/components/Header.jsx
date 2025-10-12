@@ -19,7 +19,7 @@ const Header = ({ clearUser }) => {
         <motion.h1
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 150 }}
-          className="text-2xl font-bold"
+          className="text-2xl font-bold animate-pulse"
         >
           OneNote
         </motion.h1>
