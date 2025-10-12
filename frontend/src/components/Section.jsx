@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Book, Trash2, Plus } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { renameSection, createPage, deleteSection } from "../helper/api";
@@ -148,24 +148,32 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
           <Trash2 className="w-4 h-4 text-red-500" />
         </Button>
       </div>
-
-      {isExpanded === section._id && (
-        <div className="pl-6">
-          {/* 🔹 Pages */}
-          {section.pages?.map((page) => (
-            <Page key={page._id} page={page} sectionId={section._id} />
-          ))}
-          {/* 🔹 Add Page */}
-          <Button
-            size="sm"
-            className="w-full max-w-50 justify-start text-xs ml-4 mt-1"
-            onClick={() => handleAddPage(section._id)}
+      <AnimatePresence mode="wait">
+        {isExpanded === section._id && (
+          <motion.div
+            className="pl-6"
+            layout
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
           >
-            <Plus className="w-3 h-3 mr-2" />
-            Add Page
-          </Button>
-        </div>
-      )}
+            {/* 🔹 Pages */}
+            {section.pages?.map((page) => (
+              <Page key={page._id} page={page} sectionId={section._id} />
+            ))}
+            {/* 🔹 Add Page */}
+            <Button
+              size="sm"
+              className="w-full max-w-50 justify-start text-xs ml-7"
+              onClick={() => handleAddPage(section._id)}
+            >
+              <Plus className="w-3 h-3 mr-2" />
+              Add Page
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
