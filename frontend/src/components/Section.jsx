@@ -14,7 +14,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
   const setCurrentPage = usePageStore((s) => s.setCurrentPage);
   const [editingSectionId, setEditingSectionId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
-  const isSectionSelected = section.pages.some(
+  const isSectionSelected = section?.pages?.some(
     (page) => page._id === currentPage
   );
 
