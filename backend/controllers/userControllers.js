@@ -158,10 +158,11 @@ const createPage = async (req, res) => {
 const getPage = async (req, res) => {
   try {
     const { pageId } = req.params;
+    const userId = req.user.id;
 
     const page = await Page.findById(pageId);
 
-    if (!page) {
+    if (!page || page.user != userId) {
       return res.status(404).json({ message: "Page not found" });
     }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
-import Auth from "./pages/auth";
+import Auth from "./pages/Auth";
 import Notebook from "./pages/Notebook";
 import NotFound from './pages/NotFound'
 import ProjectDocs from "./pages/ProjectDocs";
