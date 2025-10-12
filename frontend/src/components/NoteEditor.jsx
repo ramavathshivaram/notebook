@@ -2,14 +2,27 @@ import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getPage, updatePage } from "../helper/api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const NoteEditor = ({ pageId }) => {
+  const queryClient = useQueryClient();
   const {
     data: page,
     isLoading,
     error,
-  } = useQuery(["page", pageId], () => getPage(pageId));
+  } = useQuery({ queryKey: ["page", pageId], queryFn: () => getPage(pageId) });
+
+  const { mutate: updatePageMutate } = useMutation({
+    mutationFn: ({ pageId, updatedData }) => updatePage(pageId, updatedData),
+    onSuccess: () => {
+      // Refetch the sections or specific page if cached
+      queryClient.invalidateQueries(["sections"]);
+      queryClient.invalidateQueries(["page", pageId]);
+    },
+    onError: (error) => {
+      console.error("❌ Error updating page:", error);
+    },
+  });
 
   const [localTitle, setLocalTitle] = useState("");
   const [localContent, setLocalContent] = useState("");
@@ -22,14 +35,20 @@ const NoteEditor = ({ pageId }) => {
     }
   }, [page]);
 
-  const handleTitleBlur = async () => {
-    if (!page) return;
-    await updatePage(pageId, { title: localTitle, content: localContent });
+  const handleTitleBlur = () => {
+    if (!page || page.title == localTitle) return;
+    updatePageMutate({
+      pageId,
+      updatedData: { title: localTitle, content: localContent },
+    });
   };
 
-  const handleContentBlur = async () => {
-    if (!page) return;
-    await updatePage(pageId, { title: localTitle, content: localContent });
+  const handleContentBlur = () => {
+    if (!page || page.content == localContent) return;
+    updatePageMutate({
+      pageId,
+      updatedData: { title: localTitle, content: localContent },
+    });
   };
 
   useEffect(() => {
@@ -51,7 +70,7 @@ const NoteEditor = ({ pageId }) => {
           onChange={(e) => setLocalTitle(e.target.value)}
           onBlur={handleTitleBlur}
           placeholder="Page Title"
-          className="text-3xl font-bold border-0 bg-transparent px-0 mb-4 focus-visible:ring-0"
+          className="text-2xl font-bold border-0 bg-transparent px-2 mb-4 focus-visible:ring-0"
         />
         <Textarea
           ref={textareaRef}

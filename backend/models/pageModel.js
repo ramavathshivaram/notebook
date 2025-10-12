@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const pageSchema = new mongoose.Schema(
   {
@@ -15,9 +15,13 @@ const pageSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    section: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Section",
+    },
   },
   { timestamps: true }
 );
 
 const Page = mongoose.model("Page", pageSchema);
-export default Page;
+module.exports = Page;

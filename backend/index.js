@@ -10,6 +10,8 @@ const {
   updatePage,
   getSections,
   renameSection,
+  deleteSection,
+  deletePage,
 } = require("./controllers/userControllers");
 const protect = require("./middlewares/authMiddleware");
 
@@ -25,6 +27,8 @@ app.post("/create-section", createSection);
 
 app.get("/sections", getSections);
 
+app.delete("/sections/:sectionId", deleteSection);
+
 app.patch("/rename-sections/:sectionId", renameSection);
 
 app.post("/create-page", createPage);
@@ -32,6 +36,8 @@ app.post("/create-page", createPage);
 app.get("/page/:pageId", getPage);
 
 app.put("/page/:pageId", updatePage);
+
+app.delete("/pages/:sectionId/:pageId", deletePage);
 
 const PORT = process.env.PORT || 3000;
 

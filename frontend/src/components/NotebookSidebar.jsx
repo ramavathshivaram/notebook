@@ -42,8 +42,8 @@ const NotebookSidebar = ({ sections_d }) => {
               <Section
                 key={section._id}
                 section={section}
-                is_expanded={isExpanded}
-                set_is_expanded={setIsExpanded}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
               />
             ))
           )}
