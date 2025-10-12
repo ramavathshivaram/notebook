@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "sonner";
 
-const URL = "http://localhost:3000";
+const URL = "https://notebook-oe5t.onrender.com";
 
 const API = axios.create({
   baseURL: URL,
