@@ -7,25 +7,6 @@ import PhysicsHero from "../components/PhysicsHero";
 const LandingPage = () => {
   const navigate = useNavigate();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
-  };
-
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden relative">
       {/* Physics Background */}
@@ -96,7 +77,7 @@ const LandingPage = () => {
             >
               <Button
                 size="lg"
-                onClick={() => navigate("/auth")}
+                onClick={() => navigate("/notebook")}
                 className="text-lg px-8 py-6 pointer-events-auto group"
               >
                 Start Writing
@@ -111,6 +92,7 @@ const LandingPage = () => {
               <Button
                 size="lg"
                 variant="outline"
+                onClick={() => navigate("/docs")}
                 className="text-lg px-8 py-6 pointer-events-auto backdrop-blur-sm"
               >
                 Learn More

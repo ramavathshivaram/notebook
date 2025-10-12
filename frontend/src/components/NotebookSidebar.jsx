@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ScrollArea } from "../components/ui/scroll-area";
-import { Book } from "lucide-react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { getSections } from "../helper/api";
 import AddSection from "./AddSection";
 import Section from "../components/Section";
+import NoSectionsFound from "./NoSectionsFound";
+import ListSkeleton from "../skeletons/ListSkeleton";
+import ErrorMessage from "./ErrorMessage";
 
 const NotebookSidebar = ({ sections_d }) => {
   const [isExpanded, setIsExpanded] = useState("hello");
@@ -18,25 +20,18 @@ const NotebookSidebar = ({ sections_d }) => {
     queryKey: ["sections"],
     queryFn: () => getSections(),
     initialData: sections_d,
+    staleTime: 5 * 60 * 1000,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading sections</div>;
-  console.log("sec", sections);
+  if (isLoading) return <ListSkeleton />;
+  if (error) return <ErrorMessage />;
   return (
-    <div className="w-full  border-border bg-card h-full flex flex-col">
+    <div className="w-full  bg-card h-full flex flex-col">
       <AddSection />
       <ScrollArea className="flex-1">
         <div className="p-2">
           {sections.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center text-muted-foreground mt-10"
-            >
-              <Book className="mx-auto mb-2 w-8 h-8" />
-              <p>No notebooks yet</p>
-            </motion.div>
+            <NoSectionsFound />
           ) : (
             sections.map((section) => (
               <Section

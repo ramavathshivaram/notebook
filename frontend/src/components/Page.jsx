@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
 import { FileText, Trash2 } from "lucide-react";
@@ -16,6 +16,22 @@ const Page = ({ page, sectionId }) => {
     mutationFn: ({ sectionId, pageId }) => deletePage(sectionId, pageId),
     onSuccess: () => {
       queryClient.invalidateQueries(["sections"]);
+    },
+    onMutate: async ({ sectionId, pageId }) => {
+      const previousSections = queryClient.getQueryData(["sections"]);
+      queryClient.setQueryData(["sections"], (old) =>
+        old?.map((sec) =>
+          sec._id === sectionId
+            ? { ...sec, pages: sec.pages.filter((p) => p._id !== pageId) }
+            : sec
+        )
+      );
+      return { previousSections };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousSections) {
+        queryClient.setQueryData(["sections"], context.previousSections);
+      }
     },
   });
 

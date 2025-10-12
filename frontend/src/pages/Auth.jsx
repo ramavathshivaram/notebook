@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { auth_api } from "../helper/api";
 import useUserStore from "@/store/userStore";
+import PhysicsHero from "../components/PhysicsHero";
 
 // ✅ Schema
 const loginSchema = z.object({
@@ -31,6 +32,7 @@ const Auth = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [errorShake, setErrorShake] = useState(false);
+
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -60,6 +62,15 @@ const Auth = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
+      <div className="absolute inset-0 pointer-events-none">
+        <PhysicsHero />
+      </div>
+
+      {/* Gradient Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background/80 pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-foreground/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-foreground/5 rounded-full blur-3xl pointer-events-none" />
+
       <motion.div
         animate={errorShake ? { x: [-10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.4 }}
