@@ -5,9 +5,12 @@ import { getPage, updatePage } from "../helper/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import NoteEditorSkeleton from "../skeletons/NoteEditorSkeleton";
 import ErrorMessage from "../components/ErrorMessage";
+import usePageStore from "../store/usePageStore";
 
 const NoteEditor = ({ pageId }) => {
   const queryClient = useQueryClient();
+  const initialLoad = usePageStore((s) => s.initialLoad);
+  const clearInitialLoad= usePageStore((s) => s.clearInitialLoad);
   const {
     data: page,
     isLoading,
@@ -15,7 +18,7 @@ const NoteEditor = ({ pageId }) => {
   } = useQuery({
     queryKey: ["page", pageId],
     queryFn: () => getPage(pageId),
-    enabled: !!pageId,
+    enabled: initialLoad,
   });
 
   const { mutate: updatePageMutate } = useMutation({

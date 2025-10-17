@@ -14,16 +14,26 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: 6,
     },
-    // Reference to sections
     sections: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Section",
       },
     ],
+    forgotPasswordOTP: {
+      type: Number,
+      default: null,
+    },
+    forgotPasswordOTPExpiry: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );
+
+userSchema.index({ email: 1 });
+userSchema.index({ sections: 1 });
 
 // 🔒 Hash password before saving
 userSchema.pre("save", async function (next) {

@@ -33,7 +33,6 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorShake, setErrorShake] = useState(false);
 
-
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
