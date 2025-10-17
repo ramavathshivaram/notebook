@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
+const { v4: uuid } = require("uuid");
 
 const sectionSchema = new mongoose.Schema(
   {
+    _id: {
+      type: String,
+      default: () => uuid(),
+    },
     title: {
       type: String,
       required: true,
@@ -13,13 +18,16 @@ const sectionSchema = new mongoose.Schema(
     },
     pages: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Page",
       },
     ],
   },
   { timestamps: true }
 );
+
+sectionSchema.index({ user: 1 });
+sectionSchema.index({ pages: 1 });
 
 const Section = mongoose.model("Section", sectionSchema);
 module.exports = Section;

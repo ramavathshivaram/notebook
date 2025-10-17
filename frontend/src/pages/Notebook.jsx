@@ -24,6 +24,7 @@ const Notebook = () => {
       <div className="max-w-6xl mx-auto w-full border shadow-md h-full">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={30} minSize={20} maxSize={40}>
+            
             <NotebookSidebar sections_d={section} />
           </ResizablePanel>
           <ResizableHandle />

@@ -4,43 +4,38 @@ const cors = require("cors");
 const connectDB = require("./config/mongo");
 const {
   auth,
-  createSection,
-  createPage,
-  getPage,
-  updatePage,
-  getSections,
-  renameSection,
-  deleteSection,
-  deletePage,
+  sendOTP,
+  verifyOTP,
+  resetPassword,
 } = require("./controllers/userControllers");
 const protect = require("./middlewares/authMiddleware");
+const section_routes = require("./routes/sectionRoutes");
+const page_routes = require("./routes/pageRoutes");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.post("/auth", auth);
+app.post("/api/auth", auth);
+app.post("api/forgot-password/send-otp", sendOTP);
+app.post("api/forgot-password/verify-otp", verifyOTP);
+app.post("api/forgot-password/reset", resetPassword);
+
 
 app.use(protect);
 
-app.post("/create-section", createSection);
-
-app.get("/sections", getSections);
-
-app.delete("/sections/:sectionId", deleteSection);
-
-app.patch("/rename-sections/:sectionId", renameSection);
-
-app.post("/create-page", createPage);
-
-app.get("/page/:pageId", getPage);
-
-app.put("/page/:pageId", updatePage);
-
-app.delete("/pages/:sectionId/:pageId", deletePage);
+app.use("/api/section", section_routes);
+app.use("/api/page", page_routes);
 
 const PORT = process.env.PORT || 3000;
 
-connectDB().then(() => {
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  } catch (error) {
+    console.error("Failed to connect to DB", error);
+  }
+};
+
+startServer();
