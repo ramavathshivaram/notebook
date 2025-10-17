@@ -6,6 +6,7 @@ import { ChevronRight, Book, Trash2, Plus } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { renameSection, createPage, deleteSection } from "../helper/api";
 import Page from "./Page";
+import { v4 as uuid } from "uuid";
 import usePageStore from "../store/usePageStore";
 
 const Section = ({ section, isExpanded, setIsExpanded }) => {
@@ -37,25 +38,27 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
   });
 
   const { mutate: addPageMutate } = useMutation({
-    mutationFn: ({ sectionId, title }) => createPage(sectionId, title),
+    mutationFn: (page) => createPage(page),
     onSuccess: () => {
       queryClient.invalidateQueries(["sections"]);
     },
-    onMutate: async ({ sectionId, title }) => {
+    onMutate: async ({ sectionId, title, pageId }) => {
       const previousSections = queryClient.getQueryData(["sections"]);
       queryClient.setQueryData(["sections"], (old) =>
         old.map((sec) =>
           sec._id === sectionId
             ? {
                 ...sec,
-                pages: [...sec.pages, { _id: "temp-" + Date.now(), title }],
+                pages: [...sec.pages, { _id: pageId, title, sectionId }],
               }
             : sec
         )
       );
+      setCurrentPage(pageId, false);
       return { previousSections };
     },
     onError: (err, variables, context) => {
+      setCurrentPage(null);
       queryClient.setQueryData(["sections"], context.previousSections);
     },
   });
@@ -83,7 +86,12 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
     },
   });
   const handleAddPage = (sectionId) => {
-    addPageMutate({ sectionId, title: "New Page" });
+    const pageId = uuid();
+    addPageMutate({
+      sectionId,
+      title: `New Page ${section.pages.length + 1}`,
+      pageId,
+    });
   };
 
   const handleDeleteSection = (sectionId) => {
@@ -96,6 +104,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       exit={{ scale: 0 }}
+      key={section._id}
     >
       <div className="flex items-center px-2 group">
         <Button

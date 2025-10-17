@@ -5,6 +5,7 @@ import Auth from "./pages/Auth";
 import Notebook from "./pages/Notebook";
 import NotFound from "./pages/NotFound";
 import ProjectDocs from "./pages/ProjectDocs";
+import ForgotPassword from "./pages/ForgotPassword";
 import { Toaster } from "sonner";
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/notebook" element={<Notebook />} />
           <Route path="/auth" element={<Auth />}></Route>
           <Route path="/docs" element={<ProjectDocs />}></Route>
+          <Route path="/forgot-password" element={<ForgotPassword />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster position="top-right" richColors duration={2000} />

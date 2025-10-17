@@ -3,30 +3,31 @@ import { createSection } from "../helper/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
+import { v4 as uuid } from "uuid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const AddSection = () => {
   const queryClient = useQueryClient();
 
   const { mutate: addSection, isPending } = useMutation({
-    mutationFn: (title) => createSection(title),
+    mutationFn: (section) => createSection(section),
     onSuccess: () => {
       queryClient.invalidateQueries(["sections"]); // refresh section list
       setNewSectionTitle("");
       setAddingSection(false);
     },
-    onMutate: async (title) => {
+    onMutate: async ({ sectionId, title }) => {
       setNewSectionTitle("");
       setAddingSection(false);
       await queryClient.cancelQueries(["sections"]);
       const previous = queryClient.getQueryData(["sections"]);
       queryClient.setQueryData(["sections"], (old) => [
         ...(old || []),
-        { title, id: Date.now() },
+        { _id: sectionId, title },
       ]);
       return { previous };
     },
-    onError: (err, title, context) => {
+    onError: (err, section, context) => {
       queryClient.setQueryData(["sections"], context.previous);
       console.error("❌ Error creating section:", err);
     },
@@ -38,11 +39,13 @@ const AddSection = () => {
   const [newSectionTitle, setNewSectionTitle] = useState("");
   const handleAddSection = () => {
     if (!newSectionTitle.trim()) return;
-    addSection(newSectionTitle); // use mutate
+    const sectionId = uuid();
+    addSection({ sectionId, title: newSectionTitle }); // use mutate
   };
 
   useEffect(() => {
     const handleKey = (e) => {
+      if (addingSection) return;
       if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "s") {
         setAddingSection(true);
       }
