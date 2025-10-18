@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTP Verification</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        background-color: #ffffff;
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .logo {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .logo img {
+        width: 60px;
+        height: 60px;
+      }
+      h2 {
+        color: #333;
+        text-align: center;
+      }
+      p {
+        color: #555;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .otp {
+        text-align: center;
+        font-size: 28px;
+        letter-spacing: 5px;
+        font-weight: bold;
+        color: #2a9d8f;
+        margin: 20px 0;
+      }
+      .button {
+        display: block;
+        text-align: center;
+        margin: 25px 0;
+      }
+      .btn {
+        background-color: #2a9d8f;
+        color: #ffffff;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+      .btn:hover {
+        background-color: #21867a;
+      }
+      .footer {
+        text-align: center;
+        color: #999;
+        font-size: 13px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/942/942799.png"
+          alt="Lock Icon"
+        />
+      </div>
+      <h2>Forgot Password?</h2>
+      <p>
+        We received a request to reset your password. Use the OTP below to
+        proceed with resetting your password.
+      </p>
+      <div class="otp">${otp}</div>
+      <div class="button">
+        <a
+          href="https://yourwebsite.com/reset-password?email=${encodeURIComponent(to)}"
+          class="btn"
+          >Reset Password</a
+        >
+      </div>
+      <p>If you didn’t request this, you can safely ignore this email.</p>
+      <div class="footer">
+        © ${new Date().getFullYear()} Your App Name. All rights reserved.
+      </div>
+    </div>
+  </body>
+</html>
