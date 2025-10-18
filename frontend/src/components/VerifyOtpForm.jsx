@@ -17,52 +17,43 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-import useUserStore from "@/store/userStore";
-import PhysicsHero from "../components/PhysicsHero";
-import { sendOTP } from "../helper/api";
+import { verifyOTP } from "../helper/api";
 
-// ✅ Schema
-const loginSchema = z.object({
-  email: z.string().email("Enter a valid email"),
+// ✅ Schema for OTP verification
+const otpSchema = z.object({
+  otp: z
+    .string()
+    .min(6, "OTP must be 6 digits")
+    .max(6, "OTP must be 6 digits")
+    .regex(/^\d{6}$/, "OTP must contain only numbers"),
 });
 
-const ForgotPassword = () => {
+const VerifyOtpForm = ({ userId, setStep }) => {
+  const navigate = useNavigate();
   const [errorShake, setErrorShake] = useState(false);
 
   const form = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(otpSchema),
     defaultValues: {
-      email: "",
+      otp: "",
     },
   });
 
   const onSubmit = async (values) => {
     try {
-      console.log(values);
-      await sendOTP(values.email);
-      toast.success("OTP Send");
+      // Example API call:
+      await verifyOTP({ userId, otp: values.otp });
+      toast.success(`OTP Verified Successfully ${values.otp}`);
+      setStep("PASSWORD");
     } catch (error) {
+      toast.error(error.message || "OTP verification failed 😢");
       setErrorShake(true);
       setTimeout(() => setErrorShake(false), 600);
     }
   };
 
   return (
-    <motion.div
-      className="w-screen h-screen flex items-center justify-center bg-gradient-to-br from-background via-background/80 to-card/80"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      <div className="absolute inset-0 pointer-events-none">
-        <PhysicsHero />
-      </div>
-
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background/80 pointer-events-none" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-foreground/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-foreground/5 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="flex items-center justify-center">
       <motion.div
         animate={errorShake ? { x: [-10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.4 }}
@@ -79,21 +70,24 @@ const ForgotPassword = () => {
                 transition={{ duration: 0.5 }}
                 className="text-3xl font-bold text-center"
               >
-                FORGOT PASSWORD
+                Verify OTP
               </motion.h1>
 
-              {/* Email */}
+              {/* OTP Input */}
               <FormField
                 control={form.control}
-                name="email"
+                name="otp"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>OTP</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter your email"
+                        placeholder="Enter 6-digit OTP"
+                        type="text"
+                        maxLength={6}
+                        inputMode="numeric"
                         {...field}
-                        className="transition-all focus:ring-2 focus:ring-primary/50"
+                        className="transition-all focus:ring-2 focus:ring-primary/50 tracking-widest"
                       />
                     </FormControl>
                     <FormMessage />
@@ -101,6 +95,7 @@ const ForgotPassword = () => {
                 )}
               />
 
+              {/* Submit Button */}
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting}
@@ -116,7 +111,7 @@ const ForgotPassword = () => {
                       className="flex items-center gap-2"
                     >
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      {"Sending OTP"}
+                      Verifying...
                     </motion.div>
                   ) : (
                     <motion.span
@@ -125,7 +120,7 @@ const ForgotPassword = () => {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                     >
-                      {"Send OTP"}
+                      Verify →
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -134,8 +129,8 @@ const ForgotPassword = () => {
           </Form>
         </Card>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
-export default ForgotPassword;
+export default VerifyOtpForm;

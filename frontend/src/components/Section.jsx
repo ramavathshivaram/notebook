@@ -3,88 +3,37 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Book, Trash2, Plus } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { renameSection, createPage, deleteSection } from "../helper/api";
-import Page from "./Page";
 import { v4 as uuid } from "uuid";
+
+import Page from "./Page";
 import usePageStore from "../store/usePageStore";
 
+import useRenameSection from "../hooks/useRenameSection.js";
+import useAddPage from "../hooks/useAddPage.js";
+import useDeleteSection from "../hooks/useDeleteSection.js";
+
 const Section = ({ section, isExpanded, setIsExpanded }) => {
-  const queryClient = useQueryClient();
   const currentPage = usePageStore((s) => s.currentPage);
-  const setCurrentPage = usePageStore((s) => s.setCurrentPage);
+
   const [editingSectionId, setEditingSectionId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
+
   const isSectionSelected = section?.pages?.some(
     (page) => page._id === currentPage
   );
 
-  const { mutate: renameSectionMutate } = useMutation({
-    mutationFn: ({ id, title }) => renameSection(id, title),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["sections"]);
-      setEditingSectionId(null);
-    },
-    onMutate: async ({ id, title }) => {
-      const previousSections = queryClient.getQueryData(["sections"]);
-      queryClient.setQueryData(["sections"], (old) =>
-        old.map((sec) => (sec._id === id ? { ...sec, title } : sec))
-      );
-      return { previousSections };
-    },
-    onError: (err, variables, context) => {
-      queryClient.setQueryData(["sections"], context.previousSections);
-    },
-  });
+  // 🔹 Hooks for mutations
+  const renameSectionMutate = useRenameSection().mutate;
+  const addPageMutate = useAddPage().mutate;
+  const deleteSectionMutate = useDeleteSection().mutate;
 
-  const { mutate: addPageMutate } = useMutation({
-    mutationFn: (page) => createPage(page),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["sections"]);
-    },
-    onMutate: async ({ sectionId, title, pageId }) => {
-      const previousSections = queryClient.getQueryData(["sections"]);
-      queryClient.setQueryData(["sections"], (old) =>
-        old.map((sec) =>
-          sec._id === sectionId
-            ? {
-                ...sec,
-                pages: [...sec.pages, { _id: pageId, title, sectionId }],
-              }
-            : sec
-        )
-      );
-      setCurrentPage(pageId, false);
-      return { previousSections };
-    },
-    onError: (err, variables, context) => {
-      setCurrentPage(null);
-      queryClient.setQueryData(["sections"], context.previousSections);
-    },
-  });
-
+  // 🔹 Handlers
   const handleRename = (sectionId, newTitle) => {
     if (!newTitle.trim()) return;
     renameSectionMutate({ id: sectionId, title: newTitle });
+    setEditingSectionId(null);
   };
 
-  const { mutate: deleteMutation } = useMutation({
-    mutationFn: (sectionId) => deleteSection(sectionId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["sections"]);
-    },
-    onMutate: async (sectionId) => {
-      if (isSectionSelected) setCurrentPage(null);
-      const previousSections = queryClient.getQueryData(["sections"]);
-      queryClient.setQueryData(["sections"], (old) =>
-        old.filter((sec) => sec._id !== sectionId)
-      );
-      return { previousSections };
-    },
-    onError: (err, sectionId, context) => {
-      queryClient.setQueryData(["sections"], context.previousSections);
-    },
-  });
   const handleAddPage = (sectionId) => {
     const pageId = uuid();
     addPageMutate({
@@ -95,7 +44,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
   };
 
   const handleDeleteSection = (sectionId) => {
-    deleteMutation(sectionId);
+    deleteSectionMutate(sectionId);
   };
 
   return (
@@ -106,6 +55,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
       exit={{ scale: 0 }}
       key={section._id}
     >
+      {/* Section Header */}
       <div className="flex items-center px-2 group">
         <Button
           variant="ghost"
@@ -141,7 +91,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
           ) : (
             <span
               className={`truncate cursor-pointer ${
-                isSectionSelected && "text-blue-700"
+                isSectionSelected ? "text-blue-700" : ""
               }`}
               onDoubleClick={() => {
                 setEditingSectionId(section._id);
@@ -153,6 +103,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
           )}
         </Button>
 
+        {/* Delete Section Button */}
         <Button
           variant="ghost"
           size="icon"
@@ -162,6 +113,8 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
           <Trash2 className="w-4 h-4 text-red-500" />
         </Button>
       </div>
+
+      {/* Pages List */}
       <AnimatePresence mode="wait">
         {isExpanded === section._id && (
           <motion.div
@@ -172,11 +125,11 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
           >
-            {/* 🔹 Pages */}
             {section.pages?.map((page) => (
               <Page key={page._id} page={page} sectionId={section._id} />
             ))}
-            {/* 🔹 Add Page */}
+
+            {/* Add Page Button */}
             <Button
               size="sm"
               className="w-30 justify-start text-xs ml-7"
