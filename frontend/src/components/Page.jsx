@@ -1,41 +1,16 @@
 import React from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
 import { FileText, Trash2 } from "lucide-react";
-import { deletePage } from "../helper/api";
+import { motion } from "framer-motion";
+import useDeletePage from "../hooks/useDeletePage.js"; // default export
+
 import usePageStore from "../store/usePageStore";
-import {  motion } from "framer-motion";
 
 const Page = ({ page, sectionId }) => {
-  const queryClient = useQueryClient();
-
   const setCurrentPage = usePageStore((s) => s.setCurrentPage);
   const currentPage = usePageStore((s) => s.currentPage);
 
-  // 🔹 Delete Page Mutation
-  const deleteMutation = useMutation({
-    mutationFn: ({ sectionId, pageId }) => deletePage(sectionId, pageId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["sections"]);
-    },
-    onMutate: async ({ sectionId, pageId }) => {
-      if (currentPage === pageId) setCurrentPage(null);
-      const previousSections = queryClient.getQueryData(["sections"]);
-      queryClient.setQueryData(["sections"], (old) =>
-        old?.map((sec) =>
-          sec._id === sectionId
-            ? { ...sec, pages: sec.pages.filter((p) => p._id !== pageId) }
-            : sec
-        )
-      );
-      return { previousSections };
-    },
-    onError: (err, variables, context) => {
-      if (context?.previousSections) {
-        queryClient.setQueryData(["sections"], context.previousSections);
-      }
-    },
-  });
+  const deleteMutation = useDeletePage();
 
   const handleDelete = () => {
     deleteMutation.mutate({ sectionId, pageId: page._id });
@@ -46,7 +21,7 @@ const Page = ({ page, sectionId }) => {
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       exit={{ scale: 0 }}
-      transition={{duration:0.2}}
+      transition={{ duration: 0.2 }}
       className="flex items-center mx-4 group"
     >
       <Button
