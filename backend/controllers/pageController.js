@@ -133,9 +133,67 @@ const updatePage = async (req, res) => {
   }
 };
 
+const updatePageTitle = async (req, res) => {
+  try {
+    const { pageId } = req.params;
+    const { title } = req.body;
+    // console.log("title", title);
+
+    if (!pageId) {
+      return res.status(400).json({ message: "Page ID is required" });
+    }
+
+    const page = await Page.findById(pageId);
+    if (!page) {
+      return res.status(404).json({ message: "Page not found" });
+    }
+
+    if (title && title.trim() !== "") page.title = title;
+
+    // console.log(page)
+    await page.save();
+
+    res
+      .status(200)
+      .json({ page, message: "Page title updated successfully", status: true });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updatePageContent = async (req, res) => {
+  try {
+    const { pageId } = req.params;
+    const { content } = req.body;
+    if (!pageId) {
+      return res.status(400).json({ message: "Page ID is required" });
+    }
+
+    const page = await Page.findById(pageId);
+    if (!page) {
+      return res.status(404).json({ message: "Page not found" });
+    }
+
+    if (content && content.trim() !== "") page.content = content;
+
+    //  console.log(page)
+    await page.save();
+
+    res.status(200).json({
+      page,
+      message: "Page content updated successfully",
+      status: true,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createPage,
   getPage,
   updatePage,
   deletePage,
+  updatePageTitle,
+  updatePageContent,
 };
