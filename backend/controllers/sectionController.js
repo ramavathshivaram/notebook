@@ -19,13 +19,13 @@ const createSection = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log(user);
+   // console.log(user);
     const section = await Section.create({
       _id: sectionId || uuid(),
       title: title || "New Section",
       user: userId,
     });
-    console.log("sec", section);
+    //console.log("sec", section);
 
     user.sections.push(section._id);
     await user.save(); // save updated user
@@ -47,7 +47,7 @@ const getSections = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    console.log(user);
+    //console.log(user);
     res.status(201).json({ section: user.sections, message: "", status: true });
   } catch (error) {
     res.status(500).json({ message: error.message });
