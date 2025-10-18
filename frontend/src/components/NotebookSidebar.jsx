@@ -8,8 +8,9 @@ import Section from "../components/Section";
 import NoSectionsFound from "./NoSectionsFound";
 import ListSkeleton from "../skeletons/ListSkeleton";
 import ErrorMessage from "./ErrorMessage";
+import { cn } from "../lib/utils";
 
-const NotebookSidebar = ({ sections_d }) => {
+const NotebookSidebar = ({ sections_d, additionaClass = "" }) => {
   const [isExpanded, setIsExpanded] = useState("hello");
 
   const {
@@ -26,7 +27,7 @@ const NotebookSidebar = ({ sections_d }) => {
   if (isLoading) return <ListSkeleton />;
   if (error) return <ErrorMessage />;
   return (
-    <div className="w-full  bg-card h-full flex flex-col">
+    <div className={cn("w-full bg-card h-full flex flex-col", additionaClass)}>
       <AddSection />
       <ScrollArea className="flex-1">
         <div className="p-2">

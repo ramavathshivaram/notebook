@@ -17,59 +17,50 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { auth_api } from "../helper/api";
-import useUserStore from "@/store/userStore";
-import PhysicsHero from "../components/PhysicsHero";
+import { resetPassword } from "../helper/api";
 
-// ✅ Schema
-const loginSchema = z.object({
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(1, "Password is required"),
-});
+// ✅ Schema for password confirmation
+const passwordSchema = z
+  .object({
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirm_password: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: "Passwords do not match",
+    path: ["confirm_password"],
+  });
 
-const Auth = () => {
-  const setUser = useUserStore((state) => state.setUser);
+const ConfirmPassword = ({ userId }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [errorShake, setErrorShake] = useState(false);
 
   const form = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(passwordSchema),
     defaultValues: {
-      email: "",
       password: "",
+      confirm_password: "",
     },
   });
 
   const onSubmit = async (values) => {
     try {
-      const response = await auth_api(values);
-      toast.success("Login successful 🎉");
-      setUser(response.user);
-      navigate("/notebook");
+      // Example: API call
+      await resetPassword({
+        password: values.password,
+        userId,
+      });
+      toast.success(`Password changed successfully ${values.password}`);
+      navigate("/auth");
     } catch (error) {
-      toast.error(error.message || "Login failed 😢");
+      toast.error(error.message || "Password change failed 😢");
       setErrorShake(true);
       setTimeout(() => setErrorShake(false), 600);
     }
   };
 
   return (
-    <motion.div
-      className="w-screen h-screen flex items-center justify-center bg-gradient-to-br from-background via-background/80 to-card/80"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      <div className="absolute inset-0 pointer-events-none">
-        <PhysicsHero />
-      </div>
-
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background/80 pointer-events-none" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-foreground/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-foreground/5 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="flex items-center justify-center">
       <motion.div
         animate={errorShake ? { x: [-10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.4 }}
@@ -86,27 +77,8 @@ const Auth = () => {
                 transition={{ duration: 0.5 }}
                 className="text-3xl font-bold text-center"
               >
-                Note Book
+                Change Password
               </motion.h1>
-
-              {/* Email */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your email"
-                        {...field}
-                        className="transition-all focus:ring-2 focus:ring-primary/50"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
               {/* Password */}
               <FormField
@@ -114,12 +86,12 @@ const Auth = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>New Password</FormLabel>
                     <div className="relative">
                       <FormControl>
                         <Input
                           type={showPassword ? "text" : "password"}
-                          placeholder="Enter password"
+                          placeholder="Enter new password"
                           {...field}
                           className="pr-10 transition-all focus:ring-2 focus:ring-primary/50"
                         />
@@ -144,6 +116,28 @@ const Auth = () => {
                 )}
               />
 
+              {/* Confirm Password */}
+              <FormField
+                control={form.control}
+                name="confirm_password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <div className="relative">
+                      <FormControl>
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Re-enter your password"
+                          {...field}
+                          className="pr-10 transition-all focus:ring-2 focus:ring-primary/50"
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               {/* Submit Button */}
               <Button
                 type="submit"
@@ -160,7 +154,7 @@ const Auth = () => {
                       className="flex items-center gap-2"
                     >
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Get Starting...
+                      Updating...
                     </motion.div>
                   ) : (
                     <motion.span
@@ -169,27 +163,17 @@ const Auth = () => {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                     >
-                      Get Started →
+                      Update Password →
                     </motion.span>
                   )}
                 </AnimatePresence>
               </Button>
-
-              {/* Forgot Password */}
-              <p className="text-sm text-center mt-2">
-                <span
-                  onClick={() => navigate("/forgot-password")}
-                  className="text-blue-600 cursor-pointer hover:underline"
-                >
-                  Forgot Password?
-                </span>
-              </p>
             </form>
           </Form>
         </Card>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
-export default Auth;
+export default ConfirmPassword;
