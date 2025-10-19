@@ -1,5 +1,6 @@
 require("dotenv").config();
 const OpenAI = require("openai");
+
 const openAI = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
   apiKey: process.env.OPENAI_API_KEY,
@@ -18,7 +19,7 @@ Follow these rules strictly:
 5. If the question is unclear, politely ask for clarification.
 6. When explaining code, describe it in paragraph form before showing examples.
 7. Never include unnecessary repetition or filler text.
-8. Avoid using slang or slang words.
+8. Avoid using slang or informal language.
 9. Always prioritize accuracy and relevance in your responses.`;
 
 const getAiResponse = async (prompt, res) => {
@@ -26,28 +27,34 @@ const getAiResponse = async (prompt, res) => {
     const response = await openAI.chat.completions.create({
       model: process.env.AI_MODEL,
       messages: [
-        {
-          role: "system",
-          content: rules,
-        },
+        { role: "system", content: rules },
         { role: "user", content: prompt },
       ],
       temperature: 0.8,
     });
 
-    let content;
+    // ✅ Extract AI message safely
+    const message = response.choices?.[0]?.message?.content?.trim();
+
+    if (!message) {
+      return res.status(500).json({ message: "AI returned no content." });
+    }
+
+    // ✅ Try parsing JSON (optional)
+    let content = message;
     try {
       content = JSON.parse(message);
-    } catch (err) {
-      res.status(400).json({ message: "AI response is not valid JSON." });
-      content = message;
+    } catch {
+      // message is not JSON; keep as text
     }
 
     console.log("✅ AI Response:", content);
-    res.status(200).json({ message: content });
+    return res.status(200).json({ message: content });
   } catch (error) {
     console.error("Error fetching AI response:", error.message);
-    res.status(500).json({ message: error.message });
+    if (!res.headersSent) {
+      return res.status(500).json({ message: error.message });
+    }
   }
 };
 
