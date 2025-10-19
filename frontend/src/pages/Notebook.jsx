@@ -13,12 +13,14 @@ import {
 import { use, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import useSidebarStore from "../store/useSidebarStore";
+import CanvasEditor from "../components/CanvasEditor";
 
 const Notebook = () => {
   const navigate = useNavigate();
   const user = useUserStore((s) => s.user);
   const clearUser = useUserStore((s) => s.clearUser);
   const currentPage = usePageStore((s) => s.currentPage);
+  const currentCanvas = usePageStore((s) => s.currentCanvas);
   const [mobileView, setMobileView] = useState(window.innerWidth < 540);
   const isSidebarOpen = useSidebarStore((s) => s.isSidebarOpen);
 
@@ -72,6 +74,8 @@ const Notebook = () => {
             <ResizablePanel defaultSize={70} minSize={60} maxSize={80}>
               {currentPage ? (
                 <NoteEditor pageId={currentPage} />
+              ) : currentCanvas ? (
+                <CanvasEditor canvasId={currentCanvas} />
               ) : (
                 <EmptyState />
               )}

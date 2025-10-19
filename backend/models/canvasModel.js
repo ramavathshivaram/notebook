@@ -17,8 +17,8 @@ const canvasSchema = new mongoose.Schema(
       required: true,
     },
     content: {
-      type: String,
-      default: "",
+      type: Array,
+      default: [],
     },
     section: {
       type: String,

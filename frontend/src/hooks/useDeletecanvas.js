@@ -1,24 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deletePage } from "../helper/api";
+import { deleteCanvas } from "../helper/api";
 import usePageStore from "../store/usePageStore";
 
-export default function useDeletePage() {
+export default function useDeleteCanvas() {
   const queryClient = useQueryClient();
   const clearCurrentPage = usePageStore((s) => s.clearCurrentPage);
-  const currentPage = usePageStore((s) => s.currentPage);
+  const currentCanvas = usePageStore((s) => s.currentCanvas);
 
   return useMutation({
-    mutationFn: ({ sectionId, pageId }) => deletePage(sectionId, pageId),
+    mutationFn: ({ sectionId, canvasId }) => deleteCanvas(sectionId, canvasId),
 
-    onMutate: async ({ sectionId, pageId }) => {
-      if (currentPage === pageId) clearCurrentPage();
+    onMutate: async ({ sectionId, canvasId }) => {
+      if (currentCanvas === canvasId) clearCurrentPage();
 
       const previousSections = queryClient.getQueryData(["sections"]);
 
       queryClient.setQueryData(["sections"], (old) =>
         old?.map((sec) =>
           sec._id === sectionId
-            ? { ...sec, pages: sec.pages.filter((p) => p._id !== pageId) }
+            ? { ...sec, canvases: sec.canvases.filter((c) => c._id !== canvasId) }
             : sec
         )
       );
@@ -30,7 +30,7 @@ export default function useDeletePage() {
       if (context?.previousSections) {
         queryClient.setQueryData(["sections"], context.previousSections);
       }
-      console.error("❌ Error deleting page:", err);
+      console.error("❌ Error deleting canvas:", err);
     },
 
     onSuccess: () => {

@@ -2,10 +2,11 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Textarea } from "./ui/textarea";
 import debounce from "lodash.debounce";
 import useUpdatePageContent from "../hooks/useUpdatePageContent.js";
-import chat from "../assets/chat.png";
+import AISymbol from "./AISymbol";
 import { getAiResponse } from "../helper/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import ListSkeleton from "../skeletons/ListSkeleton.jsx";
 
 const ContentEditor = ({ content, pageId }) => {
   const [localContent, setLocalContent] = useState(content);
@@ -35,7 +36,10 @@ const ContentEditor = ({ content, pageId }) => {
     try {
       debouncedUpdate.flush();
       const res = await getAiResponse({ prompt: localContent });
-      setLocalContent(res);
+      console.log(res);
+      if (res) {
+        setLocalContent(res);
+      }
       toast.success("✨ AI response received!");
     } catch (err) {
       console.error(err);
@@ -48,13 +52,17 @@ const ContentEditor = ({ content, pageId }) => {
   return (
     <div className="relative">
       {/* Textarea */}
-      <Textarea
-        value={localContent}
-        onChange={(e) => handleChange(e.target.value)}
-        placeholder="Start typing your notes..."
-        spellCheck
-        className="min-h-[500px] text-lg border-0 bg-transparent px-0 resize-none focus-visible:ring-0 leading-relaxed overflow-y-auto"
-      />
+      {isLoadingAI ? (
+        <ListSkeleton />
+      ) : (
+        <Textarea
+          value={localContent}
+          onChange={(e) => handleChange(e.target.value)}
+          placeholder="Start typing your notes..."
+          spellCheck
+          className="min-h-[500px] text-lg border-0 bg-transparent px-0 resize-none focus-visible:ring-0 leading-relaxed overflow-y-auto"
+        />
+      )}
 
       {/* Saving indicator */}
       {isPending && (
@@ -64,41 +72,25 @@ const ContentEditor = ({ content, pageId }) => {
       {/* Floating AI Chat Button */}
       <motion.div
         onClick={handleAI}
-        className="fixed left-1/2 bottom-10 -translate-x-1/2 cursor-pointer z-50"
-        whileHover={{ scale: 1.1 }}
+        className="fixed left-1/2 bottom-5 w-25 -translate-x-1/2 cursor-pointer z-50"
+        whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.9 }}
         animate={{
           y: [0, -8, 0],
         }}
         transition={{
           repeat: Infinity,
-          duration: 2,
+          duration: 3,
           ease: "easeInOut",
         }}
       >
-        <img src={chat} alt="AI Chat" className="w-12 drop-shadow-md" />
+        <AISymbol />
       </motion.div>
 
       {/* AI Loading Overlay */}
-      <AnimatePresence>
-        {isLoadingAI && (
-          <motion.div
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center z-40"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-              className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
-            />
-            <p className="mt-4 text-white text-sm animate-pulse">
-              AI is thinking...
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isLoadingAI && (
+        <div className="fixed inset-0 bg-transparent w-screen h-screen z-40"></div>
+      )}
     </div>
   );
 };
