@@ -1,34 +1,34 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updatePageContent } from "../helper/api";
+import { updateCanvasContent } from "../helper/api";
 
- const useUpdatePageContent = () => {
-  const queryClient = useQueryClient();
+ const useUpdateCanvasContent = () => {
+   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: ({ pageId, updatedData }) =>
-      updatePageContent(pageId, updatedData),
-    onMutate: async ({ pageId, updatedData }) => {
-      await queryClient.cancelQueries(["page", pageId]);
-      const previousPage = queryClient.getQueryData(["page", pageId]);
-      queryClient.setQueryData(["page", pageId], (old) => ({
-        ...old,
-        ...updatedData,
-      }));
-      return { previousPage };
-    },
-    onError: (error, variables, context) => {
-      if (context?.previousPage) {
-        queryClient.setQueryData(
-          ["page", variables.pageId],
-          context.previousPage
-        );
-      }
-      console.error("❌ Error updating page:", error);
-    },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries(["page", variables.pageId]);
-    },
-  });
-};
+   return useMutation({
+     mutationFn: ({ canvasId, updatedData }) =>
+       updateCanvasContent(canvasId, updatedData),
+     onMutate: async ({ canvasId, updatedData }) => {
+       await queryClient.cancelQueries(["canvas", canvasId]);
+       const previousPage = queryClient.getQueryData(["canvas", canvasId]);
+       queryClient.setQueryData(["canvas", canvasId], (old) => ({
+         ...old,
+         ...updatedData,
+       }));
+       return { previousPage };
+     },
+     onError: (error, variables, context) => {
+       if (context?.previousPage) {
+         queryClient.setQueryData(
+           ["canvas", variables.canvasId],
+           context.previousPage
+         );
+       }
+       console.error("❌ Error updating canvas:", error);
+     },
+     onSuccess: (_, variables) => {
+       queryClient.invalidateQueries(["canvas", variables.canvasId]);
+     },
+   });
+ };
 
-export default useUpdatePageContent;
+export default useUpdateCanvasContent;

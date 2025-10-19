@@ -1,6 +1,5 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 
 const API = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_DEV_URL}/api`,
@@ -22,8 +21,7 @@ API.interceptors.response.use(
     if (error.response && error.response.status === 444) {
       localStorage.removeItem("user-storage");
       localStorage.removeItem("token");
-      const navigator = useNavigate();
-      navigator("/auth");
+      window.location.href = "/auth";
       toast.error("Session expired. Please log in again.");
     } else {
       toast.error(error.response.data.message || "An error occurred");
@@ -49,7 +47,7 @@ export const sendOTP = async (email) => {
 
 // Verify OTP -> returns true if OTP verified
 export const verifyOTP = async ({ userId, otp }) => {
-  console.log(userId, otp);
+  // console.log(userId, otp);
   const res = await API.post("/forgot-password/verify-otp", { userId, otp });
   // assume backend returns 200 if verified, 400 otherwise
   return res.status === 200;
@@ -57,14 +55,14 @@ export const verifyOTP = async ({ userId, otp }) => {
 
 // Reset Password -> returns true on success
 export const resetPassword = async ({ userId, password }) => {
-  console.log(userId, password);
+  // console.log(userId, password);
   const res = await API.post("/forgot-password/reset", { userId, password });
   return res.status === 200;
 };
 
 //SECTION API
 export const createSection = async (section) => {
-  console.log("before", section);
+  // console.log("before", section);
   const res = await API.post("section/create", { ...section });
   console.log("after", res.data);
   return res.data;
@@ -81,15 +79,15 @@ export const renameSection = async (sectionId, title) => {
 
 export const deleteSection = async (sectionId) => {
   const res = await API.delete(`section/${sectionId}`);
-  console.log(res.data);
+  // console.log(res.data);
   return res.data;
 };
 
 // PAGE API
 export const createPage = async (page) => {
-  console.log("before", page);
+  // console.log("before", page);
   const res = await API.post("page/create", { ...page });
-  console.log("after", res.data);
+  // console.log("after", res.data);
   return res.data;
 };
 
@@ -106,7 +104,7 @@ export const updatePage = async (pageId, data) => {
 };
 
 export const updatePageContent = async (pageId, data) => {
-  console.log(pageId, data.content);
+  // console.log(pageId, data.content);
   const res = await API.patch(`page/content/${pageId}`, data);
   return res.data;
 };
@@ -126,4 +124,34 @@ export const deletePage = async (sectionId, pageId) => {
 export const getAiResponse = async (data) => {
   const res = await API.post("/ai/create", data);
   return res.data.message;
+};
+
+//Canvas
+
+export const createCanvas = async (canvas) => {
+  console.log(canvas);
+  const res = await API.post(`canvas/create`, canvas);
+  return res.data.canvas;
+};
+
+export const getCanvas = async (canvasId) => {
+  // console.log(canvasId);
+  const res = await API.get(`canvas/${canvasId}`);
+  // console.log(res.data.canvas);
+  return res.data.canvas;
+};
+
+export const updateCanvasTitle = async (canvasId, data) => {
+  const res = await API.patch(`canvas/title/${canvasId}`, data);
+  return res.data;
+};
+export const updateCanvasContent = async (canvasId, data) => {
+  console.log(canvasId, data);
+  const res = await API.patch(`canvas/content/${canvasId}`, data);
+  // console.log(res.data)
+  return res?.data?.canvas?.content;
+};
+export const deleteCanvas = async (sectionId, canvasId) => {
+  const res = await API.delete(`canvas/${sectionId}/${canvasId}`);
+  return res.data;
 };

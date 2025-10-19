@@ -1,21 +1,18 @@
 import React from "react";
-import { Button } from "../components/ui/button";
-import { FileText, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
-import useDeletePage from "../hooks/useDeletePage.js"; // default export
-
+import { Button } from "./ui/button";
+import { PencilLine, Trash2 } from "lucide-react";
 import usePageStore from "../store/usePageStore";
+import useDeleteCanvas from "../hooks/useDeleteCanvas";
+const Canvas = ({ canvas, sectionId }) => {
+  const setCurrentCanvas = usePageStore((s) => s.setCurrentCanvas);
+  const currentCanvas = usePageStore((s) => s.currentCanvas);
 
-const Page = ({ page, sectionId }) => {
-  const setCurrentPage = usePageStore((s) => s.setCurrentPage);
-  const currentPage = usePageStore((s) => s.currentPage);
-
-  const deleteMutation = useDeletePage();
+  const deleteMutation = useDeleteCanvas();
 
   const handleDelete = () => {
-    deleteMutation.mutate({ sectionId, pageId: page._id });
+    deleteMutation.mutate({ sectionId, canvasId: canvas._id });
   };
-
   return (
     <motion.div
       initial={{ scale: 0 }}
@@ -27,15 +24,15 @@ const Page = ({ page, sectionId }) => {
       <Button
         variant="ghost"
         className="w-full justify-start text-sm mb-1 transition-all hover:translate-x-1"
-        onClick={() => setCurrentPage(page._id)}
+        onClick={() => setCurrentCanvas(canvas._id)}
       >
-        <FileText className="w-4 h-4 mr-2" />
+        <PencilLine className="w-4 h-4 mr-2" />
         <span
           className={`truncate cursor-pointer ${
-            currentPage === page._id ? "text-blue-700" : ""
+            currentCanvas === canvas._id ? "text-blue-700" : ""
           }`}
         >
-          {page.title}
+          {canvas.title}
         </span>
       </Button>
 
@@ -52,4 +49,4 @@ const Page = ({ page, sectionId }) => {
   );
 };
 
-export default Page;
+export default Canvas;
