@@ -6,9 +6,9 @@ const {
   updatePage,
   deletePage,
   updatePageTitle,
-  updatePageContent
+  updatePageContent,
+  movePage,
 } = require("../controllers/pageController");
-
 
 router.post("/create", createPage);
 

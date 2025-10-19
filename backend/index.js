@@ -12,6 +12,7 @@ const protect = require("./middlewares/authMiddleware");
 const section_routes = require("./routes/sectionRoutes");
 const page_routes = require("./routes/pageRoutes");
 const ai_routes = require("./routes/aiRoutes");
+const canvas_routes = require("./routes/canvasRoutes");
 
 const app = express();
 app.use(express.json());
@@ -29,6 +30,7 @@ app.use(protect);
 
 app.use("/api/section", section_routes);
 app.use("/api/page", page_routes);
+app.use("/api/canvas", canvas_routes);
 app.use("/api/ai", ai_routes);
 
 const PORT = process.env.PORT || 3000;
