@@ -1,8 +1,8 @@
+const mongoose = require("mongoose");
 const User = require("../models/userModel");
 const Section = require("../models/sectionModel");
 const Page = require("../models/pageModel");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const { v4: uuid } = require("uuid");
 
 const createPage = async (req, res) => {
@@ -23,7 +23,7 @@ const createPage = async (req, res) => {
 
     // Create new page
     const page = await Page.create({
-      title: `New Page ${section.pages.length + 1}`,
+      title: `New Note ${section.pages.length + 1}`,
       user: userId,
       section: sectionId,
       _id: pageId || uuid(),
@@ -188,6 +188,7 @@ const updatePageContent = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 module.exports = {
   createPage,

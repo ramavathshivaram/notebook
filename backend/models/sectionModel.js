@@ -22,6 +22,12 @@ const sectionSchema = new mongoose.Schema(
         ref: "Page",
       },
     ],
+    canvases: [
+      {
+        type: String,
+        ref: "Canvas",
+      },
+    ],
   },
   { timestamps: true }
 );

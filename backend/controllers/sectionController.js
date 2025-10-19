@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const Section = require("../models/sectionModel");
 const Page = require("../models/pageModel");
+const Canvas = require("../models/canvasModel");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const { v4: uuid } = require("uuid");
@@ -19,7 +20,7 @@ const createSection = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-   // console.log(user);
+    // console.log(user);
     const section = await Section.create({
       _id: sectionId || uuid(),
       title: title || "New Section",
@@ -42,7 +43,10 @@ const getSections = async (req, res) => {
 
     const user = await User.findById(userId).populate({
       path: "sections",
-      populate: { path: "pages", select: "-content" },
+      populate: [
+        { path: "pages", select: "-content" },
+        { path: "canvases", select: "-content" },
+      ],
     });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -93,6 +97,11 @@ const deleteSection = async (req, res) => {
       session
     );
 
+    // 4️⃣ Delete related canvases
+    await Canvas.deleteMany({ section: sectionId, user: userId }).session(
+      session
+    );
+
     // 5️⃣ Delete the section itself
     await Section.findByIdAndDelete(sectionId).session(session);
 
@@ -100,7 +109,10 @@ const deleteSection = async (req, res) => {
     await session.commitTransaction();
     session.endSession();
 
-    res.json({ message: "Section and related pages deleted successfully",sectionId });
+    res.json({
+      message: "Section and related pages deleted successfully",
+      sectionId,
+    });
   } catch (error) {
     console.error("❌ Transaction Error:", error);
     await session.abortTransaction();

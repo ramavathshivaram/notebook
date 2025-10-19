@@ -50,7 +50,10 @@ const auth = async (req, res) => {
 
     user = await User.findOne({ email }).populate({
       path: "sections",
-      populate: { path: "pages", select: "-content" },
+      populate: [
+        { path: "pages", select: "-content" }, 
+        { path: "canvases",select: "-content" },
+      ],
     });
     if (!(await user.matchPassword(password))) {
       return res
