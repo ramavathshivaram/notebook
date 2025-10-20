@@ -1,4 +1,3 @@
-// src/components/TitleEditor.jsx
 import React, { useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import debounce from "lodash.debounce";
