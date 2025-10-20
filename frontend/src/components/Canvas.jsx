@@ -23,7 +23,7 @@ const Canvas = ({ canvas, sectionId }) => {
     >
       <Button
         variant="ghost"
-        className="w-full justify-start text-sm mb-1 transition-all hover:translate-x-1"
+        className="w-[calc(100%_-_8px)] justify-start text-sm mb-1 transition-all hover:translate-x-1"
         onClick={() => setCurrentCanvas(canvas._id)}
       >
         <PencilLine className="w-4 h-4 mr-2" />
