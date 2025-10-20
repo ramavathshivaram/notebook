@@ -22,40 +22,4 @@ Follow these rules strictly:
 8. Avoid using slang or informal language.
 9. Always prioritize accuracy and relevance in your responses.`;
 
-const getAiResponse = async (prompt, res) => {
-  try {
-    const response = await openAI.chat.completions.create({
-      model: process.env.AI_MODEL,
-      messages: [
-        { role: "system", content: rules },
-        { role: "user", content: prompt },
-      ],
-      temperature: 0.8,
-    });
-
-    // ✅ Extract AI message safely
-    const message = response.choices?.[0]?.message?.content?.trim();
-
-    if (!message) {
-      return res.status(500).json({ message: "AI returned no content." });
-    }
-
-    // ✅ Try parsing JSON (optional)
-    let content = message;
-    try {
-      content = JSON.parse(message);
-    } catch {
-      // message is not JSON; keep as text
-    }
-
-    console.log("✅ AI Response:", content);
-    return res.status(200).json({ message: content });
-  } catch (error) {
-    console.error("Error fetching AI response:", error.message);
-    if (!res.headersSent) {
-      return res.status(500).json({ message: error.message });
-    }
-  }
-};
-
-module.exports = getAiResponse;
+module.exports=openAI
