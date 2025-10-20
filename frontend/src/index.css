@@ -118,11 +118,12 @@
   }
 }
 
-
-
+*::-webkit-scrollbar {
+  display: none;
+}
 
 .nav {
-  --color: #000000; 
+  --color: #000000;
   background: none;
   width: 40px;
   height: 20px;
@@ -141,11 +142,12 @@
         opacity: 1;
         stroke-dashoffset: 221;
         stroke-dasharray: 46 249;
-        transition: stroke-dashoffset .12s linear .2s, stroke-dasharray .12s linear .2s, opacity 0s linear .2s;  
+        transition: stroke-dashoffset 0.12s linear 0.2s,
+          stroke-dasharray 0.12s linear 0.2s, opacity 0s linear 0.2s;
       }
       &:nth-of-type(2) {
         animation: stroke-animation-reverse 1.2s ease-out forwards;
-      } 
+      }
     }
   }
   input {
@@ -162,11 +164,12 @@
             stroke-dashoffset: 175;
             stroke-dasharray: 0 295;
             opacity: 0;
-            transition: stroke-dashoffset .07s linear .07s, stroke-dasharray .07s linear .07s, opacity 0s linear .14s;  
+            transition: stroke-dashoffset 0.07s linear 0.07s,
+              stroke-dasharray 0.07s linear 0.07s, opacity 0s linear 0.14s;
           }
           &:nth-of-type(2) {
             animation: stroke-animation 1.2s ease-out forwards;
-          } 
+          }
         }
       }
     }
@@ -209,4 +212,28 @@
     stroke-dashoffset: 290;
     stroke-dasharray: 25 270;
   }
+}
+
+/* editor.css (import this after quill.snow.css) */
+.my-editor {
+  box-shadow: 0 0 3px #e0dddd;
+  border-radius: 8px;
+  letter-spacing: 1px;
+}
+.my-editor .ql-container {
+  min-height: 500px !important;
+  font-size: 0.9rem;
+  border-radius: 0 0 8px 8px;
+}
+.my-editor .ql-editor {
+  min-height: 460px !important;
+  padding: 16px;
+}
+
+.my-editor .ql-toolbar {
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-evenly;
 }

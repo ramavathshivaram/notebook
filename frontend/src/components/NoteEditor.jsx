@@ -20,7 +20,7 @@ const NoteEditor = ({ pageId }) => {
 
   return (
     <div className="flex-1 flex flex-col h-full">
-      <div className="flex-1 overflow-auto p-8">
+      <div className="flex-1 overflow-auto p-4">
         <TitleEditor title={page?.title} pageId={pageId} />
         <ContentEditor content={page?.content} pageId={pageId} />
       </div>

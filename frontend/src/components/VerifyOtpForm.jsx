@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
@@ -29,7 +28,6 @@ const otpSchema = z.object({
 });
 
 const VerifyOtpForm = ({ userId, setStep }) => {
-  const navigate = useNavigate();
   const [errorShake, setErrorShake] = useState(false);
 
   const form = useForm({
