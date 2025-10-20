@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { generateCanvasDrawing } from "../helper/api";
 import { toast } from "sonner";
-import useUpdateCanvasContent from "../hooks/useUpdateCanvasContent";
+import useUpdateCanvasContent from "../hooks/useUpdateCanvasContent.js";
 
 const CanvasFooter = ({ canvasRef, title, content, canvasId }) => {
   const { mutateAsync: updateCanvasContent } = useUpdateCanvasContent();
