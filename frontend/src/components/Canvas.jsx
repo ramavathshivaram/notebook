@@ -19,7 +19,7 @@ const Canvas = ({ canvas, sectionId }) => {
       animate={{ scale: 1 }}
       exit={{ scale: 0 }}
       transition={{ duration: 0.2 }}
-      className="flex items-center px-2 mx-2 group bg-white"
+      className="flex items-center px-2 mx-2 group"
     >
       <Button
         variant="ghost"

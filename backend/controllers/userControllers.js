@@ -93,8 +93,6 @@ const sendOTP = async (req, res) => {
     user.forgotPasswordOTPExpiry = expiry;
     await user.save();
 
-    // console.log(`OTP for ${email}: ${otp}`);
-
     sendMail(
       email,
       "Password Reset OTP",
@@ -168,8 +166,6 @@ const sendOTP = async (req, res) => {
       </p>
   </div>`
     );
-
-
     res.status(200).json({ message: "OTP sent to email" });
   } catch (error) {
     console.error(error);

@@ -9,18 +9,18 @@ const CanvasHeader = ({
   setStrokeWidth,
   canvasRef,
 }) => {
-   const [eraseMode, setEraseMode] = useState(false);
-   
+  const [eraseMode, setEraseMode] = useState(false);
+
   const handlePenClick = () => {
     setEraseMode(false);
     canvasRef.current?.eraseMode(false);
-   };
-   
+  };
+
   const handleEraserClick = () => {
     setEraseMode(true);
     canvasRef.current?.eraseMode(true);
-   };
-   
+  };
+
   const handleUndoClick = () => canvasRef.current?.undo();
   const handleRedoClick = () => canvasRef.current?.redo();
   const handleClearClick = () => canvasRef.current?.clearCanvas();
