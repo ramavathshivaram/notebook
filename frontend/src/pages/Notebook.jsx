@@ -10,7 +10,7 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "../components/ui/resizable";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import useSidebarStore from "../store/useSidebarStore";
 import CanvasEditor from "../components/CanvasEditor";
