@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { cn } from "../lib/utils";
 import useSidebarStore from "../store/useSidebarStore";
 import Menu from "./Menu";
+import DarkModeToggle from "./DarkModeToggle";
 
 const Header = ({ clearUser }) => {
   const navigate = useNavigate();
@@ -43,25 +44,28 @@ const Header = ({ clearUser }) => {
         </motion.h1>
       </Button>
       {/* Logout */}
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="flex items-center gap-2"
-      >
-        <Button
-          size="sm"
-          onClick={() => {
-            clearUser();
-            clearCurrentPage();
-            localStorage.removeItem("token");
-            navigate("/auth");
-          }}
-          className="flex items-center gap-1"
+      <div className="flex gap-1">
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2"
         >
-          <LogOut className="w-4 h-4" />
-          {mobileView ? "" : " Logout"}
-        </Button>
-      </motion.div>
+          <Button
+            size="sm"
+            onClick={() => {
+              clearUser();
+              clearCurrentPage();
+              localStorage.removeItem("token");
+              navigate("/auth");
+            }}
+            className="flex items-center gap-1"
+          >
+            <LogOut className="w-4 h-4" />
+            {mobileView ? "" : " Logout"}
+          </Button>
+        </motion.div>
+        <DarkModeToggle />
+      </div>
     </header>
   );
 };
