@@ -5,68 +5,62 @@ const API = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_DEV_URL}/api`,
 });
 
-// Interceptor to attach token
+// -------------------- Interceptors --------------------
+// Attach token to every request
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
-  if (token) {
-    req.headers.authorization = `Bearer ${token}`;
-  }
+  if (token) req.headers.authorization = `Bearer ${token}`;
   return req;
 });
 
+// Handle global errors
 API.interceptors.response.use(
-  (response) => response,
+  (res) => res,
   (error) => {
-    // Handle 444 status code - session expired
-    if (error.response && error.response.status === 444) {
+    const status = error?.response?.status;
+    const message = error?.response?.data?.message || "An error occurred";
+
+    if (status === 444) {
+      // Session expired
       localStorage.removeItem("user-storage");
       localStorage.removeItem("token");
       window.location.href = "/auth";
       toast.error("Session expired. Please log in again.");
     } else {
-      toast.error(error.response.data.message || "An error occurred");
+      toast.error(message);
     }
     return Promise.reject(error);
   }
 );
 
-// USER API FETCHING
+// -------------------- Auth APIs --------------------
 export const auth_api = async (formData) => {
   const res = await API.post("/auth", formData);
   localStorage.setItem("token", res.data.token);
   return res.data;
 };
 
-// ---------------- Forgot Password ----------------
-
-// Send OTP -> returns true on success, throws on error
 export const sendOTP = async (email) => {
   const res = await API.post("/forgot-password/send-otp", { email });
-  return res.status === 200 || res.status === 201;
+  return res.status >= 200 && res.status < 300;
 };
 
-// Verify OTP -> returns true if OTP verified
 export const verifyOTP = async ({ userId, otp }) => {
-  // console.log(userId, otp);
   const res = await API.post("/forgot-password/verify-otp", { userId, otp });
-  // assume backend returns 200 if verified, 400 otherwise
   return res.status === 200;
 };
 
-// Reset Password -> returns true on success
 export const resetPassword = async ({ userId, password }) => {
-  // console.log(userId, password);
   const res = await API.post("/forgot-password/reset", { userId, password });
   return res.status === 200;
 };
 
-//SECTION API
+// -------------------- Section APIs --------------------
 export const createSection = async (section) => {
-  // console.log("before", section);
-  const res = await API.post("section/create", { ...section });
-  console.log("after", res.data);
+  const res = await API.post("section/create", section);
   return res.data;
 };
+
 export const getSections = async () => {
   const res = await API.get("section/");
   return res.data.section;
@@ -79,38 +73,31 @@ export const renameSection = async (sectionId, title) => {
 
 export const deleteSection = async (sectionId) => {
   const res = await API.delete(`section/${sectionId}`);
-  // console.log(res.data);
   return res.data;
 };
 
-// PAGE API
+// -------------------- Page APIs --------------------
 export const createPage = async (page) => {
-  // console.log("before", page);
-  const res = await API.post("page/create", { ...page });
-  // console.log("after", res.data);
+  const res = await API.post("page/create", page);
   return res.data;
 };
 
-// Get Page
 export const getPage = async (pageId) => {
   const res = await API.get(`page/${pageId}`);
   return res.data.page;
 };
 
-// Update Page
 export const updatePage = async (pageId, data) => {
   const res = await API.put(`page/${pageId}`, data);
   return res.data;
 };
 
 export const updatePageContent = async (pageId, data) => {
-  // console.log(pageId, data.content);
   const res = await API.patch(`page/content/${pageId}`, data);
   return res.data;
 };
 
 export const updatePageTitle = async (pageId, data) => {
-  // console.log(pageId, data.title);
   const res = await API.patch(`page/title/${pageId}`, data);
   return res.data;
 };
@@ -120,24 +107,14 @@ export const deletePage = async (sectionId, pageId) => {
   return res.data;
 };
 
-//AI
-export const getAiResponse = async (data) => {
-  const res = await API.post("/ai/create", data);
-  return res.data.message;
-};
-
-//Canvas
-
+// -------------------- Canvas APIs --------------------
 export const createCanvas = async (canvas) => {
-  console.log(canvas);
-  const res = await API.post(`canvas/create`, canvas);
+  const res = await API.post("canvas/create", canvas);
   return res.data.canvas;
 };
 
 export const getCanvas = async (canvasId) => {
-  // console.log(canvasId);
   const res = await API.get(`canvas/${canvasId}`);
-  // console.log(res.data.canvas);
   return res.data.canvas;
 };
 
@@ -145,13 +122,41 @@ export const updateCanvasTitle = async (canvasId, data) => {
   const res = await API.patch(`canvas/title/${canvasId}`, data);
   return res.data;
 };
+
 export const updateCanvasContent = async (canvasId, data) => {
-  console.log(canvasId, data);
+  // console.log(canvasId,data)
   const res = await API.patch(`canvas/content/${canvasId}`, data);
-  // console.log(res.data)
   return res?.data?.canvas?.content;
 };
+
 export const deleteCanvas = async (sectionId, canvasId) => {
   const res = await API.delete(`canvas/${sectionId}/${canvasId}`);
   return res.data;
+};
+
+// -------------------- AI APIs --------------------
+export const getAiResponse = async (data) => {
+  const res = await API.post("/ai/generate-ai-note", data);
+  return res.data.message;
+};
+
+export const optimizationAINote = async (data) => {
+  // console.log(data)
+  const res = await API.post("/ai/optimize-ai-note", data);
+  return res.data.message;
+};
+
+export const generateCanvasDrawing = async (data) => {
+  // console.log(data);
+  const res = await API.post("/ai/generate-canvas-drawing", data);
+  let canvas = JSON.parse(res.data.canvas);
+  // console.log("api", drawingDescription);
+  return canvas;
+};
+
+export const optimizeCanvasWithAI = async (data) => {
+  // console.log(data);
+  const res = await API.post("/ai/optimize-canvas", data);
+  // console.log(res.data.optimizedCanvas);
+  return res.data.optimizedCanvas;
 };

@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {  } from "../helper/api";
+import { updateCanvasContent } from "../helper/api";
 
-const useUpdatePageContent = () => {
+const useUpdateCanvasContent = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ pageId, updatedData }) =>
-      updatePageContent(pageId, updatedData),
-    onMutate: async ({ pageId, updatedData }) => {
-      await queryClient.cancelQueries(["page", pageId]);
-      const previousPage = queryClient.getQueryData(["page", pageId]);
-      queryClient.setQueryData(["page", pageId], (old) => ({
+    mutationFn: ({ canvasId, updatedData }) =>
+      updateCanvasContent(canvasId, updatedData),
+    onMutate: async ({ canvasId, updatedData }) => {
+      await queryClient.cancelQueries(["canvas", canvasId]);
+      const previousPage = queryClient.getQueryData(["canvas", canvasId]);
+      queryClient.setQueryData(["canvas", canvasId], (old) => ({
         ...old,
         ...updatedData,
       }));
@@ -19,16 +19,16 @@ const useUpdatePageContent = () => {
     onError: (error, variables, context) => {
       if (context?.previousPage) {
         queryClient.setQueryData(
-          ["page", variables.pageId],
+          ["canvas", variables.canvasId],
           context.previousPage
         );
       }
-      console.error("❌ Error updating page:", error);
+      console.error("❌ Error updating canvas:", error);
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries(["page", variables.pageId]);
+      queryClient.invalidateQueries(["canvas", variables.canvasId]);
     },
   });
 };
 
-export default useUpdatePageContent;
+export default useUpdateCanvasContent;

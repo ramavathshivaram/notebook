@@ -26,12 +26,13 @@ const NotebookSidebar = ({ sections_d, additionaClass = "" }) => {
 
   if (isLoading) return <ListSkeleton />;
   if (error) return <ErrorMessage />;
+  console.log(sections)
   return (
     <div className={cn("w-full bg-card h-full flex flex-col", additionaClass)}>
       <AddSection />
       <ScrollArea className="flex-1">
         <div className="p-2">
-          {sections.length === 0 ? (
+          {sections?.length === 0 ? (
             <NoSectionsFound />
           ) : (
             sections.map((section) => (

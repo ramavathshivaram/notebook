@@ -21,13 +21,13 @@ const LandingPage = () => {
 
       {/* Content */}
       <div className="relative z-10 pointer-events-none">
-        <div className="container mx-auto px-4 py-20">
+        <div className="container mx-auto px-4 md:py-20 py-5">
           {/* Hero Section */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center mb-32"
+            className="text-center mb-10"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -63,7 +63,7 @@ const LandingPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed"
+              className="text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed"
             >
               Capture ideas, organize thoughts, and bring your notes to life in
               a beautifully minimal workspace
@@ -98,6 +98,27 @@ const LandingPage = () => {
                 Learn More
               </Button>
             </motion.div>
+          </motion.div>
+
+          <motion.div
+            whileHover={{ scale: 1.05, rotate: [0, 2, -2, 0] }}
+            transition={{ duration: 0.4 }}
+            className="max-w-2xl mx-auto p-6 border border-border/50 rounded-xl bg-card/40 backdrop-blur-sm flex items-start gap-4 mb-6"
+          >
+            <Pen className="w-6 h-6 mt-1 flex-shrink-0" />
+            <div>
+              <h4 className="font-semibold mb-1">AI Notes & Drawing</h4>
+              <p className="text-sm text-muted-foreground">
+                <strong>Generate Notes:</strong> Automatically create structured
+                notes using AI.
+                <br />
+                <strong>Optimize Notes:</strong> Refine your notes for clarity
+                and conciseness.
+                <br />
+                <strong>Canvas Drawing:</strong> Generate and optimize drawings
+                in real-time with AI.
+              </p>
+            </div>
           </motion.div>
           {/* Additional Features */}
           <motion.div

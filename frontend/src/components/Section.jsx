@@ -18,7 +18,7 @@ import Canvas from "./Canvas.jsx";
 const Section = ({ section, isExpanded, setIsExpanded }) => {
   const renameSectionMutate = useRenameSection().mutate;
   const deleteSectionMutate = useDeleteSection().mutate;
-  
+
   const addPageMutate = useAddPage().mutate;
 
   const addCanvasMutate = useAddCanvas().mutate;
@@ -51,19 +51,22 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
     });
   };
 
-  const handleAddCanvas = (sectionId) => {  const canvasId = uuid();
-  addCanvasMutate({
-    sectionId,
-    title: `New Drawing ${section.canvases.length + 1}`,
-    canvasId,
-  }); }
+  const handleAddCanvas = (sectionId) => {
+    const canvasId = uuid();
+    addCanvasMutate({
+      sectionId,
+      title: `New Drawing ${section.canvases.length + 1}`,
+      canvasId,
+    });
+  };
 
   return (
     <motion.div
       className="mb-1 w-[calc(100%-1.5rem)]"
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      exit={{ scale: 0 }}
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.95, opacity: 0 }}
+      transition={{ duration: 0.3 }}
       key={section._id}
     >
       {/* Section Header */}
@@ -100,17 +103,23 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
               autoFocus
             />
           ) : (
-            <span
+            <motion.span
               className={`truncate cursor-pointer ${
-                isSectionSelected ? "text-blue-700" : ""
+                isSectionSelected
+                  ? "text-blue-700 font-medium"
+                  : "text-gray-800 dark:text-gray-200"
               }`}
+              animate={{
+                x: isSectionSelected ? 5 : 0,
+                transition: { type: "spring", stiffness: 200, damping: 20 },
+              }}
               onDoubleClick={() => {
                 setEditingSectionId(section._id);
                 setEditTitle(section.title);
               }}
             >
               {section.title}
-            </span>
+            </motion.span>
           )}
         </Button>
 
@@ -129,43 +138,52 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
       <AnimatePresence mode="wait">
         {isExpanded === section._id && (
           <motion.div
-            className="pl-4  w-full"
-            layout
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
+            className="pl-4 w-full overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            {section.pages?.map((page) => (
-              <Page key={page._id} page={page} sectionId={section._id} />
-            ))}
-            {
-              section.canvases?.map((canvas) => (
-                <Canvas key={canvas._id} canvas={canvas} sectionId={section._id} />
-              ))
-            }
+            <motion.div
+              initial={{ x: "-100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "-100%", opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="mt-1"
+            >
+              {section.pages?.map((page) => (
+                <Page key={page._id} page={page} sectionId={section._id} />
+              ))}
+              {section.canvases?.map((canvas) => (
+                <Canvas
+                  key={canvas._id}
+                  canvas={canvas}
+                  sectionId={section._id}
+                />
+              ))}
 
-            {/* Add Page Button */}
-            <div className="flex gap-2">
               {/* Add Page Button */}
-              <Button
-                size="sm"
-                className="justify-start text-xs ml-7"
-                onClick={() => handleAddPage(section._id)}
-              >
-                <Plus className="size-3" />
-                Note
-              </Button>
-              {/* add canvas */}
-              <Button
-                size="sm"
-                className=" justify-start text-xs"
-                onClick={() => handleAddCanvas(section._id)}
-              >
-                <Plus className="size-3" />
-                Drawing
-              </Button>
-            </div>
+              <div className="flex gap-2">
+                {/* Add Page Button */}
+                <Button
+                  size="sm"
+                  className="justify-start text-xs ml-7"
+                  onClick={() => handleAddPage(section._id)}
+                >
+                  <Plus className="size-3" />
+                  Note
+                </Button>
+                {/* add canvas */}
+                <Button
+                  size="sm"
+                  className=" justify-start text-xs"
+                  onClick={() => handleAddCanvas(section._id)}
+                >
+                  <Plus className="size-3" />
+                  Drawing
+                </Button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -20,7 +20,7 @@ const CanvasEditor = ({ canvasId }) => {
   if (error) return <ErrorMessage />;
   return (
     <div className="flex-1 flex flex-col h-full">
-      <div className="flex-1 overflow-auto p-8">
+      <div className="flex-1 overflow-auto p-4">
         <CanvasTitle title={canvasPage?.title} canvasId={canvasId} />
         <CanvasContent
           content={canvasPage?.content}
