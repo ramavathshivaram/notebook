@@ -133,7 +133,7 @@
   align-items: center;
   svg {
     fill: none;
-    stroke: var(--color);
+    stroke: var(--foreground);
     stroke-width: 7px;
     stroke-linecap: round;
     stroke-linejoin: round;

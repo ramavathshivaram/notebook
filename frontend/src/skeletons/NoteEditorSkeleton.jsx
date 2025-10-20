@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const NoteEditorSkeleton = () => {
   return (
-    <div className="flex-1 flex flex-col h-full bg-gray-50 animate-pulse">
+    <div className="flex-1 flex flex-col h-full bg-gray-50 dark:bg-gray-900 animate-pulse">
       {/* Title placeholder */}
       <div className="flex flex-col p-6 gap-4">
         <Skeleton className="h-10 w-1/2 rounded-lg" /> {/* Title */}

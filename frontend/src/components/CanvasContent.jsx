@@ -1,55 +1,25 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { optimizeCanvasWithAI } from "../helper/api";
 import { Card } from "./ui/Card";
 import AISymbol from "./AISymbol";
 import CanvasHeader from "./CanvasHeader";
 import CanvasFooter from "./CanvasFooter";
-import useUpdateCanvasContent from "../hooks/useUpdateCanvasContent";
 import { toast } from "sonner";
 
 const CanvasContent = ({ content, title, canvasId }) => {
   const canvasRef = useRef(null);
   const colorInputRef = useRef(null);
-  const { mutateAsync: updateCanvasContent } = useUpdateCanvasContent();
 
   const [strokeColor, setStrokeColor] = useState("#000000");
   const [strokeWidth, setStrokeWidth] = useState(3);
   const [loading, setLoading] = useState(false); // for AI / save operations
 
-  useEffect(() => {
-    if (content && canvasRef.current) {
-      try {
-        canvasRef.current.loadPaths(content);
-      } catch (err) {
-        console.error("Error loading saved canvas:", err);
-      }
-    }
-  }, [content]);
-
-  // 🎨 Color change
   const handleStrokeColorChange = (event) => {
     const newColor = event.target.value;
     setStrokeColor(newColor);
   };
 
-  // Save current canvas paths to backend
-  const handleSaveJSON = async () => {
-    try {
-      const paths = await canvasRef.current?.exportPaths();
-      if (!paths) {
-        toast.error("No drawing to save.");
-        return;
-      }
-      await updateCanvasContent({ canvasId, updatedData: { content: paths } });
-      toast.success("Drawing saved!");
-    } catch (err) {
-      console.error("Save failed:", err);
-      toast.error("Failed to save drawing.");
-    }
-  };
-
-  // Call AI to optimize current canvas and load result
   const handleAI = async () => {
     if (loading) return;
     setLoading(true);
@@ -110,6 +80,7 @@ const CanvasContent = ({ content, title, canvasId }) => {
           ref={canvasRef}
           strokeColor={strokeColor}
           strokeWidth={strokeWidth}
+          backgroundImage={content}
           canvasColor="white"
           className="!aspect-video"
         />
@@ -118,7 +89,8 @@ const CanvasContent = ({ content, title, canvasId }) => {
       <CanvasFooter
         canvasRef={canvasRef}
         title={title}
-        handleSaveJSON={handleSaveJSON}
+        canvasId={canvasId}
+        content={content}
       />
 
       {/* AISymbol triggers AI optimize; disable while loading */}

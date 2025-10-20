@@ -52,13 +52,15 @@ const Notebook = () => {
           <div className="flex h-full">
             <NotebookSidebar
               sections_d={section}
-              additionaClass={`absolute bg-white z-10 w-full h-full -left-full ${
+              additionaClass={`absolute z-10 w-full h-full -left-full ${
                 isSidebarOpen ? "left-0" : "-left-full"
               } transition-left duration-300 ease-in-out shadow-lg`}
             />
             <div className="flex-1 overflow-y-auto border-t">
               {currentPage ? (
                 <NoteEditor pageId={currentPage} />
+              ) : currentCanvas ? (
+                <CanvasEditor canvasId={currentCanvas} />
               ) : (
                 <EmptyState />
               )}
