@@ -1,6 +1,6 @@
 import debounce from 'lodash.debounce';
 import React, { useCallback, useState } from 'react'
-import useUpdateCanvasTitle from '../hooks/useUpdateCanvasTitle';
+import useUpdateCanvasTitle from '../hooks/useUpdateCanvasTitle.js';
 import { Input } from "@/components/ui/input";
 
 const CanvasTitle = ({ title, canvasId }) => {
