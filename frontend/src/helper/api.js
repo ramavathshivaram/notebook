@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "sonner";
 
 const API = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_DEV_URL}/api`,
+  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`,
 });
 
 // -------------------- Interceptors --------------------

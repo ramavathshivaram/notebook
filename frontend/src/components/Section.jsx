@@ -66,7 +66,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
   };
   return (
     <motion.div
-      className="mb-1 w-[calc(100%-1.5rem)]"
+      className="mb-1 w-[calc(100%-30px)]"
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.95, opacity: 0 }}
@@ -142,7 +142,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
       <AnimatePresence mode="wait">
         {isExpanded === section._id && (
           <motion.div
-            className="pl-4 w-full overflow-hidden"
+            className="w-full relative left-5 overflow-hidden"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
