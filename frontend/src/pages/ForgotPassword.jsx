@@ -38,7 +38,7 @@ const ForgotPassword = () => {
 
   const onSubmit = async (values) => {
     try {
-      console.log(values);
+      // console.log(values);
       await sendOTP(values.email);
       toast.success("OTP Send");
     } catch (error) {

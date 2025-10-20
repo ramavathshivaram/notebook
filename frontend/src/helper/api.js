@@ -143,6 +143,7 @@ export const getAiResponse = async (data) => {
 export const optimizationAINote = async (data) => {
   // console.log(data)
   const res = await API.post("/ai/optimize-ai-note", data);
+  // console.log(res.data.message);
   return res.data.message;
 };
 

@@ -26,7 +26,6 @@ const NotebookSidebar = ({ sections_d, additionaClass = "" }) => {
 
   if (isLoading) return <ListSkeleton />;
   if (error) return <ErrorMessage />;
-  console.log(sections)
   return (
     <div className={cn("w-full bg-card h-full flex flex-col", additionaClass)}>
       <AddSection />

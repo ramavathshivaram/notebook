@@ -52,6 +52,7 @@ const CanvasHeader = ({
       <div className="flex gap-5">
         <Button
           size="icon"
+          className="dark:border-1 dark:border-gray-400/50"
           type="button"
           onClick={() => colorInputRef.current?.click()}
           style={{ backgroundColor: strokeColor }}
@@ -74,7 +75,8 @@ const CanvasHeader = ({
             max="20"
             value={strokeWidth}
             onChange={(e) => setStrokeWidth(parseInt(e.target.value))}
-            className="w-20 accent-purple-500"
+            className="w-20 cursor-pointer"
+            style={{ color: strokeColor,backgroundColor: strokeColor }}
           />
         </div>
       </div>

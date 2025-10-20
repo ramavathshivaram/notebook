@@ -42,10 +42,8 @@ const ContentEditor = ({ content, pageId }) => {
     setLoadingAI(true);
     try {
       debouncedUpdate.flush();
-      const res = await getAiResponse({ prompt: localContent });
-      const content = res;
-      console.log(content);
-      if (res) {
+      const content = await getAiResponse({ prompt: localContent });
+      if (content) {
         setLocalContent(content);
       }
     } catch (err) {

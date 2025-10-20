@@ -2,7 +2,7 @@ import React from "react";
 
 const Menu = ({ toggleSidebar }) => {
   return (
-    <div onClick={toggleSidebar}>
+    <div onClick={toggleSidebar} className="dark:text-white">
       <div className="nav">
         <input type="checkbox" />
         <svg>
