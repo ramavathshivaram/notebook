@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { optimizeCanvasWithAI } from "../helper/api";
-import { Card } from "./ui/Card";
+import { Card } from "./ui/card";
 import AISymbol from "./AISymbol";
 import CanvasHeader from "./CanvasHeader";
 import CanvasFooter from "./CanvasFooter";
