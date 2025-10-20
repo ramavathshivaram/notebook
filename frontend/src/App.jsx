@@ -15,9 +15,7 @@ const App = () => {
   return (
     <div className="select-none">
       <BrowserRouter>
-        <Suspense
-          fallback={<div className="text-center py-20">Loading...</div>}
-        >
+        <Suspense fallback={<div className="text-center py-20" />}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/notebook" element={<Notebook />} />
