@@ -81,9 +81,10 @@ const updateCanvasTitle = async (req, res) => {
 
 const updateCanvasContent = async (req, res) => {
   try {
+    // console.log("canvas content")
     const { canvasId } = req.params;
     const { content } = req.body;
-    console.log(canvasId, content);
+    // console.log(canvasId, content);
     const canvas = await Canvas.findById(canvasId);
     if (!canvas) {
       return res.status(404).json({ message: "Canvas not found" });

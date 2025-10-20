@@ -1,30 +1,33 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
-import Auth from "./pages/Auth";
-import Notebook from "./pages/Notebook";
-import NotFound from "./pages/NotFound";
-import ProjectDocs from "./pages/ProjectDocs";
-import ForgotPassword from "./pages/ForgotPassword";
 import { Toaster } from "sonner";
-import VerifyOTP from "./pages/VerifyOTP";
+
+// Lazy load pages
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Notebook = lazy(() => import("./pages/Notebook"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const ProjectDocs = lazy(() => import("./pages/ProjectDocs"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const VerifyOTP = lazy(() => import("./pages/VerifyOTP"));
 
 const App = () => {
   return (
     <div className="select-none">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />}></Route>
-          <Route path="/notebook" element={<Notebook />} />
-          <Route path="/auth" element={<Auth />}></Route>
-          <Route path="/docs" element={<ProjectDocs />}></Route>
-          <Route path="/forgot-password" element={<ForgotPassword />}></Route>
-          <Route
-            path="/forgot-password/:userId"
-            element={<VerifyOTP />}
-          ></Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense
+          fallback={<div className="text-center py-20">Loading...</div>}
+        >
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/notebook" element={<Notebook />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/docs" element={<ProjectDocs />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/forgot-password/:userId" element={<VerifyOTP />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
         <Toaster position="top-right" richColors duration={2000} />
       </BrowserRouter>
     </div>
