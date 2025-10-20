@@ -15,9 +15,11 @@ const ListSkeleton = ({ count = 5 }) => {
             repeatType: "reverse",
             delay: i * 0.1,
           }}
-          className="flex items-center space-x-3 p-4 bg-gray-200 rounded-md dark:bg-gray-700"
+          className="flex flex-col space-y-2 p-3 bg-gray-200 rounded-md dark:bg-gray-700"
         >
-
+          {/* Simulated lines for list item */}
+          <div className="h-4 w-3/4 bg-gray-300 rounded dark:bg-gray-600"></div>
+          <div className="h-3 w-1/2 bg-gray-300 rounded dark:bg-gray-600"></div>
         </motion.div>
       ))}
     </div>

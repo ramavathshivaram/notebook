@@ -3,14 +3,21 @@ import { Textarea } from "./ui/textarea";
 import debounce from "lodash.debounce";
 import useUpdatePageContent from "../hooks/useUpdatePageContent.js";
 import AISymbol from "./AISymbol";
-import { getAiResponse } from "../helper/api";
+import { getAiResponse, optimizationAINote } from "../helper/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import ListSkeleton from "../skeletons/ListSkeleton.jsx";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 const ContentEditor = ({ content, pageId }) => {
   const [localContent, setLocalContent] = useState(content);
   const [isLoadingAI, setLoadingAI] = useState(false);
+  const inputRef = React.useRef(null);
+
+  const [loading, setLoading] = useState(false);
 
   const { mutate: updatePageMutate, isPending } = useUpdatePageContent();
 
@@ -36,16 +43,37 @@ const ContentEditor = ({ content, pageId }) => {
     try {
       debouncedUpdate.flush();
       const res = await getAiResponse({ prompt: localContent });
-      console.log(res);
+      const content = res;
+      console.log(content);
       if (res) {
-        setLocalContent(res);
+        setLocalContent(content);
       }
-      toast.success("✨ AI response received!");
     } catch (err) {
       console.error(err);
       toast.error("❌ Error fetching AI response.");
     } finally {
       setLoadingAI(false);
+    }
+  };
+  const handleGenerate = async () => {
+    if (loading) return;
+    const prompt = inputRef.current.value;
+    if (!prompt) return;
+    setLoading(true);
+    try {
+      const content = await optimizationAINote({
+        prompt,
+        noteContent: localContent,
+      });
+      if (content) {
+        setLocalContent(content);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("❌ Error fetching AI response.");
+    } finally {
+      setLoading(false);
+      inputRef.current.value = "";
     }
   };
 
@@ -55,13 +83,31 @@ const ContentEditor = ({ content, pageId }) => {
       {isLoadingAI ? (
         <ListSkeleton />
       ) : (
-        <Textarea
-          value={localContent}
-          onChange={(e) => handleChange(e.target.value)}
-          placeholder="Start typing your notes..."
-          spellCheck
-          className="min-h-[500px] text-lg border-0 bg-transparent px-0 resize-none focus-visible:ring-0 leading-relaxed overflow-y-auto"
-        />
+        <>
+          <ReactQuill
+            className="my-editor"
+            theme="snow"
+            value={localContent}
+            onChange={handleChange}
+            placeholder="Start writing..."
+            style={{ height: "100%" }}
+          />
+          <div className="peer group/generate flex items-center gap-2 flex-1 transition-all duration-500 ease-in-out group-hover/generate:blur-[0px] mt-2 mb-15">
+            <Input
+              ref={inputRef}
+              className="w-0 transition-all p-0 border-0 duration-500 ease-in-out group-hover/generate:w-full group-hover/generate:border group-hover/generate:p-3 focus:w-full focus:border focus:p-3"
+              placeholder="Type prompt..."
+            />
+            <Button
+              variant="outline"
+              onClick={handleGenerate}
+              disabled={loading}
+              className="transition-all duration-500 ease-in-out"
+            >
+              {loading ? "Generating..." : "Generate"}
+            </Button>
+          </div>
+        </>
       )}
 
       {/* Saving indicator */}
@@ -70,22 +116,7 @@ const ContentEditor = ({ content, pageId }) => {
       )}
 
       {/* Floating AI Chat Button */}
-      <motion.div
-        onClick={handleAI}
-        className="fixed left-1/2 bottom-5 w-25 -translate-x-1/2 cursor-pointer z-50"
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9 }}
-        animate={{
-          y: [0, -8, 0],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 3,
-          ease: "easeInOut",
-        }}
-      >
-        <AISymbol />
-      </motion.div>
+      <AISymbol handleAI={handleAI} />
 
       {/* AI Loading Overlay */}
       {isLoadingAI && (
