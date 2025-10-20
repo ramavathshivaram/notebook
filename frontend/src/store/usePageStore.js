@@ -4,10 +4,11 @@ const usePageStore = create((set) => ({
   currentPage: null,
   initialLoad: true,
   currentCanvas: null,
-  setCurrentCanvas: (canvas) =>
+  setCurrentCanvas: (canvas, initialLoad = true) =>
     set({
       currentCanvas: canvas,
       currentPage: null,
+      initialLoad,
     }),
   setCurrentPage: (page, initialLoad = true) =>
     set({

@@ -24,11 +24,16 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
   const addCanvasMutate = useAddCanvas().mutate;
 
   const currentPage = usePageStore((s) => s.currentPage);
+  const currentCanvas = usePageStore((s) => s.currentCanvas);
   const [editingSectionId, setEditingSectionId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
 
   const isSectionSelected = section?.pages?.some(
     (page) => page._id === currentPage
+  );
+
+  const isCanvasSelected = section?.canvases?.some(
+    (canvas) => canvas?._id === currentCanvas
   );
 
   // 🔹 Handlers
@@ -59,7 +64,6 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
       canvasId,
     });
   };
-
   return (
     <motion.div
       className="mb-1 w-[calc(100%-1.5rem)]"
@@ -110,7 +114,7 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
                   : "text-gray-800 dark:text-gray-200"
               }`}
               animate={{
-                x: isSectionSelected ? 5 : 0,
+                x: isSectionSelected || isCanvasSelected ? 5 : 0,
                 transition: { type: "spring", stiffness: 200, damping: 20 },
               }}
               onDoubleClick={() => {
