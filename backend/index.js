@@ -16,11 +16,11 @@ const canvas_routes = require("./routes/canvasRoutes");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
-app.set("view engine", "ejs");
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+}));
 
-app.set("views", "./views");
-
+// Public Routes
 app.post("/api/auth", auth);
 app.post("/api/forgot-password/send-otp", sendOTP);
 app.post("/api/forgot-password/verify-otp", verifyOTP);
@@ -28,9 +28,16 @@ app.post("/api/forgot-password/reset", resetPassword);
 
 app.use(protect);
 
+// Section Routes
 app.use("/api/section", section_routes);
+
+// Page Routes
 app.use("/api/page", page_routes);
+
+// Canvas Routes
 app.use("/api/canvas", canvas_routes);
+
+// AI Routes
 app.use("/api/ai", ai_routes);
 
 const PORT = process.env.PORT || 3000;
@@ -38,7 +45,7 @@ const PORT = process.env.PORT || 3000;
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   } catch (error) {
     console.error("Failed to connect to DB", error);
   }

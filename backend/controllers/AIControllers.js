@@ -1,63 +1,11 @@
 /* aiController.js */
+const {
+  NOTE_RULES,
+  CANVAS_GENERATION_RULES,
+  CANVAS_OPTIMIZATION_RULES,
+} = require("../constants");
+
 const OpenAI = require("../config/ai");
-
-/**
- * System rules/prompts
- */
-const NOTE_RULES = `
-Read first: Skim the note to understand context before editing — this avoids accidental deletions.
-Follow the AI Note Optimization Rules:
-
-1. Clarify and simplify writing.
-2. Structure content using only the following HTML tags: h1, h2, h3, p, b, li, ol, ul.
-3. Do NOT include any styles, classes, ids, or other HTML attributes.
-4. Keep the meaning unchanged.
-5. Preserve code and technical data.
-6. Return the final result as a clean HTML string that can be safely rendered in ReactQuill.
-7. Do NOT return JSON, markdown, or any extra metadata — only the HTML content string.
-`;
-
-const CANVAS_GENERATION_RULES = `
-You are an expert in vector and drawing optimization.
-
-Task:
-1. Read the existing canvas JSON if provided.
-2. Optimize it — remove redundant points, merge similar paths, and ensure smooth, consistent curves.
-3. If the user provides a prompt, generate new drawing paths according to it.
-4. Always return ONLY a JSON array in this format:
-
-[
-  {
-    "drawMode": true,
-    "strokeColor": "#000000",
-    "strokeWidth": 3,
-    "paths": [
-      { "x": 301.296875, "y": 326 },
-      { "x": 323.296875, "y": 308 }
-    ]
-  }
-]
-
-Rules:
-- Return only valid JSON (no explanation, no markdown).
-- Keep coordinates within 0-2000 unless user specifies otherwise.
-- Maintain strokeColor and strokeWidth types.
-- Round coordinates to max 3 decimal places.
-`;
-
-const CANVAS_OPTIMIZATION_RULES = `
-You are an expert in vector and drawing optimization.
-
-Task:
-1. Read the provided canvas JSON (array of stroke objects).
-2. Optimize it:
-   - Remove consecutive duplicate/near-duplicate points.
-   - Remove empty/zero-length paths.
-   - Round coordinates to 2 decimal places.
-   - Merge adjacent paths that have identical strokeColor and strokeWidth if they are continuous.
-   - Keep structure: { drawMode, strokeColor, strokeWidth, paths }.
-3. Return ONLY the optimized JSON array (same structure as input).
-`;
 
 const getAIResponse = async (userMessage, systemRules) => {
   const model = process.env.AI_MODEL || "gpt-4o-mini";
