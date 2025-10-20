@@ -98,18 +98,77 @@ const sendOTP = async (req, res) => {
     sendMail(
       email,
       "Password Reset OTP",
-      `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9; text-align: center;">
-          <h2 style="color: #333;">Password Reset OTP</h2>
-          <p style="font-size: 16px; color: #555;">Use the OTP below to reset your password. It is valid for 10 minutes.</p>
-          <p style="font-size: 24px; font-weight: bold; color: #2d89ff; margin: 20px 0;">${otp}</p>
-          <p style="font-size: 14px; color: #777;">Do not share this OTP with anyone.</p>
-          <a href="${process.env.FRONTEND_URL}/forgot-password/${user._id}" 
-            style="display: inline-block; margin-top: 20px; padding: 12px 25px; background-color: #2d89ff; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold;">
-            Verify OTP
-          </a>
-          <p style="font-size: 12px; color: #aaa; margin-top: 20px;">If you didn’t request a password reset, please ignore this email.</p>
-      </div>`
+      `<div style="
+      font-family: Arial, sans-serif; 
+      max-width: 600px; 
+      margin: auto; 
+      padding: 30px; 
+      border: 2px solid #000; 
+      border-radius: 15px; 
+      background-color: #fff; 
+      text-align: center; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  ">
+      <h2 style="
+          color: #000; 
+          font-size: 28px; 
+          margin-bottom: 15px; 
+          text-transform: uppercase;
+          letter-spacing: 1px;
+      ">
+          Password Reset OTP
+      </h2>
+      
+      <p style="
+          font-size: 16px; 
+          color: #333; 
+          margin-bottom: 25px;
+      ">
+          Use the OTP below to reset your password. It is valid for 10 minutes.
+      </p>
+      
+      <div style="
+          display: inline-block; 
+          padding: 20px 40px; 
+          font-size: 28px; 
+          font-weight: bold; 
+          color: #000; 
+          border: 2px dashed #000; 
+          border-radius: 10px; 
+          margin-bottom: 25px;
+          letter-spacing: 2px;
+      ">
+          ${otp}
+      </div>
+      
+      <p style="font-size: 14px; color: #555; margin-bottom: 25px;">
+          Do not share this OTP with anyone.
+      </p>
+      
+      <a href="${process.env.FRONTEND_URL}/forgot-password/${user._id}" 
+        style="
+          display: inline-block; 
+          padding: 14px 30px; 
+          font-size: 16px; 
+          font-weight: bold; 
+          text-decoration: none; 
+          color: #fff; 
+          background-color: #000; 
+          border-radius: 8px;
+          transition: all 0.3s ease;
+      "
+        onmouseover="this.style.backgroundColor='#333'; this.style.transform='scale(1.05)';"
+        onmouseout="this.style.backgroundColor='#000'; this.style.transform='scale(1)';"
+      >
+        Verify OTP
+      </a>
+      
+      <p style="font-size: 12px; color: #777; margin-top: 30px;">
+          If you didn’t request a password reset, please ignore this email.
+      </p>
+  </div>`
     );
+
 
     res.status(200).json({ message: "OTP sent to email" });
   } catch (error) {
