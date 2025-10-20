@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { PencilLine, Trash2 } from "lucide-react";
 import usePageStore from "../store/usePageStore";
-import useDeleteCanvas from "../hooks/useDeleteCanvas";
+import useDeleteCanvas from "../hooks/useDeleteCanvas.js";
 const Canvas = ({ canvas, sectionId }) => {
   const setCurrentCanvas = usePageStore((s) => s.setCurrentCanvas);
   const currentCanvas = usePageStore((s) => s.currentCanvas);
