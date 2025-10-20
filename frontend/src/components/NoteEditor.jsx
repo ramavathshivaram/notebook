@@ -22,7 +22,11 @@ const NoteEditor = ({ pageId }) => {
     <div className="flex-1 flex flex-col h-full">
       <div className="flex-1 overflow-auto p-4">
         <TitleEditor title={page?.title} pageId={pageId} />
-        <ContentEditor content={page?.content} pageId={pageId} />
+        <ContentEditor
+          content={page?.content}
+          title={page?.title}
+          pageId={pageId}
+        />
       </div>
     </div>
   );
