@@ -134,3 +134,19 @@ npm run dev
   <img src="https://img.shields.io/badge/JWT-Auth-yellow?logo=jsonwebtokens">
   <img src="https://img.shields.io/badge/License-MIT-blue">
 </p>
+---
+
+### 💬 Connect With Me
+
+<p align="center">
+  <a href="mailto:ramavathshiva6300@gmail.com"><img src="https://img.shields.io/badge/Email-Contact%20Me-red?logo=gmail&logoColor=white" alt="Email"></a>
+  <a href="https://github.com/ramavathshivaram"><img src="https://img.shields.io/badge/GitHub-ramavathshivaram-black?logo=github" alt="GitHub"></a>
+  <a href="https://www.linkedin.com/in/"><img src="https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin" alt="LinkedIn"></a>
+</p>
+
+---
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Made%20with❤️by-Ramavath%20Shiva%20Ram-orange?style=for-the-badge" alt="Made by Ramavath Shiva Ram">
+</p>
+
