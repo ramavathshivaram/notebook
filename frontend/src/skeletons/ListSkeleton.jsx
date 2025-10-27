@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const ListSkeleton = ({ count = 5 }) => {
   return (
-    <div className="space-y-3 p-2">
+    <div className="space-y-3 p-2 w-full overflow-hidden">
       {[...Array(count)].map((_, i) => (
         <motion.div
           key={i}

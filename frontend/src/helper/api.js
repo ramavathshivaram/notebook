@@ -55,6 +55,12 @@ export const resetPassword = async ({ userId, password }) => {
   return res.status === 200;
 };
 
+export const updateUser = async (darkMode) => {
+  console.log(darkMode);
+  const res = await API.post("/update-user", { darkMode });
+  return res.data.user;
+};
+
 // -------------------- Section APIs --------------------
 export const createSection = async (section) => {
   const res = await API.post("section/create", section);
@@ -135,29 +141,15 @@ export const deleteCanvas = async (sectionId, canvasId) => {
 };
 
 // -------------------- AI APIs --------------------
-export const getAiResponse = async (data) => {
+export const generateAiNote = async (data) => {
   const res = await API.post("/ai/generate-ai-note", data);
-  return res.data.message;
-};
-
-export const optimizationAINote = async (data) => {
-  // console.log(data)
-  const res = await API.post("/ai/optimize-ai-note", data);
-  // console.log(res.data.message);
   return res.data.message;
 };
 
 export const generateCanvasDrawing = async (data) => {
   // console.log(data);
   const res = await API.post("/ai/generate-canvas-drawing", data);
-  let canvas = JSON.parse(res.data.canvas);
-  // console.log("api", drawingDescription);
-  return canvas;
-};
-
-export const optimizeCanvasWithAI = async (data) => {
-  // console.log(data);
-  const res = await API.post("/ai/optimize-canvas", data);
-  // console.log(res.data.optimizedCanvas);
-  return res.data.optimizedCanvas;
+  // console.log(res.data);
+  // console.log("AI");
+  return res.data.canvas;
 };

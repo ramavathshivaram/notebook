@@ -2,15 +2,15 @@ import { create } from "zustand";
 
 const usePageStore = create((set) => ({
   currentPage: null,
-  initialLoad: true,
+  initialLoad: false,
   currentCanvas: null,
-  setCurrentCanvas: (canvas, initialLoad = true) =>
+  setCurrentCanvas: (canvas, initialLoad = false) =>
     set({
       currentCanvas: canvas,
       currentPage: null,
       initialLoad,
     }),
-  setCurrentPage: (page, initialLoad = true) =>
+  setCurrentPage: (page, initialLoad = false) =>
     set({
       currentPage: page,
       currentCanvas: null,
@@ -23,7 +23,7 @@ const usePageStore = create((set) => ({
     }),
   clearInitialLoad: () =>
     set({
-      initialLoad: true,
+      initialLoad: false,
     }),
 }));
 
