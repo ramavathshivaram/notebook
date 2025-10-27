@@ -8,7 +8,7 @@
 🔗 **Frontend:** [https://notebook-frontend-v2.onrender.com](https://notebook-frontend-v2.onrender.com)  
 
 ---
-![App Screenshot](./Output/desktop-note.png)  
+![App Screenshot](./Outputs/Desktop - Note.png)  
 ---
 
 A full-stack **MERN notebook application** integrated with **AI note generation** and **canvas drawing** capabilities.  
