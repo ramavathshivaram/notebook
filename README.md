@@ -7,8 +7,7 @@
 ## 🌐 Live Demo  
 🔗 **Frontend:** [https://notebook-frontend-v2.onrender.com](https://notebook-frontend-v2.onrender.com)  
 
----
-![App Screenshot]("./Outputs/Desktop - Note.png")  
+
 ---
 
 A full-stack **MERN notebook application** integrated with **AI note generation** and **canvas drawing** capabilities.  
@@ -116,7 +115,7 @@ VITE_BACKEND_DEV_URL=http://localhost:3000                  # Local backend URL
 ```
 cd backend
 npm install
-npm start             # or `npm run dev` if dev script exists
+npm run dev
 ```
 
 ### Frontend (in separate terminal)
