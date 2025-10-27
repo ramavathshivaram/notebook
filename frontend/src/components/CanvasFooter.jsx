@@ -8,7 +8,7 @@ import useUpdateCanvasContent from "../hooks/useUpdateCanvasContent.js";
 const CanvasFooter = ({ canvasRef, title, content, canvasId }) => {
   const { mutateAsync: updateCanvasContent } = useUpdateCanvasContent();
   const inputRef = useRef(null);
-  const [loading, setLoading] = useState(false);
+  const [isloadingAI, setisLoadingAI] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -93,19 +93,70 @@ const CanvasFooter = ({ canvasRef, title, content, canvasId }) => {
   // Generate canvas from AI prompt
   const handleGenerate = async () => {
     const prompt = inputRef.current.value.trim();
-    if (!prompt) return;
-    setLoading(true);
+    if (!prompt || isloadingAI) return;
+    setisLoadingAI(true);
+
+    // console.log(await canvasRef.current.exportPaths());
+
     try {
       const res = await generateCanvasDrawing({ prompt });
-      canvasRef.current.loadPaths(res);
-      inputRef.current.value = "";
+      // canvasRef.current.loadPaths(res.content);
+      const shapePaths = res.content.map((shape) => {
+        const { stroke, strokeWidth, type, paths } = shape;
+        let points = [];
+
+        if (type === "line" || type === "path" || type === "curve") {
+          // For line/path/curve, use points as given
+          points = shape.paths.map((pt) => ({ x: pt.x, y: pt.y }));
+        } else if (type === "rectangle") {
+          // Generate rectangle corners (close loop back to start)
+          const p1 = paths[0];
+          const p2 = paths[1];
+          points = [
+            { x: p1.x, y: p1.y },
+            { x: p1.x, y: p2.y },
+            { x: p2.x, y: p2.y },
+            { x: p2.x, y: p1.y },
+            { x: p1.x, y: p1.y },
+          ];
+        } else if (type === "circle") {
+          // Approximate circle: center = paths[0], second point defines radius
+          const center = paths[0];
+          const edge = paths[1];
+          const dx = edge.x - center.x;
+          const dy = edge.y - center.y;
+          const radius = Math.sqrt(dx * dx + dy * dy);
+          const numSegments = 32;
+          for (let i = 0; i <= numSegments; i++) {
+            const theta = (i * 2 * Math.PI) / numSegments;
+            points.push({
+              x: center.x + radius * Math.cos(theta),
+              y: center.y + radius * Math.sin(theta),
+            });
+          }
+        }
+
+        return {
+          drawMode: true,
+          strokeColor: stroke,
+          strokeWidth: strokeWidth,
+          paths: points,
+        };
+      });
+
+      // console.log(shapePaths);
+
+      await canvasRef.current.loadPaths(shapePaths);
     } catch (err) {
       console.error("Canvas generation failed:", err);
       toast.error("Failed to generate canvas.");
     } finally {
-      setLoading(false);
+      inputRef.current.value = "";
+      setisLoadingAI(false);
     }
   };
+
+  // console.log(canvasRef.current);
 
   return (
     <div className="flex justify-between items-center px-4">
@@ -118,10 +169,10 @@ const CanvasFooter = ({ canvasRef, title, content, canvasId }) => {
         <Button
           variant="outline"
           onClick={handleGenerate}
-          disabled={loading}
+          disabled={isloadingAI}
           className="transition-all duration-500 ease-in-out cursor-pointer"
         >
-          {loading ? "Generating..." : "Generate"}
+          {isloadingAI ? "Generating..." : "Generate"}
         </Button>
       </div>
 
@@ -129,7 +180,7 @@ const CanvasFooter = ({ canvasRef, title, content, canvasId }) => {
         <Button
           variant="outline"
           onClick={handleDownload}
-          disabled={downloading}
+          disabled={downloading || isloadingAI}
           className="cursor-pointer"
         >
           {downloading ? "Downloading..." : "Download"}
@@ -139,7 +190,7 @@ const CanvasFooter = ({ canvasRef, title, content, canvasId }) => {
           onClick={handleExportPNG}
           title="Save"
           className="cursor-pointer"
-          disabled={saving}
+          disabled={saving || isloadingAI}
         >
           {saving ? "Saving..." : "Save"}
         </Button>

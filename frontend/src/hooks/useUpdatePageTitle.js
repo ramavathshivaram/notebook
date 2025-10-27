@@ -21,20 +21,18 @@ export default function useUpdatePageTitle() {
       }));
 
       // Update sections (if they contain pages)
-      if ("title" in updatedData) {
-        queryClient.setQueryData(["sections"], (old) =>
-          old?.map((sec) =>
-            sec.pages
-              ? {
-                  ...sec,
-                  pages: sec.pages.map((p) =>
-                    p._id === pageId ? { ...p, title: updatedData.title } : p
-                  ),
-                }
-              : sec
-          )
-        );
-      }
+      queryClient.setQueryData(["sections"], (old) =>
+        old?.map((sec) =>
+          sec?.pages
+            ? {
+                ...sec,
+                pages: sec.pages.map((p) =>
+                  p._id === pageId ? { ...p, title: updatedData.title } : p
+                ),
+              }
+            : sec
+        )
+      );
 
       return { prevPage, prevSections };
     },

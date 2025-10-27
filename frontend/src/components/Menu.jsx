@@ -2,9 +2,9 @@ import React from "react";
 
 const Menu = ({ toggleSidebar }) => {
   return (
-    <div onClick={toggleSidebar} className="dark:text-white">
+    <div className="dark:text-white">
       <div className="nav">
-        <input type="checkbox" />
+        <input type="checkbox" onClick={toggleSidebar} />
         <svg>
           <use xlinkHref="#menu" />
           <use xlinkHref="#menu" />

@@ -7,6 +7,7 @@ const {
   sendOTP,
   verifyOTP,
   resetPassword,
+  updateUser,
 } = require("./controllers/userControllers");
 const protect = require("./middlewares/authMiddleware");
 const section_routes = require("./routes/sectionRoutes");
@@ -16,9 +17,11 @@ const canvas_routes = require("./routes/canvasRoutes");
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  })
+);
 
 // Public Routes
 app.post("/api/auth", auth);
@@ -27,6 +30,8 @@ app.post("/api/forgot-password/verify-otp", verifyOTP);
 app.post("/api/forgot-password/reset", resetPassword);
 
 app.use(protect);
+
+app.post("/api/update-user", updateUser);
 
 // Section Routes
 app.use("/api/section", section_routes);

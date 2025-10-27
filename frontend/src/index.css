@@ -237,3 +237,28 @@
   gap: 8px;
   justify-content: space-evenly;
 }
+
+.show-scroll {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff transparent;
+}
+
+.show-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.show-scroll::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.show-scroll::-webkit-scrollbar-thumb {
+  @apply bg-white dark:bg-gray-600 rounded-full;
+  @apply transition-colors duration-300;
+}
+
+.show-scroll::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-300 dark:bg-gray-500;
+}

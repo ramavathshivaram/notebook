@@ -12,11 +12,11 @@ import DarkModeToggle from "./DarkModeToggle";
 const Header = ({ clearUser }) => {
   const navigate = useNavigate();
   const clearCurrentPage = usePageStore((s) => s.clearCurrentPage);
-  const [mobileView, setMobileView] = useState(window.innerWidth < 540);
+  const [mobileView, setMobileView] = useState(window.innerWidth < 780);
   const toggleSidebar = useSidebarStore((s) => s.toggleSidebar);
 
   useEffect(() => {
-    const handleResize = () => setMobileView(window.innerWidth < 540);
+    const handleResize = () => setMobileView(window.innerWidth < 780);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -45,6 +45,7 @@ const Header = ({ clearUser }) => {
       </Button>
       {/* Logout */}
       <div className="flex gap-1">
+        <DarkModeToggle />
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -64,7 +65,6 @@ const Header = ({ clearUser }) => {
             {mobileView ? "" : " Logout"}
           </Button>
         </motion.div>
-        <DarkModeToggle />
       </div>
     </header>
   );

@@ -10,16 +10,40 @@ const openAI = new OpenAI({
   },
 });
 
-const rules = `You are a helpful and intelligent AI assistant.
-Follow these rules strictly:
-1. Always write responses in full paragraphs — smooth, natural, and easy to read.
-2. Avoid using bullet points or numbered lists unless explicitly requested.
-3. Keep the writing concise, clear, and grammatically correct.
-4. Maintain a professional, friendly, and confident tone.
-5. If the question is unclear, politely ask for clarification.
-6. When explaining code, describe it in paragraph form before showing examples.
-7. Never include unnecessary repetition or filler text.
-8. Avoid using slang or informal language.
-9. Always prioritize accuracy and relevance in your responses.`;
+const getAIResponse = async (userMessage, systemRules) => {
+  const model = process.env.AI_MODEL || "gpt-4o-mini";
+  const temperature = 0.7;
 
-module.exports=openAI
+  // console.log(userMessage, systemRules);
+
+  try {
+    const response = await openAI.chat.completions.create({
+      model,
+      messages: [
+        { role: "system", content: systemRules || "" },
+        { role: "user", content: userMessage },
+      ],
+      temperature,
+    });
+
+    // console.log(response);
+
+    let message = response?.choices?.[0]?.message?.content;
+
+    if (message && message.includes("```json")) {
+      message.replace(/```json|```/g, "").trim();
+    }
+
+    message = await JSON.parse(message);
+    // console.log(message);
+
+    return message;
+  } catch (err) {
+    console.error("getAIResponse error:", err?.message || err);
+    return null;
+  }
+};
+
+module.exports = {
+  getAIResponse,
+};

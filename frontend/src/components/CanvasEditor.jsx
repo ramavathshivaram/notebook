@@ -1,7 +1,6 @@
 import React from "react";
 import { getCanvas } from "../helper/api";
 import { useQuery } from "@tanstack/react-query";
-import NoteEditorSkeleton from "../skeletons/NoteEditorSkeleton";
 import ErrorMessage from "../components/ErrorMessage";
 import CanvasTitle from "./CanvasTitle";
 import CanvasContent from "./CanvasContent";
