@@ -5,11 +5,11 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const sendMail = require("../config/nodeMailler");
-const { generateHTML } = require("../constants");
+const { generateHTML } = require("../utils");
 
 const generateToken = (id) => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "1h",
+    expiresIn: "5h",
   });
   return token;
 };
@@ -97,7 +97,7 @@ const sendOTP = async (req, res) => {
     const htmlContent = generateHTML(otp, user._id);
 
     sendMail(email, "Password Reset OTP", htmlContent);
-    
+
     res.status(200).json({ message: "OTP sent to email" });
   } catch (error) {
     console.error(error);
@@ -151,9 +151,30 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const { darkMode } = req.body;
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (darkMode != null) {
+      console.log(darkMode);
+      user.isDarkMode = darkMode;
+    }
+    await user.save();
+    res.status(200).json({ message: "User updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   auth,
   sendOTP,
   verifyOTP,
   resetPassword,
+  updateUser,
 };

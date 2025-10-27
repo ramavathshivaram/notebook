@@ -21,11 +21,11 @@ const Notebook = () => {
   const clearUser = useUserStore((s) => s.clearUser);
   const currentPage = usePageStore((s) => s.currentPage);
   const currentCanvas = usePageStore((s) => s.currentCanvas);
-  const [mobileView, setMobileView] = useState(window.innerWidth < 540);
+  const [mobileView, setMobileView] = useState(window.innerWidth < 780);
   const isSidebarOpen = useSidebarStore((s) => s.isSidebarOpen);
 
   useEffect(() => {
-    const handleResize = () => setMobileView(window.innerWidth < 540);
+    const handleResize = () => setMobileView(window.innerWidth < 780);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -43,7 +43,7 @@ const Notebook = () => {
 
       <div
         className={cn(
-          "max-w-6xl mx-auto w-full border shadow-md h-full overflow-hidden",
+          "max-w-7xl mx-auto w-full border shadow-md h-full overflow-hidden",
           mobileView && "flex flex-col"
         )}
       >
@@ -69,11 +69,11 @@ const Notebook = () => {
         ) : (
           // 💻 On desktop — show resizable panels
           <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={30} minSize={20} maxSize={40}>
+            <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
               <NotebookSidebar sections_d={section} />
             </ResizablePanel>
             <ResizableHandle />
-            <ResizablePanel defaultSize={70} minSize={60} maxSize={80}>
+            <ResizablePanel defaultSize={75} minSize={60} maxSize={80}>
               {currentPage ? (
                 <NoteEditor pageId={currentPage} />
               ) : currentCanvas ? (
