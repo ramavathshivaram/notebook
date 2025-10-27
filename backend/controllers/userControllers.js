@@ -74,7 +74,6 @@ const auth = async (req, res) => {
 const sendOTP = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log(email);
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -84,7 +83,12 @@ const sendOTP = async (req, res) => {
     if (await checkPasswordExpiry(user, res)) return;
 
     if (user.forgotPasswordOTP && user.forgotPasswordOTPExpiry > new Date()) {
-      return res.status(400).json({ message: "OTP already sent" });
+      const remainingMin = Math.floor(
+        (user.forgotPasswordOTPExpiry - new Date()) / 60000
+      );
+      return res
+        .status(400)
+        .json({ message: `OTP already sent or wait for ${remainingMin} min` });
     }
 
     const otp = generateOTP();
@@ -95,6 +99,7 @@ const sendOTP = async (req, res) => {
     await user.save();
 
     const htmlContent = generateHTML(otp, user._id);
+    // console.log(htmlContent)
 
     sendMail(email, "Password Reset OTP", htmlContent);
 

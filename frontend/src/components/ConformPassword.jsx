@@ -65,7 +65,7 @@ const ConfirmPassword = ({ userId }) => {
         animate={errorShake ? { x: [-10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.4 }}
       >
-        <Card className="md:min-w-[400px] p-8 rounded-2xl shadow-lg border border-border/50 backdrop-blur-md bg-card/70">
+        <Card className="min-w-[400px] p-8 rounded-2xl shadow-lg border border-border/50 backdrop-blur-md bg-card/70">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
