@@ -71,7 +71,7 @@ It also includes **JWT-based authentication**, **email OTP verification**, and *
 `express` &nbsp; | &nbsp; `mongoose` &nbsp; | &nbsp; `jsonwebtoken` &nbsp; | &nbsp; `bcryptjs` &nbsp; | &nbsp; `nodemailer` &nbsp; | &nbsp; `dotenv` &nbsp; | &nbsp; `cors` &nbsp; | &nbsp; `ejs` &nbsp; | &nbsp; `openai` &nbsp; | &nbsp; `uuid` &nbsp; | &nbsp; `node-fetch`
 
 ### **Frontend Packages**
-`react` &nbsp; | &nbsp; `react-dom` &nbsp; | &nbsp; `react-router-dom` &nbsp; | &nbsp; `react-hook-form` &nbsp; | &nbsp; `axios` &nbsp; | &nbsp; `zustand` &nbsp; | &nbsp; `tailwindcss` &nbsp; | &nbsp; `react-quill-new` &nbsp; | &nbsp; `react-sketch-canvas` &nbsp; | &nbsp; `sonner` &nbsp; | &nbsp; `lucide-react` &nbsp; | &nbsp; `motion` &nbsp; | &nbsp; `lottie-react` &nbsp; | &nbsp; `crypto-js` &nbsp; | &nbsp; `zod` &nbsp; | &nbsp; `next-themes`
+`react` &nbsp; | &nbsp; `react-dom` &nbsp; | &nbsp; `react-router-dom` &nbsp; | &nbsp; `react-hook-form` &nbsp; | &nbsp; `axios` &nbsp; | &nbsp; `zustand` &nbsp; | &nbsp; `tailwindcss` &nbsp; | &nbsp; `shadcn` &nbsp; | &nbsp; `react-quill-new` &nbsp; | &nbsp; `react-sketch-canvas` &nbsp; | &nbsp; `sonner` &nbsp; | &nbsp; `lucide-react` &nbsp; | &nbsp; `motion` &nbsp; | &nbsp; `lottie-react` &nbsp; | &nbsp; `crypto-js` &nbsp; | &nbsp; `zod` &nbsp; | &nbsp; `next-themes` &nbsp; | &nbsp; `@tanstack/react-query` &nbsp; | &nbsp; `lodash.debounce` &nbsp; | &nbsp; `tailwind-merge` &nbsp; | &nbsp; `clsx`
 
 ---
 
