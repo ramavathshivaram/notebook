@@ -80,11 +80,9 @@ const sendOTP = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (await checkPasswordExpiry(user, res)) return;
-
     if (user.forgotPasswordOTP && user.forgotPasswordOTPExpiry > new Date()) {
       const remainingMin = Math.floor(
-        (user.forgotPasswordOTPExpiry - new Date()) / 60000
+        (user.forgotPasswordOTPExpiry - new Date() + 1) / 60000
       );
       return res
         .status(400)
@@ -94,14 +92,16 @@ const sendOTP = async (req, res) => {
     const otp = generateOTP();
     const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min expiry
 
+    console.log(otp);
+
     user.forgotPasswordOTP = otp;
     user.forgotPasswordOTPExpiry = expiry;
     await user.save();
 
     const htmlContent = generateHTML(otp, user._id);
-    // console.log(htmlContent)
+    // console.log(htmlContent);
 
-    sendMail(email, "Password Reset OTP", htmlContent);
+    await sendMail(email, "Password Reset OTP", htmlContent);
 
     res.status(200).json({ message: "OTP sent to email" });
   } catch (error) {
