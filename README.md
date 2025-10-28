@@ -120,7 +120,7 @@ npm run dev
 
 ### Frontend (in separate terminal)
 ```
-cd ../frontend
+cd frontend
 npm install
 npm run dev
 ```
