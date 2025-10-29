@@ -81,7 +81,7 @@ const sendOTP = async (req, res) => {
     }
 
     if (user.forgotPasswordOTP && user.forgotPasswordOTPExpiry > new Date()) {
-      const remainingMin = Math.floor(
+      const remainingMin = Math.ceil(
         (user.forgotPasswordOTPExpiry - new Date() + 1) / 60000
       );
       return res
@@ -92,17 +92,15 @@ const sendOTP = async (req, res) => {
     const otp = generateOTP();
     const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min expiry
 
-    console.log(otp);
-
-    user.forgotPasswordOTP = otp;
-    user.forgotPasswordOTPExpiry = expiry;
-    await user.save();
-
     const htmlContent = generateHTML(otp, user._id);
-    // console.log(htmlContent);
 
     await sendMail(email, "Password Reset OTP", htmlContent);
-
+    
+    user.forgotPasswordOTP = otp;
+    user.forgotPasswordOTPExpiry = expiry;
+    
+    await user.save();
+    
     res.status(200).json({ message: "OTP sent to email" });
   } catch (error) {
     console.error(error);
