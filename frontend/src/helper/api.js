@@ -1,8 +1,11 @@
 import axios from "axios";
 import { toast } from "sonner";
 
+const BASE_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const API = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`,
+  baseURL: `${BASE_URL}/api`,
 });
 
 // -------------------- Interceptors --------------------
