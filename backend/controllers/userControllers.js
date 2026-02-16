@@ -82,7 +82,7 @@ const sendOTP = async (req, res) => {
 
     if (user.forgotPasswordOTP && user.forgotPasswordOTPExpiry > new Date()) {
       const remainingMin = Math.ceil(
-        (user.forgotPasswordOTPExpiry - new Date() + 1) / 60000
+        (user.forgotPasswordOTPExpiry - new Date() + 1) / 60000,
       );
       return res
         .status(400)
@@ -95,12 +95,12 @@ const sendOTP = async (req, res) => {
     const htmlContent = generateHTML(otp, user._id);
 
     await sendMail(email, "Password Reset OTP", htmlContent);
-    
+
     user.forgotPasswordOTP = otp;
     user.forgotPasswordOTPExpiry = expiry;
-    
+
     await user.save();
-    
+
     res.status(200).json({ message: "OTP sent to email" });
   } catch (error) {
     console.error(error);
@@ -180,4 +180,6 @@ module.exports = {
   verifyOTP,
   resetPassword,
   updateUser,
+  generateToken,
+  generateOTP,
 };
