@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const nodeMailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
+const transporter = nodeMailer.createTransport({
   host: "smtp-relay.brevo.com",
   port: 587,
   auth: {
