@@ -1,19 +1,20 @@
+require("dotenv").config();
+
 const nodeMailer = require("nodemailer");
 
-const transporter = nodeMailer.createTransport({
-  host: process.env.BREVO_SERVER,
-  port: process.env.BREVO_PORT,
-  secure: false, // true for 465, false for 587
+const transporter = nodemailer.createTransport({
+  host: "smtp-relay.brevo.com",
+  port: 587,
   auth: {
-    user: process.env.BREVO_USER,
-    pass: process.env.BREVO_API_KEY,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
   },
 });
 
 const sentEmail = async (to, sub, text) => {
   await transporter.sendMail({
     from: `"AI NOTEBOOK" <${process.env.BREVO_USER}>`,
-    to: to,
+    to,
     subject: sub,
     html: text,
   });

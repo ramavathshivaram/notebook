@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from "react";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
-import { setNavigator } from "./utils/navigator";
 
 // Lazy load pages
 const LandingPage = lazy(() => import("./pages/LandingPage"));
@@ -12,17 +11,10 @@ const ProjectDocs = lazy(() => import("./pages/ProjectDocs"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const VerifyOTP = lazy(() => import("./pages/VerifyOTP"));
 
-function NavigationSetter() {
-  const navigate = useNavigate();
-  setNavigator(navigate);
-  return null;
-}
-
 const App = () => {
   return (
     <div className="select-none">
       <BrowserRouter>
-        <NavigationSetter />
         <Suspense fallback={<div className="text-center py-20" />}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
