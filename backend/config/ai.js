@@ -11,8 +11,8 @@ const openAI = new OpenAI({
 });
 
 const getAIResponse = async (userMessage, systemRules) => {
-  const model = process.env.AI_MODEL || "gpt-4o-mini";
-  const temperature = 0.7;
+  const model = process.env.OPEN_API_MODEL || "gpt-4o-mini";
+  const temperature = 0.5;
 
   // console.log(userMessage, systemRules);
 
