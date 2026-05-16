@@ -17,6 +17,7 @@ const VerifyOTP = () => {
       transition={{ duration: 0.8 }}
     >
       <BackGround />
+
       <div>
         {step === "OTP" ? (
           <VerifyOtpForm userId={userId} setStep={setStep} />
