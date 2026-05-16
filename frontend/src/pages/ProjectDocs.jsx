@@ -1,21 +1,31 @@
 import React from "react";
 import { motion } from "motion/react";
 import { BookOpen, Pen, Layers, Sparkles, Zap, Lock } from "lucide-react";
-import PhysicsHero from "../components/PhysicsHero"; // Matter.js interactive background
+import BackGround from "../components/BackGround";
+
+const features = [
+  {
+    icon: Sparkles,
+    title: "Animated UI",
+    description: "Sections and pages animate on hover and expand smoothly.",
+  },
+  {
+    icon: Zap,
+    title: "Fast & Responsive",
+    description: "React Query handles caching and mutations efficiently.",
+  },
+  {
+    icon: Lock,
+    title: "Secure",
+    description: "JWT authentication ensures your data stays private.",
+  },
+];
 
 const ProjectDocs = () => {
   return (
     <div className="h-screen bg-background text-foreground overflow-hidden relative">
       {/* Physics Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <PhysicsHero />
-      </div>
-
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background/80 pointer-events-none" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-foreground/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-foreground/5 rounded-full blur-3xl pointer-events-none" />
-
+      <BackGround />
       {/* Content */}
       <div className="relative z-10 pointer-events-auto container mx-auto px-4 md:py-20 py-5">
         {/* Hero Section */}
@@ -82,35 +92,23 @@ const ProjectDocs = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto "
         >
-          <div className="p-6 border border-border/50 rounded-xl bg-card/40 backdrop-blur-sm flex items-start gap-4">
-            <Sparkles className="w-6 h-6 mt-1 flex-shrink-0" />
-            <div>
-              <h4 className="font-semibold mb-1">Animated UI</h4>
-              <p className="text-sm text-muted-foreground">
-                Sections and pages animate on hover and expand smoothly.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-6 border border-border/50 rounded-xl bg-card/40 backdrop-blur-sm flex items-start gap-4">
-            <Zap className="w-6 h-6 mt-1 flex-shrink-0" />
-            <div>
-              <h4 className="font-semibold mb-1">Fast & Responsive</h4>
-              <p className="text-sm text-muted-foreground">
-                React Query handles caching and mutations efficiently.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-6 border border-border/50 rounded-xl bg-card/40 backdrop-blur-sm flex items-start gap-4">
-            <Lock className="w-6 h-6 mt-1 flex-shrink-0" />
-            <div>
-              <h4 className="font-semibold mb-1">Secure</h4>
-              <p className="text-sm text-muted-foreground">
-                JWT authentication ensures your data stays private.
-              </p>
-            </div>
-          </div>
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={index}
+                className="p-4 border border-border/50 rounded-xl bg-card/40 backdrop-blur-sm flex items-start gap-4"
+              >
+                <Icon className="w-6 h-6 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold mb-1">{feature.title}</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
         </motion.div>
 
         {/* Additional Docs */}

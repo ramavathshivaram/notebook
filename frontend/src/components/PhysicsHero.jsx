@@ -39,7 +39,7 @@ const PhysicsHero = () => {
       window.innerHeight + 30,
       window.innerWidth,
       60,
-      { isStatic: true, render: { fillStyle: "#000" } }
+      { isStatic: true, render: { fillStyle: "#000" } },
     );
 
     const wallLeft = Bodies.rectangle(
@@ -47,7 +47,7 @@ const PhysicsHero = () => {
       window.innerHeight / 2,
       60,
       window.innerHeight,
-      { isStatic: true, render: { fillStyle: "#000" } }
+      { isStatic: true, render: { fillStyle: "#000" } },
     );
 
     const wallRight = Bodies.rectangle(
@@ -55,7 +55,7 @@ const PhysicsHero = () => {
       window.innerHeight / 2,
       60,
       window.innerHeight,
-      { isStatic: true, render: { fillStyle: "#000" } }
+      { isStatic: true, render: { fillStyle: "#000" } },
     );
 
     const words = ["NOTE", "WRITE", "ORGANIZE", "CREATE", "THINK"];
@@ -73,8 +73,8 @@ const PhysicsHero = () => {
             strokeStyle: i % 2 === 0 ? "#fff" : "#000",
             lineWidth: 2,
           },
-        }
-      )
+        },
+      ),
     );
 
     Composite.add(world, [ground, wallLeft, wallRight, ...boxes]);
