@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+
+    "types": ["node"],
+    "lib": ["ES2020"],
+
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "paths": {
+      "#configs/*": ["./src/configs/*"],
+      "#middlewares/*": ["./src/middlewares/*"],
+      "#utils/*": ["./src/utils/*"],
+      "#services/*": ["./src/services/*"],
+      "#modules/*": ["./src/modules/*"]
+    }
+  }
+}
