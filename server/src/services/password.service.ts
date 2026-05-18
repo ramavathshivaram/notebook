@@ -1,3 +1,4 @@
+import ApiError from "#utils/ApiError.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
@@ -11,9 +12,11 @@ export const isPasswordMatched = async (
   hashedPassword: string,
 ): Promise<boolean> => {
   if (!password || !hashedPassword)
-    throw new Error("Password and hashedPassword required");
+    throw new ApiError(404, "Password and hashedPassword required");
 
-  return await bcrypt.compare(password, hashedPassword);
+  const isMatch = await bcrypt.compare(password, hashedPassword);
+  if (!isMatch) throw new ApiError(401, "Invalid password");
+  return isMatch;
 };
 
 export const generateRandomPassword = async (): Promise<string> => {

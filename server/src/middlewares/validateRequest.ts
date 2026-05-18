@@ -1,7 +1,8 @@
 import ApiError from "#utils/ApiError.js";
+import type { ZodAny } from "zod";
 
-const validateRequest = (schema) => {
-  return (req, res, next) => {
+const validateRequest = (schema: ZodAny) => {
+  return (req: Request, res: Response, next: Function) => {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {

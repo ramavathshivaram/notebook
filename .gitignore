@@ -1,16 +1,14 @@
-# Dependencies
-node_modules
+node_modules/
 
-# Environment variables
 .env
-*/.env
+.env.*
+!.env.example
 
-# Build folders
 dist/
-dist-ssr/
 build/
+coverage/
+*.tsbuildinfo
 
-# Logs
 logs/
 *.log
 npm-debug.log*
@@ -19,21 +17,44 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Local config files
-*.local
+pids/
+*.pid
+*.seed
+*.pid.lock
 
-# Editor folders
+.cache/
+.temp/
+tmp/
+
+coverage/
+.nyc_output/
+
+*.sqlite
+*.sqlite3
+*.db
+
+uploads/
+public/uploads/
+
+dump.rdb
+
+.docker/
+
 .vscode/*
 !.vscode/extensions.json
+
 .idea/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Visual Studio files
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+.DS_Store
+Thumbs.db
+
+*.local
+
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

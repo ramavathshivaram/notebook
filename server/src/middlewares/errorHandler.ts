@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import logger from "#configs/logger.js";
+import env from "#configs/env.js";
 
 interface CustomError extends Error {
   statusCode?: number;
@@ -9,7 +10,7 @@ const errorHandler = (
   err: CustomError,
   req: Request,
   res: Response,
-  next: NextFunction,
+  nxt: NextFunction,
 ) => {
   const status = err.statusCode || 500;
   const message = err.message || "Something went wrong";
@@ -26,7 +27,7 @@ const errorHandler = (
     success: false,
     error: true,
     message,
-    ...(process.env.NODE_ENV === "development" && {
+    ...(env.isProd && {
       stack: err.stack,
     }),
   });

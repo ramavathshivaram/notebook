@@ -1,13 +1,16 @@
 import redis from "#configs/redis.js";
+import ApiError from "#utils/ApiError.js";
 import type { Types } from "mongoose";
+import type { ITokenPayload } from "../types/type.js";
 
-const SESSION_TTL = 60 * 60 * 24; // 1 day
+const SESSION_TTL = 60 * 60 * 24;
 
 interface SessionData {
   tokenVersion: number;
 }
 
-const getSessionKey = (authId: Types.ObjectId) => `session:${authId}`;
+const getSessionKey = (authId: Pick<ITokenPayload, "authId">): string =>
+  `session:${authId}`;
 
 const serialize = (data: SessionData) => JSON.stringify(data);
 
@@ -15,12 +18,12 @@ const deserialize = (data: string): SessionData | null => {
   try {
     return JSON.parse(data);
   } catch {
-    return null; // prevent crash
+    return null;
   }
 };
 
 export const setSession = async (
-  authId: Types.ObjectId,
+  authId: Pick<ITokenPayload, "authId">,
   tokenVersion: number,
 ) => {
   return redis.set(
@@ -32,16 +35,17 @@ export const setSession = async (
 };
 
 export const getSession = async (
-  authId: Types.ObjectId,
+  authId: Pick<ITokenPayload, "authId">,
 ): Promise<SessionData | null> => {
   const session = await redis.get(getSessionKey(authId));
-  return session ? deserialize(session) : null;
+  if (!session) throw new ApiError(404, "Session not found");
+  return deserialize(session);
 };
 
-export const deleteSession = async (authId: Types.ObjectId) => {
+export const deleteSession = async (authId: Pick<ITokenPayload, "authId">) => {
   return redis.del(getSessionKey(authId));
 };
 
-export const rotateSession = async (authId: Types.ObjectId) => {
+export const rotateSession = async (authId: Pick<ITokenPayload, "authId">) => {
   return redis.expire(getSessionKey(authId), SESSION_TTL);
 };

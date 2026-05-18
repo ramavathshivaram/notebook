@@ -11,7 +11,10 @@ const envSchema = z.object({
 
   ORIGIN: z.string().min(1, "ORIGIN is required"),
 
-  MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
+  MONGODB_URI: z
+    .string()
+    .min(1, "MONGODB_URI is required")
+    .default("mongodb://127.0.0.1:27017/note-book"),
 
   JWT_SECRET_KEY: z.string().min(1, "JWT_SECRET_KEY is required"),
 
@@ -23,7 +26,7 @@ const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   logger.error("❌ Invalid environment variables");
-  logger.error(parsed.error.format());
+  logger.error(parsed.error.message);
   process.exit(1);
 }
 

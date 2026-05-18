@@ -22,23 +22,23 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Client Image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./client
-          push: true
-          tags: ramavathshivaram/time-table-client:latest
+      # - name: Build and Push Client Image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ./client
+      #     push: true
+      #     tags: ramavathshivaram/note-book-client:latest
 
-      - name: Build and Push Worker Image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./worker
-          push: true
-          tags: ramavathshivaram/time-table-worker:latest
+      # - name: Build and Push Worker Image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ./worker
+      #     push: true
+      #     tags: ramavathshivaram/time-table-worker:latest
 
       - name: Build and Push auth-service Image
         uses: docker/build-push-action@v6
         with:
-          context: ./auth-service
+          context: ./server
           push: true
-          tags: ramavathshivaram/time-table-auth-service:latest
+          tags: ramavathshivaram/note-book-server:latest

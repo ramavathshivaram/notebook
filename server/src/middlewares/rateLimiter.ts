@@ -52,7 +52,7 @@ export const authCheckLimiter = createLimiter({
 
 export const rateLimiterMiddleware = (limiter: RateLimiterRedis) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const key : string =  req.ip as string;
+    const key: string = req.ip as string;
 
     try {
       await limiter.consume(key);

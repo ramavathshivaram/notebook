@@ -24,20 +24,10 @@ const resetPasswordSchema = z.object({
   email: z.string().email(),
 });
 
-const googleLoginSchema = z.object({
-  accessToken: z.string(),
-});
-
-const googleRegisterSchema = z.object({
-  accessToken: z.string(),
-});
-
 export default {
   loginSchema,
   registerSchema,
   forgotPasswordSchema,
   verifyOTPSchema,
   resetPasswordSchema,
-  googleLoginSchema,
-  googleRegisterSchema,
 };

@@ -1,60 +1,44 @@
-import axios from "axios";
-import { toast } from "sonner";
-
-const BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
-
-const API = axios.create({
-  baseURL: `${BASE_URL}/api`,
-});
-
-// -------------------- Interceptors --------------------
-// Attach token to every request
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
-  if (token) req.headers.authorization = `Bearer ${token}`;
-  return req;
-});
-
-// Handle global errors
-API.interceptors.response.use(
-  (res) => res,
-  (error) => {
-    const status = error?.response?.status;
-    const message = error?.response?.data?.message || "An error occurred";
-
-    if (status === 444) {
-      // Session expired
-      localStorage.removeItem("user-storage");
-      localStorage.removeItem("token");
-      window.location.href = "/auth";
-      toast.error("Session expired. Please log in again.");
-    } else {
-      toast.error(message);
-    }
-    return Promise.reject(error);
-  }
-);
+import API from "./axios.js";
 
 // -------------------- Auth APIs --------------------
-export const auth_api = async (formData) => {
-  const res = await API.post("/auth", formData);
-  localStorage.setItem("token", res.data.token);
+
+export const loginApi = async (formData) => {
+  const res = await API.post("/auth/login", formData);
   return res.data;
 };
 
-export const sendOTP = async (email) => {
-  const res = await API.post("/forgot-password/send-otp", { email });
+export const registerApi = async (formData) => {
+  const res = await API.post("/auth/register", formData);
+  return res.data;
+};
+
+export const logoutApi = async () => {
+  const res = await API.post("/auth/logout");
+  return res.data;
+};
+
+export const authCheckApi = async () => {
+  const res = await API.get("/auth/check");
+  return res.data;
+};
+
+export const refreshTokenApi = async () => {
+  const res = await API.get("/auth/refresh");
+  return res.data;
+};
+
+export const forgotPasswordApi = async (email) => {
+  const res = await API.post("/auth/forgot", { email });
   return res.status >= 200 && res.status < 300;
 };
 
-export const verifyOTP = async ({ userId, otp }) => {
-  const res = await API.post("/forgot-password/verify-otp", { userId, otp });
+export const verifyOTPApi = async ({ userId, otp }) => {
+  const res = await API.post("/auth/verify-otp", { userId, otp });
   return res.status === 200;
 };
 
-export const resetPassword = async ({ userId, password }) => {
-  const res = await API.post("/forgot-password/reset", { userId, password });
+export const resetPasswordApi = async ({ userId, password }) => {
+  const res = await API.post("/auth/reset", { userId, password });
   return res.status === 200;
 };
 

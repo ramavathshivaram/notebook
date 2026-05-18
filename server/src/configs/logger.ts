@@ -17,8 +17,6 @@ const logger: Logger = createLogger({
     json()
   ),
 
-  defaultMeta: { service: "auth-service" },
-
   transports: [
     new transports.Console({
       format: combine(

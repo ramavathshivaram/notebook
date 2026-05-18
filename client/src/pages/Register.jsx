@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
@@ -17,35 +17,37 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { auth_api } from "../helper/api";
-import useUserStore from "@/store/userStore";
 import PhysicsHero from "../components/PhysicsHero";
 import BackGround from "../components/BackGround";
+import useAuthStore from "../store/auth.store.js";
+import { CardFooter } from "../components/ui/card.jsx";
+import { Separator } from "@/components/ui/separator";
 
 // ✅ Schema
-const loginSchema = z.object({
+const registerSchema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(1, "Password is required"),
+  userName: z.string().min(1, "Username is required"),
 });
 
-const Auth = () => {
-  const setUser = useUserStore((state) => state.setUser);
+const Register = () => {
+  const register = useAuthStore((state) => state.register);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [errorShake, setErrorShake] = useState(false);
 
   const form = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
       password: "",
+      userName: "",
     },
   });
 
   const onSubmit = async (values) => {
     try {
-      const response = await auth_api(values);
-      setUser(response.user);
+      const response = await register(values);
       navigate("/notebook");
     } catch (error) {
       toast.error(error.message || "Login failed 😢");
@@ -78,8 +80,26 @@ const Auth = () => {
                 transition={{ duration: 0.5 }}
                 className="text-3xl font-bold text-center"
               >
-                Note Book
+                Register
               </motion.h1>
+
+              <FormField
+                control={form.control}
+                name="userName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your username"
+                        {...field}
+                        className="transition-all focus:ring-2 focus:ring-primary/50"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {/* Email */}
               <FormField
@@ -166,22 +186,24 @@ const Auth = () => {
                   )}
                 </AnimatePresence>
               </Button>
-
-              {/* Forgot Password */}
-              <p className="text-sm text-center mt-2">
-                <span
-                  onClick={() => navigate("/forgot-password")}
-                  className="text-blue-600 cursor-pointer hover:underline"
-                >
-                  Forgot Password?
-                </span>
-              </p>
             </form>
           </Form>
+          <Separator />
+          <CardFooter className="w-full">
+            <div className="text-center w-full text-sm text-muted-foreground">
+              <span>Already have an account? </span>
+              <Link
+                to="/login"
+                className="font-medium text-primary hover:underline hover:text-primary/80 transition"
+              >
+                Sign in
+              </Link>
+            </div>
+          </CardFooter>
         </Card>
       </motion.div>
     </motion.div>
   );
 };
 
-export default Auth;
+export default Register;

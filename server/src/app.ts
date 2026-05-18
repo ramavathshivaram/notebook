@@ -11,20 +11,9 @@ import rateLimiterMiddleware, {
   authLimiter,
 } from "#middlewares/rateLimiter.js";
 
-
-import {
-  auth,
-  sendOTP,
-  verifyOTP,
-  resetPassword,
-  updateUser,
-} from "./controllers/userControllers"
-import sectionRoutes from "../routes/sectionRoutes.js"
-import pageRoutes from "../routes/pageRoutes.js"
-import aiRoutes from "../routes/aiRoutes.js"
-import canvasRoutes from "../routes/canvasRoutes.js"
 import notFoundRoute from "#middlewares/notFoundRoute.js";
 import errorHandler from "#middlewares/errorHandler.js";
+import authRouter from "#modules/auth/auth.routes.js";
 
 const corsOptions = {
   origin: env.ORIGIN,
@@ -51,9 +40,9 @@ app.use(
   }),
 );
 
-app.get("/", async (req:Request, res:Response) => res.send("API running"));
+app.get("/", async (req: Request, res: Response) => res.send("API running"));
 
-app.get("/health", async (req:Request, res:Response) => {
+app.get("/health", async (req: Request, res: Response) => {
   res.status(200).json({
     status: "ok",
     uptime: process.uptime(),
@@ -62,25 +51,21 @@ app.get("/health", async (req:Request, res:Response) => {
   });
 });
 
-app.post("/api/auth", auth);
-app.post("/api/forgot-password/send-otp", sendOTP);
-app.post("/api/forgot-password/verify-otp", verifyOTP);
-app.post("/api/forgot-password/reset", resetPassword);
+app.use("/api/auth", authRouter);
 
+// app.post("/api/update-user", updateUser);
 
-app.post("/api/update-user", updateUser);
+// // Section Routes
+// app.use("/api/section", sectionRoutes);
 
-// Section Routes
-app.use("/api/section", sectionRoutes);
+// // Page Routes
+// app.use("/api/page", pageRoutes);
 
-// Page Routes
-app.use("/api/page", pageRoutes);
+// // Canvas Routes
+// app.use("/api/canvas", canvasRoutes);
 
-// Canvas Routes
-app.use("/api/canvas", canvasRoutes);
-
-// AI Routes
-app.use("/api/ai", aiRoutes);
+// // AI Routes
+// app.use("/api/ai", aiRoutes);
 
 app.use(errorHandler);
 app.use(notFoundRoute);

@@ -2,15 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import ApiError from "#utils/ApiError.js";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import env from "#configs/env.js";
-
-const publicKey = env.JWT_PUBLIC_KEY.replace(/\\n/g, "\n");
-
-interface TokenPayload extends JwtPayload {
-  userId: string;
-  authId: string;
-  tokenVersion: number;
-  type: "access" | "refresh";
-}
+import type { ITokenPayload } from "../types/type.js";
 
 const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
@@ -26,16 +18,15 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const decoded = jwt.verify(token, publicKey);
+    const decoded = jwt.verify(token, env.JWT_SECRET_KEY as string);
 
     if (typeof decoded === "string") {
       return next(new ApiError(403, "Invalid token"));
     }
 
-    const payload = decoded as TokenPayload;
+    const payload = decoded as ITokenPayload;
 
     req.authId = payload.authId;
-    req.userId = payload.userId;
 
     next();
   } catch (error) {
