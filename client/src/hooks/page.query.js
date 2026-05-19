@@ -5,9 +5,8 @@ import {
   updatePageApi,
   deletePageApi,
   getPageApi,
+  getPagesApi,
 } from "@/helper/api.js";
-
-import { sectionsQueryKey } from "./section.query.js";
 
 export const pagesQueryKey = ["pages"];
 
@@ -15,43 +14,63 @@ export const useAddPage = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ title, sectionId }) =>console.log("xcbcbbv") ,//createPageApi({ title, sectionId }),
+    mutationFn: ({ title, sectionId }) =>
+      createPageApi({
+        title,
+        sectionId,
+      }),
 
     onMutate: async ({ title, sectionId }) => {
-      const previousSections = queryClient.getQueryData(sectionsQueryKey);
+      const previousPages = queryClient.getQueryData([
+        ...pagesQueryKey,
+        sectionId,
+      ]);
 
-      queryClient.setQueryData(sectionsQueryKey, (old = []) =>
-        old.map((section) =>
-          section._id === sectionId
-            ? {
-                ...section,
-                pages: [
-                  ...section.pages,
-                  {
-                    _id: Date.now().toString(),
-                    title,
-                    sectionId,
-                  },
-                ],
-              }
-            : section,
-        ),
-      );
+      const newPage = {
+        _id: Date.now().toString(),
+        title,
+        sectionId,
+      };
 
-      return { previousSections };
+      queryClient.setQueryData([...pagesQueryKey, sectionId], (old = []) => [
+        ...old,
+        newPage,
+      ]);
+
+      return {
+        previousPages,
+      };
     },
 
-    onError: (_, __, context) => {
-      queryClient.setQueryData(sectionsQueryKey, context?.previousSections);
+    onError: (_, variables, context) => {
+      queryClient.setQueryData(
+        [...pagesQueryKey, variables.sectionId],
+        context?.previousPages,
+      );
+    },
+
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(
+        [...pagesQueryKey, variables.sectionId],
+        (old = []) =>
+          old.map((page) => (page._id.includes("temp") ? data : page)),
+      );
     },
   });
 };
 
 export const useGetPage = (pageId) => {
   return useQuery({
-    queryKey: ["page", pageId],
+    queryKey: [...pagesQueryKey, pageId],
     queryFn: () => getPageApi(pageId),
-    enabled: !!pageId,
+  });
+};
+
+export const useGetPages = (sectionId) => {
+  return useQuery({
+    queryKey: [...pagesQueryKey, sectionId],
+    queryFn: () => getPagesApi(sectionId),
+    enabled: !!sectionId,
   });
 };
 
@@ -61,28 +80,33 @@ export const useUpdatePage = () => {
   return useMutation({
     mutationFn: ({ pageId, updatedData }) => updatePageApi(pageId, updatedData),
 
-    onMutate: async ({ pageId, updatedData }) => {
+    onMutate: async ({ pageId, sectionId, updatedData }) => {
       const previousPage = queryClient.getQueryData(["page", pageId]);
 
-      const previousSections = queryClient.getQueryData(sectionsQueryKey);
+      const previousPages = queryClient.getQueryData([
+        ...pagesQueryKey,
+        sectionId,
+      ]);
 
       queryClient.setQueryData(["page", pageId], (old) => ({
         ...old,
         ...updatedData,
       }));
 
-      queryClient.setQueryData(sectionsQueryKey, (old = []) =>
-        old.map((section) => ({
-          ...section,
-          pages: section.pages.map((page) =>
-            page._id === pageId ? { ...page, ...updatedData } : page,
-          ),
-        })),
+      queryClient.setQueryData([...pagesQueryKey, sectionId], (old = []) =>
+        old.map((page) =>
+          page._id === pageId
+            ? {
+                ...page,
+                ...updatedData,
+              }
+            : page,
+        ),
       );
 
       return {
         previousPage,
-        previousSections,
+        previousPages,
       };
     },
 
@@ -92,7 +116,10 @@ export const useUpdatePage = () => {
         context?.previousPage,
       );
 
-      queryClient.setQueryData(sectionsQueryKey, context?.previousSections);
+      queryClient.setQueryData(
+        [...pagesQueryKey, variables.sectionId],
+        context?.previousPages,
+      );
     },
   });
 };
@@ -103,21 +130,26 @@ export const useDeletePage = () => {
   return useMutation({
     mutationFn: ({ pageId }) => deletePageApi(pageId),
 
-    onMutate: async ({ pageId }) => {
-      const previousSections = queryClient.getQueryData(sectionsQueryKey);
+    onMutate: async ({ pageId, sectionId }) => {
+      const previousPages = queryClient.getQueryData([
+        ...pagesQueryKey,
+        sectionId,
+      ]);
 
-      queryClient.setQueryData(sectionsQueryKey, (old = []) =>
-        old.map((section) => ({
-          ...section,
-          pages: section.pages.filter((page) => page._id !== pageId),
-        })),
+      queryClient.setQueryData([...pagesQueryKey, sectionId], (old = []) =>
+        old.filter((page) => page._id !== pageId),
       );
 
-      return { previousSections };
+      return {
+        previousPages,
+      };
     },
 
-    onError: (_, __, context) => {
-      queryClient.setQueryData(sectionsQueryKey, context?.previousSections);
+    onError: (_, variables, context) => {
+      queryClient.setQueryData(
+        [...pagesQueryKey, variables.sectionId],
+        context?.previousPages,
+      );
     },
   });
 };

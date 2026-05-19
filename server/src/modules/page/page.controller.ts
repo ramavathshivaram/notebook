@@ -7,6 +7,8 @@ const createPage = asyncHandler(async (req: Request, res: Response) => {
 
   const page = await pageRepository.create(sectionId, title);
 
+  console.log(page)
+
   res.status(201).json({
     data: page,
     message: "Page created successfully",
@@ -41,9 +43,26 @@ const updatePage = asyncHandler(async (req: Request, res: Response) => {
     .json({ page, message: "Page updated successfully", status: true });
 });
 
+const getPages = asyncHandler(async (req: Request, res: Response) => {
+  const sectionId = req.params.sectionId;
+
+  console.log(sectionId)
+
+  const pages = await pageRepository.getAllSectionPages(sectionId);
+
+  console.log(pages)
+
+  res.status(200).json({
+    data: pages,
+    message: "sections pages",
+    status: true,
+  });
+});
+
 export default {
   createPage,
   getPage,
   updatePage,
   deletePage,
+  getPages
 };

@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
-import { v4 as uuid } from "uuid";
-import { useAddSection } from "../hooks/section.query.js";
+import { useAddSection } from "@/hooks/section.query.js";
 
 const AddSection = () => {
   const { mutate: addSection, isPending } = useAddSection();

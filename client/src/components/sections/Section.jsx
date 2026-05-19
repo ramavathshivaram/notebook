@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+import { Button } from "../ui/button.jsx";
+import { Input } from "../ui/input.jsx";
 
 import { cn } from "@/lib/utils";
 
 import { Book, Trash2, Plus } from "lucide-react";
 
-import Page from "./Page";
-import Canvas from "./Canvas.jsx";
+import Page from "../pages/Page.jsx";
+import Canvas from "../Canvas.jsx";
 
 import {
   AccordionContent,
@@ -21,12 +21,13 @@ import { useRenameSection, useDeleteSection } from "@/hooks/section.query.js";
 
 import { useAddPage } from "@/hooks/page.query.js";
 
-import useAddCanvas from "../hooks/useAddCanvas.js";
+import useAddCanvas from "@/hooks/useAddCanvas.js";
+import PageList from "../pages/PageList.jsx";
 
 const Section = ({ section }) => {
   const renameSectionMutate = useRenameSection().mutate;
   const deleteSectionMutate = useDeleteSection().mutate;
-  const {mutate:addPageMutate} = useAddPage();
+  const addPageMutate = useAddPage().mutate;
   const addCanvasMutate = useAddCanvas().mutate;
 
   const [editingSectionId, setEditingSectionId] = useState(null);
@@ -42,6 +43,13 @@ const Section = ({ section }) => {
     });
 
     setEditingSectionId(null);
+  };
+
+  const handleAddPage = () => {
+    addPageMutate({
+      sectionId: section._id,
+      title: "New Note",
+    });
   };
 
   return (
@@ -89,39 +97,19 @@ const Section = ({ section }) => {
       </div>
 
       <AccordionContent className="ml-6 space-y-1">
-        {section.pages?.map((page) => (
-          <Page key={page._id} page={page} sectionId={section._id} />
-        ))}
+        <PageList sectionId={section._id} />
 
         {section.canvases?.map((canvas) => (
           <Canvas key={canvas._id} canvas={canvas} sectionId={section._id} />
         ))}
 
         <div className="flex gap-2 pt-2">
-          <Button
-            size="sm"
-            className="text-xs"
-            onClick={() =>
-              addPageMutate({
-                sectionId: section._id,
-                title: `New Note `,
-              })
-            }
-          >
+          <Button size="sm" className="text-xs" onClick={handleAddPage}>
             <Plus className="size-3" />
             Note
           </Button>
 
-          <Button
-            size="sm"
-            className="text-xs"
-            onClick={() =>
-              addCanvasMutate({
-                sectionId: section._id,
-                title: `New Drawing ${section.canvases.length + 1}`,
-              })
-            }
-          >
+          <Button size="sm" className="text-xs" onClick={handleAddPage}>
             <Plus className="size-3" />
             Drawing
           </Button>

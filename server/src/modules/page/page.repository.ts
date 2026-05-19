@@ -17,6 +17,16 @@ const get = async (pageId: Pick<IPage, "_id">) => {
   return page;
 };
 
+const getAllSectionPages = async (sectionId: Pick<IPage, "sectionId">) => {
+  const pages = await Page.find({
+    sectionId,
+  })
+    .select("_id title")
+    .lean();
+
+  return pages || [];
+};
+
 const deletePage = async (pageId: Pick<IPage, "_id">) => {
   const page = await Page.findByIdAndDelete(pageId);
   return page;
@@ -39,4 +49,5 @@ export default {
   get,
   deletePage,
   update,
+  getAllSectionPages,
 };

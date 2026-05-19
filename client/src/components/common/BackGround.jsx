@@ -1,5 +1,5 @@
 import React from "react";
-import PhysicsHero from "../PhysicsHero";
+import PhysicsHero from "./PhysicsHero";
 
 const BackGround = () => {
   return (

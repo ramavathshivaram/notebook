@@ -1,11 +1,11 @@
-import { ScrollArea } from "./ui/scroll-area.jsx";
+import { ScrollArea } from "../ui/scroll-area.jsx";
 
-import AddSection from "./AddSection";
-import Section from "./Section";
-import NoSectionsFound from "./NoSectionsFound";
+import AddSection from "../sections/AddSection";
+import Section from "../sections/Section";
+import NoSectionsFound from "../sections/NoSectionsFound";
 
 import ListSkeleton from "@/skeletons/ListSkeleton";
-import ErrorMessage from "./common/ErrorMessage";
+import ErrorMessage from "../common/ErrorMessage.jsx";
 
 import { cn } from "@/lib/utils.js";
 

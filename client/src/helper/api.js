@@ -60,11 +60,6 @@ export const getSectionsApi = async () => {
   return res.data.data;
 };
 
-export const getSectionApi = async () => {
-  const res = await API.get("section");
-  return res.data.data;
-};
-
 export const renameSectionApi = async (sectionId, title) => {
   const res = await API.patch(`section/${sectionId}`, { title });
   return res.data.data;
@@ -83,7 +78,12 @@ export const createPageApi = async ({ title, sectionId }) => {
 
 export const getPageApi = async (pageId) => {
   const res = await API.get(`page/${pageId}`);
-  return res.data.page;
+  return res.data.data;
+};
+
+export const getPagesApi = async (sectionId) => {
+  const res = await API.get(`page/all/${sectionId}`);
+  return res.data.data;
 };
 
 export const updatePageApi = async (pageId, data) => {

@@ -1,16 +1,31 @@
 import React, { Suspense, lazy } from "react";
+
 import { Route, Routes } from "react-router-dom";
+
 import LoadingHeader from "./components/common/LoadingHeader";
+
 import AuthInitializer from "./components/common/AuthInitializer";
+
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
-// Lazy load pages
+import RootLayout from "@/components/layout/RootLayout";
+
 const LandingPage = lazy(() => import("./pages/LandingPage"));
+
 const Login = lazy(() => import("./pages/Login"));
+
 const Register = lazy(() => import("./pages/Register"));
-const Notebook = lazy(() => import("./pages/Notebook"));
+
+const NoteEditor = lazy(() => import("./components/pages/NoteEditor"));
+
+const CanvasEditor = lazy(() => import("./components/CanvasEditor"));
+
 const NotFound = lazy(() => import("./pages/NotFound"));
+
 const ProjectDocs = lazy(() => import("./pages/ProjectDocs"));
+
+const EmptyState = lazy(() => import("./components/common/EmptyState"));
+
 const ForgotPassword = lazy(
   () => import("./pages/forgot-password/ForgotPassword"),
 );
@@ -24,14 +39,24 @@ const App = () => {
             <Route path="/" element={<LandingPage />} />
 
             <Route element={<ProtectedRoute />}>
-              <Route path="/notebook" element={<Notebook />} />
+              <Route path="/notebook" element={<RootLayout />}>
+                <Route index element={<EmptyState />} />
+
+                <Route path="page/:pageId" element={<NoteEditor />} />
+
+                <Route path="canvas/:canvasId" element={<CanvasEditor />} />
+              </Route>
             </Route>
           </Route>
 
           <Route path="/login" element={<Login />} />
+
           <Route path="/register" element={<Register />} />
+
           <Route path="/forgot-password" element={<ForgotPassword />} />
+
           <Route path="/docs" element={<ProjectDocs />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

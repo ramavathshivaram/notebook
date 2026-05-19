@@ -9,9 +9,8 @@ import { Button } from "../ui/button.jsx";
 import ListSkeleton from "../../skeletons/ListSkeleton.jsx";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import { Mic, MicOff } from "lucide-react";
 
-const ContentEditor = ({ content, title, pageId }) => {
+const ContentEditor = ({ content, title, pageId, sectionId }) => {
   const [localContent, setLocalContent] = useState(content);
   const [isLoadingAI, setLoadingAI] = useState(false);
   const [downloading, setDownloading] = useState(false);
@@ -21,9 +20,15 @@ const ContentEditor = ({ content, title, pageId }) => {
   // Debounced save to backend
   const debouncedUpdate = useCallback(
     debounce((value) => {
-      updatePageMutate({ pageId, updatedData: { content: value } });
+      updatePageMutate({
+        pageId,
+        sectionId,
+        updatedData: {
+          content: value,
+        },
+      });
     }, 1000),
-    [pageId, updatePageMutate],
+    [pageId, sectionId, updatePageMutate],
   );
 
   // Cleanup debounce on unmount
@@ -73,7 +78,6 @@ const ContentEditor = ({ content, title, pageId }) => {
     }
   };
 
-  // === DOWNLOAD AS PNG ===
   const handleDownload = async () => {
     if (downloading) return;
     setDownloading(true);

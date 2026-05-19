@@ -49,4 +49,9 @@ const renameSection = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export default { createSection, getSections, renameSection, deleteSection };
+export default {
+  createSection,
+  getSections,
+  renameSection,
+  deleteSection,
+};

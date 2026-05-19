@@ -1,6 +1,5 @@
-import NotebookSidebar from "@/components/NotebookSidebar";
+import NotebookSidebar from "@/components/layout/NotebookSidebar";
 import NoteEditor from "@/components/pages/NoteEditor";
-import usePageStore from "@/store/usePageStore";
 import EmptyState from "@/components/common/EmptyState";
 import Header from "@/components/layout/Header";
 import {
@@ -14,8 +13,6 @@ import useSidebarStore from "@/store/useSidebarStore";
 import CanvasEditor from "@/components/CanvasEditor";
 
 const Notebook = () => {
-  const currentPage = usePageStore((s) => s.currentPage);
-  const currentCanvas = usePageStore((s) => s.currentCanvas);
   const [mobileView, setMobileView] = useState(window.innerWidth < 780);
   const isSidebarOpen = useSidebarStore((s) => s.isSidebarOpen);
 
@@ -43,13 +40,11 @@ const Notebook = () => {
               } transition-left duration-300 ease-in-out shadow-lg`}
             />
             <div className="flex-1 overflow-y-auto border-t">
-              {currentPage ? (
-                <NoteEditor pageId={currentPage} />
-              ) : currentCanvas ? (
-                <CanvasEditor canvasId={currentCanvas} />
-              ) : (
-                <EmptyState />
-              )}
+              <NoteEditor />
+
+              <CanvasEditor />
+
+              <EmptyState />
             </div>
           </div>
         ) : (
@@ -59,13 +54,11 @@ const Notebook = () => {
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={75} minSize={60} maxSize={80}>
-              {currentPage ? (
-                <NoteEditor pageId={currentPage} />
-              ) : currentCanvas ? (
-                <CanvasEditor canvasId={currentCanvas} />
-              ) : (
-                <EmptyState />
-              )}
+              <NoteEditor />
+
+              <CanvasEditor />
+
+              <EmptyState />
             </ResizablePanel>
           </ResizablePanelGroup>
         )}

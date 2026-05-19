@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import debounce from "lodash.debounce";
 import { useUpdatePage } from "@/hooks/page.query.js"; // note .js extension
 
-const TitleEditor = ({ title, pageId }) => {
+const TitleEditor = ({ title, pageId, sectionId }) => {
   const [localTitle, setLocalTitle] = useState(title);
   const { mutate: updatePageMutate, isLoading } = useUpdatePage();
 
@@ -11,10 +11,13 @@ const TitleEditor = ({ title, pageId }) => {
     debounce((value) => {
       updatePageMutate({
         pageId,
-        updatedData: { title: value },
+        sectionId,
+        updatedData: {
+          title: value,
+        },
       });
-    }, 500),
-    [pageId, updatePageMutate],
+    }, 1000),
+    [pageId, sectionId, updatePageMutate],
   );
 
   const handleChange = (value) => {

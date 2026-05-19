@@ -2,8 +2,8 @@ import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Pen, Layers, Sparkles, Zap, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import BackGround from "../components/BackGround";
-import useAuthStore from "../store/auth.store.js";
+import BackGround from "@/components/common/BackGround";
+import useAuthStore from "@/store/auth.store.js";
 import { useEffect } from "react";
 
 const features = [

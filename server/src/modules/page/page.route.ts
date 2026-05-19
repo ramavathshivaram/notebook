@@ -7,6 +7,8 @@ router.post("/", pageController.createPage);
 
 router.get("/:pageId", pageController.getPage);
 
+router.get("/all/:sectionId", pageController.getPages);
+
 router.patch("/:pageId", pageController.updatePage);
 
 router.delete("/:pageId", pageController.deletePage);
