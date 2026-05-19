@@ -6,8 +6,8 @@ import authRouter from "./auth/auth.route.js";
 
 const router: express.Router = express.Router();
 
-router.use("/local", localRouter);
-router.use("/password", forgotPasswordRouter);
-router.use("/", authRouter);
+router.use(localRouter);
+router.use(forgotPasswordRouter);
+router.use(authRouter);
 
 export default router;

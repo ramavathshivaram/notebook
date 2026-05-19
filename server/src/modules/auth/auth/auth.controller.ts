@@ -10,6 +10,7 @@ import {
 import { verifyToken, generateTokens } from "#services/token.service.js";
 import ApiError from "#utils/ApiError.js";
 import type { ITokenPayload } from "../../../types/type.js";
+import authRepository from "../auth.repository.js";
 
 const refreshTokenController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -56,8 +57,10 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const authCheck = asyncHandler(async (_req: Request, res: Response) => {
+  const authResponse = await authRepository.getAuthById(_req.authId);
   res.status(200).json({
     success: true,
+    data: authResponse,
   });
 });
 

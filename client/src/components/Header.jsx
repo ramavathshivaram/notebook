@@ -2,16 +2,16 @@ import { motion } from "framer-motion";
 import { Button } from "../components/ui/button";
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import usePageStore from "../store/usePageStore";
 import { useEffect, useState } from "react";
 import { cn } from "../lib/utils";
 import useSidebarStore from "../store/useSidebarStore";
 import Menu from "./Menu";
 import DarkModeToggle from "./DarkModeToggle";
+import useAuthStore from "../store/auth.store";
 
-const Header = ({ clearUser }) => {
+const Header = () => {
   const navigate = useNavigate();
-  const clearCurrentPage = usePageStore((s) => s.clearCurrentPage);
+  const logout = useAuthStore((s) => s.logout);
   const [mobileView, setMobileView] = useState(window.innerWidth < 780);
   const toggleSidebar = useSidebarStore((s) => s.toggleSidebar);
 
@@ -21,11 +21,16 @@ const Header = ({ clearUser }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <header
       className={cn(
         "border-b border-border p-4 flex items-center justify-between bg-card shadow-sm",
-        mobileView && "justify-between"
+        mobileView && "justify-between",
       )}
     >
       {mobileView && <Menu toggleSidebar={toggleSidebar} />}
@@ -53,12 +58,7 @@ const Header = ({ clearUser }) => {
         >
           <Button
             size="sm"
-            onClick={() => {
-              clearUser();
-              clearCurrentPage();
-              localStorage.removeItem("token");
-              navigate("/auth");
-            }}
+            onClick={handleLogout}
             className="flex items-center gap-1"
           >
             <LogOut className="w-4 h-4" />

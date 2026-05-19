@@ -16,3 +16,20 @@ export const emailQueue = new Queue(queueConst.SEND_EMAIL, {
     priority: 2,
   },
 });
+
+export const sectionQueue = new Queue(
+  queueConst.SECTION,
+  {
+    connection: redis,
+    defaultJobOptions: {
+      attempts: 3,
+      backoff: {
+        type: "exponential",
+        delay: 3000,
+      },
+      removeOnComplete: true,
+      removeOnFail: 100,
+      priority: 2,
+    },
+  },
+);

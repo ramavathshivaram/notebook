@@ -1,7 +1,8 @@
 import asyncHandler from "express-async-handler";
+import type { Request, Response } from "express";
 
 
-const updateUser = asyncHandler(async (req, res) => {
+const updateUser = asyncHandler(async (req: Request, res: Response) => {
   try {
     const { darkMode } = req.body;
     const userId = req.user.id;

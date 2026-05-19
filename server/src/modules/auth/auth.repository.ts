@@ -35,9 +35,16 @@ const findUserByEmailAndUpdate = async (
   return authResponse as IAuth;
 };
 
+const getAuthById = async (authId: IAuth["_id"]): Promise<IAuth> => {
+  const authResponse = await AuthModel.findById(authId);
+  if (!authResponse) throw new ApiError(404, "User not found");
+  return authResponse as IAuth;
+};
+
 export default {
   getUserWithPasswordByEmail,
   checkAuthExists,
   createAuth,
   findUserByEmailAndUpdate,
+  getAuthById
 };

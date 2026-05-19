@@ -4,6 +4,7 @@ import API from "./axios.js";
 
 export const loginApi = async (formData) => {
   const res = await API.post("/auth/login", formData);
+  console.log(res.data);
   return res.data;
 };
 
@@ -24,7 +25,7 @@ export const authCheckApi = async () => {
 
 export const refreshTokenApi = async () => {
   const res = await API.get("/auth/refresh");
-  return res.data;
+  return res.data.token;
 };
 
 export const forgotPasswordApi = async (email) => {
@@ -49,22 +50,27 @@ export const updateUser = async (darkMode) => {
 };
 
 // -------------------- Section APIs --------------------
-export const createSection = async (section) => {
-  const res = await API.post("section/create", section);
+export const createSectionApi = async (title) => {
+  const res = await API.post("section", { title });
   return res.data;
 };
 
-export const getSections = async () => {
-  const res = await API.get("section/");
-  return res.data.section;
+export const getSectionsApi = async () => {
+  const res = await API.get("section/all");
+  return res.data.data;
 };
 
-export const renameSection = async (sectionId, title) => {
-  const res = await API.patch(`section/rename/${sectionId}`, { title });
-  return res.data.section;
+export const getSectionApi = async () => {
+  const res = await API.get("section");
+  return res.data.data;
 };
 
-export const deleteSection = async (sectionId) => {
+export const renameSectionApi = async (sectionId, title) => {
+  const res = await API.patch(`section/${sectionId}`, { title });
+  return res.data.data;
+};
+
+export const deleteSectionApi = async (sectionId) => {
   const res = await API.delete(`section/${sectionId}`);
   return res.data;
 };

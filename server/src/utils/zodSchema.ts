@@ -24,10 +24,16 @@ const resetPasswordSchema = z.object({
   email: z.string().email(),
 });
 
+const createSectionSchema = z.object({ title: z.string().trim().min(1,"Title is required") });
+const renameSectionSchema = z.object({ title: z.string().trim().min(1,"Title is required") });
+
 export default {
   loginSchema,
   registerSchema,
   forgotPasswordSchema,
   verifyOTPSchema,
   resetPasswordSchema,
+
+  createSectionSchema,
+  renameSectionSchema,
 };

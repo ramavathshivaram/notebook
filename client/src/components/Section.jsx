@@ -8,9 +8,8 @@ import { v4 as uuid } from "uuid";
 import Page from "./Page";
 import usePageStore from "../store/usePageStore";
 
-import useRenameSection from "../hooks/useRenameSection.js";
+import { useRenameSection, useDeleteSection } from "../hooks/section.query.js";
 import useAddPage from "../hooks/useAddPage.js";
-import useDeleteSection from "../hooks/useDeleteSection.js";
 
 import useAddCanvas from "../hooks/useAddCanvas.js";
 import Canvas from "./Canvas.jsx";
@@ -29,14 +28,13 @@ const Section = ({ section, isExpanded, setIsExpanded }) => {
   const [editTitle, setEditTitle] = useState("");
 
   const isSectionSelected = section?.pages?.some(
-    (page) => page._id === currentPage
+    (page) => page._id === currentPage,
   );
 
   const isCanvasSelected = section?.canvases?.some(
-    (canvas) => canvas?._id === currentCanvas
+    (canvas) => canvas?._id === currentCanvas,
   );
-
-  // 🔹 Handlers
+  
   const handleRename = (sectionId, newTitle) => {
     if (!newTitle.trim()) return;
     renameSectionMutate({ id: sectionId, title: newTitle });

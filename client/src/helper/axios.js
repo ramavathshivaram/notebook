@@ -7,6 +7,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
 
 const api = axios.create({
   baseURL: `${BASE_URL}/api`,
+  withCredentials: true,
 });
 
 const refreshFunc = async (originalRequest) => {
@@ -52,6 +53,7 @@ api.interceptors.response.use(
       return refreshFunc(originalRequest);
     }
 
+    console.error(message);
     toast.error(message);
     return Promise.reject(message);
   },

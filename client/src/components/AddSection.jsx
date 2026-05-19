@@ -1,46 +1,20 @@
 import { useState, useEffect } from "react";
-import { createSection } from "../helper/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { v4 as uuid } from "uuid";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAddSection } from "../hooks/section.query.js";
 
 const AddSection = () => {
-  const queryClient = useQueryClient();
-
-  const { mutate: addSection, isPending } = useMutation({
-    mutationFn: (section) => createSection(section),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["sections"]); // refresh section list
-      setNewSectionTitle("");
-      setAddingSection(false);
-    },
-    onMutate: async ({ sectionId, title }) => {
-      setNewSectionTitle("");
-      setAddingSection(false);
-      await queryClient.cancelQueries(["sections"]);
-      const previous = queryClient.getQueryData(["sections"]);
-      queryClient.setQueryData(["sections"], (old) => [
-        ...(old || []),
-        { _id: sectionId, title },
-      ]);
-      return { previous };
-    },
-    onError: (err, section, context) => {
-      queryClient.setQueryData(["sections"], context.previous);
-      console.error("❌ Error creating section:", err);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries(["sections"]);
-    },
-  });
+  const { mutate: addSection, isPending } = useAddSection();
   const [addingSection, setAddingSection] = useState(false);
   const [newSectionTitle, setNewSectionTitle] = useState("");
-  const handleAddSection = () => {
+  const handleAddSection = async () => {
     if (!newSectionTitle.trim()) return;
-    const sectionId = uuid();
-    addSection({ sectionId, title: newSectionTitle }); // use mutate
+
+    await addSection(newSectionTitle);
+    setAddingSection(false);
+    setNewSectionTitle("");
   };
 
   useEffect(() => {
@@ -53,6 +27,7 @@ const AddSection = () => {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
+
   return (
     <div className="p-4 border-b border-border">
       <h2 className="text-lg font-semibold mb-3">Notebooks</h2>

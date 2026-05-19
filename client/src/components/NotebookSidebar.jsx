@@ -1,31 +1,21 @@
 import { useState } from "react";
 import { ScrollArea } from "../components/ui/scroll-area";
 import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
-import { getSections } from "../helper/api";
 import AddSection from "./AddSection";
 import Section from "../components/Section";
 import NoSectionsFound from "./NoSectionsFound";
 import ListSkeleton from "../skeletons/ListSkeleton";
 import ErrorMessage from "./ErrorMessage";
 import { cn } from "../lib/utils";
+import { useSections } from "../hooks/section.query.js";
 
-const NotebookSidebar = ({ sections_d, additionaClass = "" }) => {
+const NotebookSidebar = ({ additionaClass = "" }) => {
   const [isExpanded, setIsExpanded] = useState("hello");
 
-  const {
-    data: sections,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["sections"],
-    queryFn: () => getSections(),
-    initialData: sections_d,
-    staleTime: 5 * 60 * 1000,
-  });
+  const { data: sections, isLoading, error } = useSections();
 
   if (isLoading) return <ListSkeleton />;
-  if (error) return <ErrorMessage />;
+  if (error != null) return <ErrorMessage />;
   return (
     <div className={cn("w-full bg-card h-full flex flex-col", additionaClass)}>
       <AddSection />

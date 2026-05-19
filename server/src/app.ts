@@ -14,6 +14,8 @@ import rateLimiterMiddleware, {
 import notFoundRoute from "#middlewares/notFoundRoute.js";
 import errorHandler from "#middlewares/errorHandler.js";
 import authRouter from "#modules/auth/auth.routes.js";
+import sectionRouter from "#modules/section/section.route.js";
+import authenticate from "#middlewares/authenticate.js";
 
 const corsOptions = {
   origin: env.ORIGIN,
@@ -55,8 +57,7 @@ app.use("/api/auth", authRouter);
 
 // app.post("/api/update-user", updateUser);
 
-// // Section Routes
-// app.use("/api/section", sectionRoutes);
+app.use("/api/section",authenticate, sectionRouter);
 
 // // Page Routes
 // app.use("/api/page", pageRoutes);

@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Toaster } from "sonner";
+import { Route, Routes } from "react-router-dom";
 import LoadingHeader from "./components/LoadingHeader";
 import AuthInitializer from "./components/AuthInitializer";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -19,26 +18,23 @@ const ForgotPassword = lazy(
 const App = () => {
   return (
     <div className="select-none">
-      <BrowserRouter>
-        <Suspense fallback={<LoadingHeader />}>
-          <Routes>
-            <Route element={<AuthInitializer />}>
-              <Route path="/" element={<LandingPage />} />
+      <Suspense fallback={<LoadingHeader />}>
+        <Routes>
+          <Route element={<AuthInitializer />}>
+            <Route path="/" element={<LandingPage />} />
 
-              <Route element={<ProtectedRoute />}>
-                <Route path="/notebook" element={<Notebook />} />
-              </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/notebook" element={<Notebook />} />
             </Route>
+          </Route>
 
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/docs" element={<ProjectDocs />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-        <Toaster position="top-right" richColors duration={2000} />
-      </BrowserRouter>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/docs" element={<ProjectDocs />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 };

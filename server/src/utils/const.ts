@@ -1,9 +1,11 @@
 interface QueueConst {
   SEND_EMAIL: string;
+  SECTION: string;
 }
 
 export const queueConst: QueueConst = {
   SEND_EMAIL: "SEND_EMAIL",
+  SECTION: "SECTION",
 };
 
 export const COOKIE_EXPIRES_IN: number = 24 * 60 * 60 * 1000;

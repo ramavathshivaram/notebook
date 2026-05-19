@@ -64,8 +64,8 @@ const useAuthStore = create((set) => ({
 
   authCheck: async () => {
     try {
-      await authCheckApi();
-      set({ isAuthenticated: true, isCheckingAuth: false });
+      const user = await authCheckApi();
+      set({ isAuthenticated: true, isCheckingAuth: false, user });
     } catch (error) {
       console.error(error);
       set({ user: null, isAuthenticated: false, token: null });

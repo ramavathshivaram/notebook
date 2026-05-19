@@ -59,12 +59,9 @@ export const verifyToken = (token: string): ITokenPayload => {
   try {
     const decoded = verify(token, env.JWT_SECRET_KEY);
 
-    if (typeof decoded === "string" || decoded.type !== "access") {
-      throw new ApiError(401, "Invalid token");
-    }
-
     return decoded as ITokenPayload;
-  } catch {
+  } catch (error) {
+    console.log(error);
     throw new ApiError(401, "Invalid or expired token");
   }
 };

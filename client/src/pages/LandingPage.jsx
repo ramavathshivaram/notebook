@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Pen, Layers, Sparkles, Zap, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BackGround from "../components/BackGround";
+import useAuthStore from "../store/auth.store.js";
+import { useEffect } from "react";
 
 const features = [
   {
@@ -24,6 +26,11 @@ const features = [
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/notebook");
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden relative">

@@ -1,6 +1,5 @@
 import redis from "#configs/redis.js";
 import ApiError from "#utils/ApiError.js";
-import type { Types } from "mongoose";
 import type { ITokenPayload } from "../types/type.js";
 
 const SESSION_TTL = 60 * 60 * 24;
