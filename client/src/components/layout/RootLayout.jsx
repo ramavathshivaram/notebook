@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import useSidebarStore from "@/store/useSidebarStore";
 
 import { useEffect, useState } from "react";
+import ChatBotWrapper from "../chatbot/ChatBotWrapper";
 
 const RootLayout = () => {
   const [mobileView, setMobileView] = useState(window.innerWidth < 780);
@@ -29,40 +30,69 @@ const RootLayout = () => {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="h-screen flex flex-col bg-background overflow-hidden">
       <Header />
 
-      <div
-        className={cn(
-          "max-w-7xl mx-auto w-full h-full overflow-hidden border shadow-md",
-        )}
-      >
-        {mobileView ? (
-          <div className="flex h-full relative">
-            <NotebookSidebar
-              additionaClass={cn(
-                "absolute z-10 w-full h-full transition-all duration-300",
-                isSidebarOpen ? "left-0" : "-left-full",
-              )}
-            />
+      <div className="flex-1 overflow-hidden">
+        <div
+          className={cn(
+            "max-w-screen-2xl mx-auto h-full w-full border shadow-md overflow-hidden",
+          )}
+        >
+          {mobileView ? (
+            <div className="flex h-full relative overflow-hidden">
+              <NotebookSidebar
+                additionaClass={cn(
+                  "absolute z-20 w-full h-full transition-all duration-300 bg-background",
+                  isSidebarOpen ? "left-0" : "-left-full",
+                )}
+              />
 
-            <div className="flex-1 overflow-y-auto border-t">
-              <Outlet />
+              <div className="flex-1 overflow-y-auto border-t">
+                <Outlet />
+              </div>
             </div>
-          </div>
-        ) : (
-          <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
-              <NotebookSidebar />
-            </ResizablePanel>
+          ) : (
+            <ResizablePanelGroup direction="horizontal" className="h-full">
+              {/* Sidebar */}
+              <ResizablePanel
+                defaultSize={18}
+                minSize={15}
+                maxSize={25}
+                className="overflow-hidden"
+              >
+                <NotebookSidebar />
+              </ResizablePanel>
 
-            <ResizableHandle />
+              <ResizableHandle withHandle />
 
-            <ResizablePanel defaultSize={75} minSize={60}>
-              <Outlet />
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        )}
+              {/* Main Content */}
+              <ResizablePanel
+                defaultSize={57}
+                minSize={35}
+                className="overflow-hidden"
+              >
+                <div className="h-full overflow-y-auto">
+                  <Outlet />
+                </div>
+              </ResizablePanel>
+
+              <ResizableHandle withHandle />
+
+              {/* Chatbot */}
+              <ResizablePanel
+                defaultSize={25}
+                minSize={20}
+                maxSize={35}
+                className="overflow-hidden"
+              >
+                <div className="h-full overflow-hidden">
+                  <ChatBotWrapper />
+                </div>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          )}
+        </div>
       </div>
     </div>
   );

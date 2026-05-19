@@ -21,7 +21,7 @@ const Header = () => {
   return (
     <header
       className={cn(
-        "border-b border-border p-4 flex items-center justify-between bg-card shadow-sm",
+        "border-b p-3 flex items-center justify-between bg-card shadow-sm border-blue-300 ",
         mobileView && "justify-between",
       )}
     >

@@ -262,3 +262,28 @@
 .show-scroll::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-300 dark:bg-gray-500;
 }
+
+.my-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.my-editor .ql-toolbar {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.my-editor .ql-container {
+  flex: 1;
+  overflow-y: auto;
+  border: none;
+}
+
+.my-editor .ql-editor {
+  min-height: 100%;
+  padding: 24px;
+  font-size: 16px;
+  line-height: 1.7;
+}
