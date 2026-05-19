@@ -34,6 +34,8 @@ const deleteCanvas = asyncHandler(async (req: Request, res: Response) => {
 const updateCanvas = asyncHandler(async (req: Request, res: Response) => {
   const { canvasId } = req.params;
 
+  console.log(req.body)
+
   const Canvas = await canvasRepository.update(canvasId, req.body);
 
   res

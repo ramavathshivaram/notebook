@@ -20,7 +20,8 @@ export const logoutApi = async () => {
 
 export const authCheckApi = async () => {
   const res = await API.get("/auth/check");
-  return res.data;
+  console.log(res.data)
+  return res.data.data;
 };
 
 export const refreshTokenApi = async () => {

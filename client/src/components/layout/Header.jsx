@@ -1,17 +1,14 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import useSidebarStore from "@/store/useSidebarStore";
 import Menu from "./Menu";
-import DarkModeToggle from "./DarkModeToggle";
-import useAuthStore from "@/store/auth.store";
+import Profile from "./Profile";
 
 const Header = () => {
   const navigate = useNavigate();
-  const logout = useAuthStore((s) => s.logout);
   const [mobileView, setMobileView] = useState(window.innerWidth < 780);
   const toggleSidebar = useSidebarStore((s) => s.toggleSidebar);
 
@@ -20,11 +17,6 @@ const Header = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   return (
     <header
@@ -50,24 +42,10 @@ const Header = () => {
       </Button>
       {/* Logout */}
       <div className="flex gap-1">
-        <DarkModeToggle />
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-2"
-        >
-          <Button
-            size="sm"
-            onClick={handleLogout}
-            className="flex items-center gap-1"
-          >
-            <LogOut className="w-4 h-4" />
-            {mobileView ? "" : " Logout"}
-          </Button>
-        </motion.div>
+        <Profile />
       </div>
     </header>
   );
 };
 
-export default Header;
+export default memo(Header);
