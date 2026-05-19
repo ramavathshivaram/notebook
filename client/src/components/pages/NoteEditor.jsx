@@ -1,19 +1,12 @@
-import { getPage } from "../helper/api";
-import { useQuery } from "@tanstack/react-query";
-import NoteEditorSkeleton from "../skeletons/NoteEditorSkeleton";
-import ErrorMessage from "../components/ErrorMessage";
+import NoteEditorSkeleton from "@/skeletons/NoteEditorSkeleton";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import TitleEditor from "./TitleEditor";
 import ContentEditor from "./ContentEditor";
+import { useGetPage } from "@/hooks/page.query.js";
+import { memo } from "react";
 
 const NoteEditor = ({ pageId }) => {
-  const {
-    data: page,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["page", pageId],
-    queryFn: () => getPage(pageId),
-  });
+  const { data: page, isLoading, error } = useGetPage(pageId);
 
   if (isLoading) return <NoteEditorSkeleton />;
   if (error) return <ErrorMessage />;
@@ -32,4 +25,4 @@ const NoteEditor = ({ pageId }) => {
   );
 };
 
-export default NoteEditor;
+export default memo(NoteEditor);

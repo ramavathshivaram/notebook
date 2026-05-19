@@ -1,37 +1,39 @@
-import { useState } from "react";
-import { ScrollArea } from "../components/ui/scroll-area";
-import { motion } from "framer-motion";
+import { ScrollArea } from "./ui/scroll-area.jsx";
+
 import AddSection from "./AddSection";
-import Section from "../components/Section";
+import Section from "./Section";
 import NoSectionsFound from "./NoSectionsFound";
-import ListSkeleton from "../skeletons/ListSkeleton";
-import ErrorMessage from "./ErrorMessage";
-import { cn } from "../lib/utils";
-import { useSections } from "../hooks/section.query.js";
+
+import ListSkeleton from "@/skeletons/ListSkeleton";
+import ErrorMessage from "./common/ErrorMessage";
+
+import { cn } from "@/lib/utils.js";
+
+import { useSections } from "@/hooks/section.query.js";
+
+import { Accordion } from "@/components/ui/accordion";
 
 const NotebookSidebar = ({ additionaClass = "" }) => {
-  const [isExpanded, setIsExpanded] = useState("hello");
-
   const { data: sections, isLoading, error } = useSections();
 
   if (isLoading) return <ListSkeleton />;
-  if (error != null) return <ErrorMessage />;
+
+  if (error) return <ErrorMessage />;
+
   return (
-    <div className={cn("w-full bg-card h-full flex flex-col", additionaClass)}>
+    <div className={cn("w-full h-full flex flex-col bg-card", additionaClass)}>
       <AddSection />
+
       <ScrollArea className="flex-1">
         <div className="p-2">
-          {sections?.length === 0 ? (
-            <NoSectionsFound />
+          {sections?.length ? (
+            <Accordion type="single" collapsible className="w-full">
+              {sections.map((section) => (
+                <Section key={section._id} section={section} />
+              ))}
+            </Accordion>
           ) : (
-            sections.map((section) => (
-              <Section
-                key={section._id}
-                section={section}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-              />
-            ))
+            <NoSectionsFound />
           )}
         </div>
       </ScrollArea>

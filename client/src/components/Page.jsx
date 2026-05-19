@@ -1,10 +1,10 @@
 import React from "react";
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { FileText, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
-import useDeletePage from "../hooks/useDeletePage.js"; // default export
+import {useDeletePage} from "@/hooks/page.query.js"; // default export
 
-import usePageStore from "../store/usePageStore";
+import usePageStore from "@/store/usePageStore";
 
 const Page = ({ page, sectionId }) => {
   const setCurrentPage = usePageStore((s) => s.setCurrentPage);

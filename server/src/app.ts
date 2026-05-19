@@ -16,6 +16,7 @@ import errorHandler from "#middlewares/errorHandler.js";
 import authRouter from "#modules/auth/auth.routes.js";
 import sectionRouter from "#modules/section/section.route.js";
 import authenticate from "#middlewares/authenticate.js";
+import pageRouter from "#modules/page/page.route.js"
 
 const corsOptions = {
   origin: env.ORIGIN,
@@ -59,8 +60,7 @@ app.use("/api/auth", authRouter);
 
 app.use("/api/section",authenticate, sectionRouter);
 
-// // Page Routes
-// app.use("/api/page", pageRoutes);
+app.use("/api/page", pageRouter);
 
 // // Canvas Routes
 // app.use("/api/canvas", canvasRoutes);

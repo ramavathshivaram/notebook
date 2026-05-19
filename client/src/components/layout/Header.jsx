@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { cn } from "../lib/utils";
-import useSidebarStore from "../store/useSidebarStore";
+import { cn } from "@/lib/utils";
+import useSidebarStore from "@/store/useSidebarStore";
 import Menu from "./Menu";
 import DarkModeToggle from "./DarkModeToggle";
-import useAuthStore from "../store/auth.store";
+import useAuthStore from "@/store/auth.store";
 
 const Header = () => {
   const navigate = useNavigate();

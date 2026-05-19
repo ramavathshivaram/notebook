@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import debounce from "lodash.debounce";
-import useUpdatePageTitle from "../hooks/useUpdatePageTitle.js"; // note .js extension
+import { useUpdatePage } from "@/hooks/page.query.js"; // note .js extension
 
 const TitleEditor = ({ title, pageId }) => {
   const [localTitle, setLocalTitle] = useState(title);
-  const { mutate: updatePageMutate, isLoading } = useUpdatePageTitle();
+  const { mutate: updatePageMutate, isLoading } = useUpdatePage();
 
   const debouncedUpdate = useCallback(
     debounce((value) => {
@@ -14,7 +14,7 @@ const TitleEditor = ({ title, pageId }) => {
         updatedData: { title: value },
       });
     }, 500),
-    [pageId, updatePageMutate]
+    [pageId, updatePageMutate],
   );
 
   const handleChange = (value) => {

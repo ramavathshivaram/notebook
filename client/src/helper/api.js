@@ -76,33 +76,23 @@ export const deleteSectionApi = async (sectionId) => {
 };
 
 // -------------------- Page APIs --------------------
-export const createPage = async (page) => {
-  const res = await API.post("page/create", page);
+export const createPageApi = async ({ title, sectionId }) => {
+  const res = await API.post("page", { title, sectionId });
   return res.data;
 };
 
-export const getPage = async (pageId) => {
+export const getPageApi = async (pageId) => {
   const res = await API.get(`page/${pageId}`);
   return res.data.page;
 };
 
-export const updatePage = async (pageId, data) => {
-  const res = await API.put(`page/${pageId}`, data);
+export const updatePageApi = async (pageId, data) => {
+  const res = await API.patch(`page/${pageId}`, data);
   return res.data;
 };
 
-export const updatePageContent = async (pageId, data) => {
-  const res = await API.patch(`page/content/${pageId}`, data);
-  return res.data;
-};
-
-export const updatePageTitle = async (pageId, data) => {
-  const res = await API.patch(`page/title/${pageId}`, data);
-  return res.data;
-};
-
-export const deletePage = async (sectionId, pageId) => {
-  const res = await API.delete(`page/${sectionId}/${pageId}`);
+export const deletePageApi = async (pageId) => {
+  const res = await API.delete(`page/${pageId}`);
   return res.data;
 };
 

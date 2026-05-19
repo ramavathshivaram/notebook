@@ -1,8 +1,8 @@
 import NotebookSidebar from "@/components/NotebookSidebar";
-import NoteEditor from "@/components/NoteEditor";
-import usePageStore from "../store/usePageStore";
-import EmptyState from "../components/EmptyState";
-import Header from "../components/Header";
+import NoteEditor from "@/components/pages/NoteEditor";
+import usePageStore from "@/store/usePageStore";
+import EmptyState from "@/components/common/EmptyState";
+import Header from "@/components/layout/Header";
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -10,8 +10,8 @@ import {
 } from "../components/ui/resizable";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import useSidebarStore from "../store/useSidebarStore";
-import CanvasEditor from "../components/CanvasEditor";
+import useSidebarStore from "@/store/useSidebarStore";
+import CanvasEditor from "@/components/CanvasEditor";
 
 const Notebook = () => {
   const currentPage = usePageStore((s) => s.currentPage);

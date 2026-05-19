@@ -1,16 +1,12 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
 import debounce from "lodash.debounce";
-import useUpdatePageContent from "../hooks/useUpdatePageContent.js";
-import useUpdatePageTitle from "../hooks/useUpdatePageTitle.js";
+import { useUpdatePage } from "@/hooks/page.query.js";
 import { toPng } from "html-to-image";
-import { generateAiNote } from "../helper/api";
+import { generateAiNote } from "../../helper/api.js";
 import { toast } from "sonner";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import ListSkeleton from "../skeletons/ListSkeleton.jsx";
+import { Input } from "../ui/input.jsx";
+import { Button } from "../ui/button.jsx";
+import ListSkeleton from "../../skeletons/ListSkeleton.jsx";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { Mic, MicOff } from "lucide-react";
@@ -20,24 +16,14 @@ const ContentEditor = ({ content, title, pageId }) => {
   const [isLoadingAI, setLoadingAI] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const inputRef = useRef(null);
-  const lastFinalRef = useRef(""); // Track processed final transcript
-
-  const { mutate: updatePageMutate, isPending } = useUpdatePageContent();
-  const { mutate: updatePageTitleMutate } = useUpdatePageTitle();
-
-  const {
-    finalTranscript,
-    listening,
-    resetTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
+  const { mutate: updatePageMutate, isPending } = useUpdatePage();
 
   // Debounced save to backend
   const debouncedUpdate = useCallback(
     debounce((value) => {
       updatePageMutate({ pageId, updatedData: { content: value } });
     }, 1000),
-    [pageId, updatePageMutate]
+    [pageId, updatePageMutate],
   );
 
   // Cleanup debounce on unmount
@@ -45,80 +31,11 @@ const ContentEditor = ({ content, title, pageId }) => {
     return () => debouncedUpdate.cancel();
   }, [debouncedUpdate]);
 
-  // === SPEECH TO PARAGRAPHS ===
-  useEffect(() => {
-    if (!listening) {
-      lastFinalRef.current = "";
-      return;
-    }
-
-    const newFinal = finalTranscript.trim();
-    if (!newFinal || newFinal === lastFinalRef.current) return;
-
-    // Extract only the NEW final text
-    const addedText = newFinal.slice(lastFinalRef.current.length).trim();
-    if (!addedText) return;
-
-    // Split into sentences using punctuation
-    const sentences = addedText
-      .split(/(?<=[.!?])\s+/)
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    if (sentences.length === 0) return;
-
-    // Convert to HTML paragraphs
-    const htmlParagraphs = sentences
-      .map(
-        (sentence) =>
-          `<p>${sentence.charAt(0).toUpperCase() + sentence.slice(1)}</p>`
-      )
-      .join("");
-
-    // Append to editor
-    setLocalContent((prev) => {
-      const updated =
-        prev.endsWith("</p>") || !prev
-          ? prev + htmlParagraphs
-          : prev + "<p></p>" + htmlParagraphs;
-      debouncedUpdate(updated);
-      return updated;
-    });
-
-    // Update reference
-    lastFinalRef.current = newFinal;
-  }, [finalTranscript, listening, debouncedUpdate]);
-
-  // Reset on stop
-  useEffect(() => {
-    if (!listening) {
-      resetTranscript();
-      lastFinalRef.current = "";
-    }
-  }, [listening, resetTranscript]);
-
-  // === MIC CONTROLS ===
-  const handleStart = () => {
-    if (!browserSupportsSpeechRecognition) {
-      toast.error("Your browser does not support speech recognition");
-      return;
-    }
-    resetTranscript();
-    lastFinalRef.current = "";
-    SpeechRecognition.startListening({ continuous: true, language: "en-IN" });
-  };
-
-  const handleStop = () => {
-    SpeechRecognition.stopListening();
-  };
-
-  // === MANUAL EDITOR CHANGE ===
   const handleChange = (value) => {
     setLocalContent(value);
     debouncedUpdate(value);
   };
 
-  // === AI GENERATE ===
   const handleGenerate = async () => {
     if (isLoadingAI) return;
     const prompt = inputRef.current?.value?.trim();
@@ -203,19 +120,6 @@ const ContentEditor = ({ content, title, pageId }) => {
         <ListSkeleton />
       ) : (
         <div className="">
-          {/* Mic Button */}
-          <div className="absolute -top-13 right-0 z-10">
-            {listening ? (
-              <Button variant="outline" size="icon" onClick={handleStop}>
-                <Mic className="h-5 w-5" />
-              </Button>
-            ) : (
-              <Button variant="outline" size="icon" onClick={handleStart}>
-                <MicOff className="h-5 w-5" />
-              </Button>
-            )}
-          </div>
-
           {/* Quill Editor */}
           <ReactQuill
             className="my-editor"

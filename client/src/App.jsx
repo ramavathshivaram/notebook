@@ -1,8 +1,8 @@
 import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-import LoadingHeader from "./components/LoadingHeader";
-import AuthInitializer from "./components/AuthInitializer";
-import ProtectedRoute from "./components/ProtectedRoute";
+import LoadingHeader from "./components/common/LoadingHeader";
+import AuthInitializer from "./components/common/AuthInitializer";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 // Lazy load pages
 const LandingPage = lazy(() => import("./pages/LandingPage"));
