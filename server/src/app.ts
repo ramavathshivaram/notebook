@@ -1,4 +1,5 @@
 import env from "#configs/env.js";
+import type { Request, Response } from "express";
 
 import express from "express";
 import cookieParser from "cookie-parser";
@@ -16,7 +17,8 @@ import errorHandler from "#middlewares/errorHandler.js";
 import authRouter from "#modules/auth/auth.routes.js";
 import sectionRouter from "#modules/section/section.route.js";
 import authenticate from "#middlewares/authenticate.js";
-import pageRouter from "#modules/page/page.route.js"
+import pageRouter from "#modules/page/page.route.js";
+import canvasRouter from "#modules/canvas/canvas.route.js";
 
 const corsOptions = {
   origin: env.ORIGIN,
@@ -58,12 +60,12 @@ app.use("/api/auth", authRouter);
 
 // app.post("/api/update-user", updateUser);
 
-app.use("/api/section",authenticate, sectionRouter);
+app.use("/api/section", authenticate, sectionRouter);
 
-app.use("/api/page", pageRouter);
+app.use("/api/page", authenticate, pageRouter);
 
 // // Canvas Routes
-// app.use("/api/canvas", canvasRoutes);
+app.use("/api/canvas", authenticate, canvasRouter);
 
 // // AI Routes
 // app.use("/api/ai", aiRoutes);

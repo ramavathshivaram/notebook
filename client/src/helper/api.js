@@ -97,29 +97,28 @@ export const deletePageApi = async (pageId) => {
 };
 
 // -------------------- Canvas APIs --------------------
-export const createCanvas = async (canvas) => {
-  const res = await API.post("canvas/create", canvas);
-  return res.data.canvas;
-};
-
-export const getCanvas = async (canvasId) => {
-  const res = await API.get(`canvas/${canvasId}`);
-  return res.data.canvas;
-};
-
-export const updateCanvasTitle = async (canvasId, data) => {
-  const res = await API.patch(`canvas/title/${canvasId}`, data);
+export const createCanvasApi = async ({ title, sectionId }) => {
+  const res = await API.post("canvas", { title, sectionId });
   return res.data;
 };
 
-export const updateCanvasContent = async (canvasId, data) => {
-  // console.log(canvasId,data)
-  const res = await API.patch(`canvas/content/${canvasId}`, data);
-  return res?.data?.canvas?.content;
+export const getCanvasApi = async (canvasId) => {
+  const res = await API.get(`canvas/${canvasId}`);
+  return res.data.data;
 };
 
-export const deleteCanvas = async (sectionId, canvasId) => {
-  const res = await API.delete(`canvas/${sectionId}/${canvasId}`);
+export const getCanvassApi = async (sectionId) => {
+  const res = await API.get(`canvas/all/${sectionId}`);
+  return res.data.data;
+};
+
+export const updateCanvasApi = async (canvasId, data) => {
+  const res = await API.patch(`canvas/${canvasId}`, data);
+  return res.data;
+};
+
+export const deleteCanvasApi = async (canvasId) => {
+  const res = await API.delete(`canvas/${canvasId}`);
   return res.data;
 };
 

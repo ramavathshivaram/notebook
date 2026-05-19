@@ -46,11 +46,7 @@ const updatePage = asyncHandler(async (req: Request, res: Response) => {
 const getPages = asyncHandler(async (req: Request, res: Response) => {
   const sectionId = req.params.sectionId;
 
-  console.log(sectionId)
-
   const pages = await pageRepository.getAllSectionPages(sectionId);
-
-  console.log(pages)
 
   res.status(200).json({
     data: pages,

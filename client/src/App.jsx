@@ -18,7 +18,7 @@ const Register = lazy(() => import("./pages/Register"));
 
 const NoteEditor = lazy(() => import("./components/pages/NoteEditor"));
 
-const CanvasEditor = lazy(() => import("./components/CanvasEditor"));
+const CanvasEditor = lazy(() => import("./components/canvas/CanvasEditor"));
 
 const NotFound = lazy(() => import("./pages/NotFound"));
 

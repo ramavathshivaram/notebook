@@ -1,10 +1,8 @@
 import { useRef, useState } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
-// import { optimizeCanvasWithAI } from "../helper/api";
-import { Card } from "./ui/card";
+import { Card } from "../ui/card";
 import CanvasHeader from "./CanvasHeader";
 import CanvasFooter from "./CanvasFooter";
-import { toast } from "sonner";
 
 const CanvasContent = ({ content, title, canvasId }) => {
   const canvasRef = useRef(null);

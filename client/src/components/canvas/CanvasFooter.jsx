@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { generateCanvasDrawing } from "../helper/api";
+import { generateCanvasDrawing } from "@/helper/api.js";
 import { toast } from "sonner";
-import useUpdateCanvasContent from "../hooks/useUpdateCanvasContent.js";
+import { useUpdateCanvas } from "@/hooks/canvas.query.js";
 
 const CanvasFooter = ({ canvasRef, title, content, canvasId }) => {
-  const { mutateAsync: updateCanvasContent } = useUpdateCanvasContent();
+  const { mutateAsync: updateCanvasContent } = useUpdateCanvas();
   const inputRef = useRef(null);
   const [isloadingAI, setisLoadingAI] = useState(false);
   const [downloading, setDownloading] = useState(false);

@@ -8,9 +8,6 @@ import { cn } from "@/lib/utils";
 
 import { Book, Trash2, Plus } from "lucide-react";
 
-import Page from "../pages/Page.jsx";
-import Canvas from "../Canvas.jsx";
-
 import {
   AccordionContent,
   AccordionItem,
@@ -21,8 +18,9 @@ import { useRenameSection, useDeleteSection } from "@/hooks/section.query.js";
 
 import { useAddPage } from "@/hooks/page.query.js";
 
-import useAddCanvas from "@/hooks/useAddCanvas.js";
+import { useAddCanvas } from "@/hooks/canvas.query.js";
 import PageList from "../pages/PageList.jsx";
+import CanvasList from "../canvas/canvasList.jsx";
 
 const Section = ({ section }) => {
   const renameSectionMutate = useRenameSection().mutate;
@@ -49,6 +47,13 @@ const Section = ({ section }) => {
     addPageMutate({
       sectionId: section._id,
       title: "New Note",
+    });
+  };
+
+  const handleAddCanvas = () => {
+    addCanvasMutate({
+      sectionId: section._id,
+      title: "New Canvas",
     });
   };
 
@@ -98,10 +103,7 @@ const Section = ({ section }) => {
 
       <AccordionContent className="ml-6 space-y-1">
         <PageList sectionId={section._id} />
-
-        {section.canvases?.map((canvas) => (
-          <Canvas key={canvas._id} canvas={canvas} sectionId={section._id} />
-        ))}
+        <CanvasList sectionId={section._id} />
 
         <div className="flex gap-2 pt-2">
           <Button size="sm" className="text-xs" onClick={handleAddPage}>
@@ -109,7 +111,7 @@ const Section = ({ section }) => {
             Note
           </Button>
 
-          <Button size="sm" className="text-xs" onClick={handleAddPage}>
+          <Button size="sm" className="text-xs" onClick={handleAddCanvas}>
             <Plus className="size-3" />
             Drawing
           </Button>
