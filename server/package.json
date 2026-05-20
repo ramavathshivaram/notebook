@@ -10,9 +10,11 @@
     "test": "jest"
   },
   "imports": {
-    "#configs/*": "./src/configs/*",
-    "#middlewares/*": "./src/middlewares/*",
-    "#modules/*": "./src/modules/*"
+    "#configs/*": "./dist/configs/*",
+    "#middlewares/*": "./dist/middlewares/*",
+    "#modules/*": "./dist/modules/*",
+    "#services/*": "./dist/services/*",
+    "#utils/*": "./dist/utils/*"
   },
   "author": "ramavath shiva ram",
   "license": "ISC",
@@ -50,6 +52,7 @@
     "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
+    "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
