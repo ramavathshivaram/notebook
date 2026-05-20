@@ -1,11 +1,10 @@
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
-
-import messageRepository from "#modules/message/message.repository.js";
+import messageCache from "#modules/message/message.cache.js";
 
 const recentMessagesNode = async (state, config) => {
   const resourceId = config.context.resourceId;
 
-  const messages = await messageRepository.getMessages(resourceId, 1, 5);
+  const messages = await messageCache.getMessages(resourceId, 1, 5);
 
   const formattedMessages = messages.reverse().map((message) => {
     if (message.role === "assistant") {
@@ -14,8 +13,6 @@ const recentMessagesNode = async (state, config) => {
 
     return new HumanMessage(message.content);
   });
-
-  console.log(formattedMessages);
 
   return {
     messages: formattedMessages,

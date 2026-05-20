@@ -11,6 +11,7 @@ import morganMiddleware from "#middlewares/morganMiddleware.js";
 import rateLimiterMiddleware, {
   authLimiter,
 } from "#middlewares/rateLimiter.js";
+import health from "#utils/health.js";
 
 import notFoundRoute from "#middlewares/notFoundRoute.js";
 import errorHandler from "#middlewares/errorHandler.js";
@@ -23,6 +24,7 @@ import messageRouter from "#modules/message/message.route.js";
 import aiRouter from "#modules/ai/ai.route.js";
 
 import pageWorkerRouter from "#modules/page/page.route.worker.js";
+import messageWorkerRouter from "#modules/message/message.worker.route.js";
 
 const corsOptions = {
   origin: env.ORIGIN,
@@ -51,14 +53,7 @@ app.use(
 
 app.get("/", async (req: Request, res: Response) => res.send("API running"));
 
-app.get("/health", async (req: Request, res: Response) => {
-  res.status(200).json({
-    status: "ok",
-    uptime: process.uptime(),
-    timestamp: Date.now(),
-    memory: process.memoryUsage(),
-  });
-});
+app.get("/health", health);
 
 app.use("/api/auth", authRouter);
 
@@ -72,7 +67,8 @@ app.use("/api/message", authenticate, messageRouter);
 
 app.use("/api/ai", authenticate, aiRouter);
 
-app.use("/internal", pageWorkerRouter);
+app.use("/internal/page", pageWorkerRouter);
+app.use("/internal/message", messageWorkerRouter);
 
 app.use(errorHandler);
 app.use(notFoundRoute);

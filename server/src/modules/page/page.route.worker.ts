@@ -8,10 +8,10 @@ import {
 
 const router = express.Router();
 
-router.post("/page", persistCreatePage);
+router.post("/", persistCreatePage);
 
-router.patch("/page/:pageId", persistUpdatePage);
+router.patch("/:pageId", persistUpdatePage);
 
-router.delete("/page/:pageId", persistDeletePage);
+router.delete("/:pageId", persistDeletePage);
 
 export default router;

@@ -4,7 +4,6 @@ export interface IAuth {
   email: string;
   userId: string;
   password: string;
-  isEmailVerified: boolean;
   tokenVersion: number;
   userName: string;
 }
@@ -25,11 +24,6 @@ const authSchema = new mongoose.Schema({
   password: {
     type: String,
     select: false,
-  },
-
-  isEmailVerified: {
-    type: Boolean,
-    default: false,
   },
 
   tokenVersion: {

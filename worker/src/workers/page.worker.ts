@@ -1,6 +1,5 @@
 import { Job, Worker } from "bullmq";
 import redis from "#configs/redis.js";
-import logger from "#configs/logger.js";
 import { queueConst } from "#utils/const.js";
 import pageApi from "#services/page.api.js";
 

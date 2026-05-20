@@ -5,8 +5,9 @@ import workerEventHandlers from "#utils/workerEventHandlers.js";
 
 import emailWorker from "#workers/email.worker.js";
 import pageWorker from "#workers/page.worker.js";
+import messageWorker from "#workers/message.worker.js";
 
-const workerFactories = [emailWorker, pageWorker];
+const workerFactories = [emailWorker, pageWorker, messageWorker];
 
 let workers: Worker[] = [];
 

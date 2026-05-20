@@ -35,3 +35,11 @@ export const pageQueue = new Queue(queueConst.PAGE, {
     priority: 5,
   },
 });
+
+export const messageQueue = new Queue(queueConst.MESSAGE, {
+  connection: redis,
+  defaultJobOptions: {
+    ...defaultJobOptions,
+    priority: 5,
+  },
+});

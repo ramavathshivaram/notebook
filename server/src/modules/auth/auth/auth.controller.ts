@@ -11,6 +11,9 @@ import { verifyToken, generateTokens } from "#services/token.service.js";
 import ApiError from "#utils/ApiError.js";
 import type { ITokenPayload } from "../../../types/type.js";
 import authRepository from "../auth.repository.js";
+import cacheService from "#services/cache.service.js";
+
+const authKey = (authId: string) => `auth-${authId}`;
 
 const refreshTokenController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -56,8 +59,10 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-const authCheck = asyncHandler(async (_req: Request, res: Response) => {
-  const authResponse = await authRepository.getAuthById(_req.authId);
+const authCheck = asyncHandler(async (req: Request, res: Response) => {
+  const authResponse = await cacheService.cache(authKey(req.authId), () =>
+    authRepository.getAuthById(req.authId),
+  );
   res.status(200).json({
     success: true,
     data: authResponse,
