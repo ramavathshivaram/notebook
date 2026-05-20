@@ -4,21 +4,19 @@ import logger from "#configs/logger.js";
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production"]).default("development"),
-  PORT: z.coerce.number().default(8080),
+  PORT: z.coerce.number().default(8081),
 
   REDIS_HOST: z.string().default("127.0.0.1"),
   REDIS_PORT: z.coerce.number().default(6379),
 
   ORIGIN: z.string().min(1, "ORIGIN is required"),
 
-  GROQ_API_KEY: z.string().min(1, "GROQ_API_KEY is required"),
+  BREVO_API_KEY: z.string().min(1, "BREVO_API_KEY is required"),
 
-  MONGODB_URI: z
+  SERVER_URL: z
     .string()
-    .min(1, "MONGODB_URI is required")
-    .default("mongodb://127.0.0.1:27017/note-book"),
-
-  JWT_SECRET_KEY: z.string().min(1, "JWT_SECRET_KEY is required"),
+    .min(1, "SERVER_URL is required")
+    .default("http://localhost:8080"),
 });
 
 const parsed = envSchema.safeParse(process.env);

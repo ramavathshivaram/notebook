@@ -1,14 +1,8 @@
 import ApiError from "#utils/ApiError.js";
 import Page, { type IPage } from "./page.model.js";
 
-const create = async (
-  sectionId: Pick<IPage, "sectionId">,
-  title: Pick<IPage, "title">,
-) => {
-  return await Page.create({
-    title,
-    sectionId,
-  });
+const create = async (page: Partial<IPage>) => {
+  return await Page.create(page);
 };
 
 const get = async (pageId: Pick<IPage, "_id">) => {

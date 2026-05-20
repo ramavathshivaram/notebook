@@ -22,6 +22,8 @@ import canvasRouter from "#modules/canvas/canvas.route.js";
 import messageRouter from "#modules/message/message.route.js";
 import aiRouter from "#modules/ai/ai.route.js";
 
+import pageWorkerRouter from "#modules/page/page.route.worker.js";
+
 const corsOptions = {
   origin: env.ORIGIN,
   credentials: true,
@@ -69,6 +71,8 @@ app.use("/api/canvas", authenticate, canvasRouter);
 app.use("/api/message", authenticate, messageRouter);
 
 app.use("/api/ai", authenticate, aiRouter);
+
+app.use("/internal", pageWorkerRouter);
 
 app.use(errorHandler);
 app.use(notFoundRoute);

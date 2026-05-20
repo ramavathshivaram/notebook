@@ -1,11 +1,12 @@
 import asyncHandler from "express-async-handler";
 import type { Request, Response } from "express";
 import pageRepository from "./page.repository.js";
+import pageCache from "./page.cache.js";
 
 const createPage = asyncHandler(async (req: Request, res: Response) => {
   const { sectionId, title } = req.body;
 
-  const page = await pageRepository.create(sectionId, title);
+  const page = await pageCache.cachePage(sectionId, title);
 
   res.status(201).json({
     data: page,
@@ -17,14 +18,14 @@ const createPage = asyncHandler(async (req: Request, res: Response) => {
 const getPage = asyncHandler(async (req: Request, res: Response) => {
   const { pageId } = req.params;
 
-  const page = await pageRepository.get(pageId);
+  const page = await pageCache.getPage(pageId);
 
   res.status(200).json({ data: page, status: true });
 });
 
 const deletePage = asyncHandler(async (req: Request, res: Response) => {
   const { pageId } = req.params;
-  const page = await pageRepository.deletePage(pageId);
+  const page = await pageCache.deletePage(pageId);
 
   res
     .status(200)
@@ -34,7 +35,7 @@ const deletePage = asyncHandler(async (req: Request, res: Response) => {
 const updatePage = asyncHandler(async (req: Request, res: Response) => {
   const { pageId } = req.params;
 
-  const page = await pageRepository.update(pageId, req.body);
+  const page = await pageCache.updatePage(pageId, req.body);
 
   res
     .status(200)
@@ -58,5 +59,5 @@ export default {
   getPage,
   updatePage,
   deletePage,
-  getPages
+  getPages,
 };
