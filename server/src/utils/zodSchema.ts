@@ -24,8 +24,25 @@ const resetPasswordSchema = z.object({
   email: z.string().email(),
 });
 
-const createSectionSchema = z.object({ title: z.string().trim().min(1,"Title is required") });
-const renameSectionSchema = z.object({ title: z.string().trim().min(1,"Title is required") });
+const createSectionSchema = z.object({
+  title: z.string().trim().min(1, "Title is required"),
+});
+const renameSectionSchema = z.object({
+  title: z.string().trim().min(1, "Title is required"),
+});
+
+const createMessageSchema = z.object({
+  content: z.string().trim().min(1, "Message is required"),
+  resourceId: z.string().trim().min(1, "Resource ID is required"),
+  role: z.string().trim().min(1, "Role is required"),
+});
+
+
+const askAiSchema = z.object({
+   resourceId: z.string().trim().min(1, "Resource ID is required")
+   , content: z.string().trim().min(1, "Message is required")
+   , resourceType: z.string().trim().min(1, "Resource Type is required")
+});
 
 export default {
   loginSchema,
@@ -36,4 +53,8 @@ export default {
 
   createSectionSchema,
   renameSectionSchema,
+
+  createMessageSchema,
+
+  askAiSchema
 };

@@ -1,8 +1,11 @@
-import { RateLimiterRedis, RateLimiterMemory } from "rate-limiter-flexible";
+import { RateLimiterMemory, RateLimiterRedis } from "rate-limiter-flexible";
+
 import asyncHandler from "express-async-handler";
+
+import type { NextFunction, Request, Response } from "express";
+
 import redis from "#configs/redis.js";
 import ApiError from "#utils/ApiError.js";
-import type { NextFunction, Request, Response } from "express";
 
 interface LimitOptions {
   keyPrefix: string;
@@ -11,14 +14,16 @@ interface LimitOptions {
   blockDuration: number;
 }
 
+const insuranceLimiter = new RateLimiterMemory({
+  points: 100,
+  duration: 60,
+});
+
 const createLimiter = (options: LimitOptions) =>
   new RateLimiterRedis({
     storeClient: redis,
+    insuranceLimiter,
     execEvenly: false,
-    insuranceLimiter: new RateLimiterMemory({
-      points: 100,
-      duration: 60,
-    }),
     ...options,
   });
 
@@ -51,14 +56,16 @@ export const authCheckLimiter = createLimiter({
 });
 
 export const rateLimiterMiddleware = (limiter: RateLimiterRedis) =>
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const key: string = req.ip as string;
-
+  asyncHandler(async (req: Request, _res: Response, next: NextFunction) => {
     try {
-      await limiter.consume(key);
-      return next();
-    } catch (err) {
-      return next(new ApiError(429, "Too many requests"));
+      const key =
+        req.authId || req.ip || req.headers["x-forwarded-for"] || "anonymous";
+
+      await limiter.consume(String(key));
+
+      next();
+    } catch {
+      next(new ApiError(429, "Too many requests. Please try again later."));
     }
   });
 

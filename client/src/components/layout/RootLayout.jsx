@@ -11,7 +11,7 @@ import {
 
 import { cn } from "@/lib/utils";
 
-import useSidebarStore from "@/store/useSidebarStore";
+import useSidebarStore from "@/store/sidebar.store.js";
 
 import { useEffect, useState } from "react";
 import ChatBotWrapper from "../chatbot/ChatBotWrapper";

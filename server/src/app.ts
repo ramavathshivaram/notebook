@@ -19,6 +19,8 @@ import sectionRouter from "#modules/section/section.route.js";
 import authenticate from "#middlewares/authenticate.js";
 import pageRouter from "#modules/page/page.route.js";
 import canvasRouter from "#modules/canvas/canvas.route.js";
+import messageRouter from "#modules/message/message.route.js";
+import aiRouter from "#modules/ai/ai.route.js";
 
 const corsOptions = {
   origin: env.ORIGIN,
@@ -58,17 +60,15 @@ app.get("/health", async (req: Request, res: Response) => {
 
 app.use("/api/auth", authRouter);
 
-// app.post("/api/update-user", updateUser);
-
 app.use("/api/section", authenticate, sectionRouter);
 
 app.use("/api/page", authenticate, pageRouter);
 
-// // Canvas Routes
 app.use("/api/canvas", authenticate, canvasRouter);
 
-// // AI Routes
-// app.use("/api/ai", aiRoutes);
+app.use("/api/message", authenticate, messageRouter);
+
+app.use("/api/ai", authenticate, aiRouter);
 
 app.use(errorHandler);
 app.use(notFoundRoute);

@@ -59,7 +59,7 @@ const ContentEditor = ({ content, pageId, sectionId }) => {
   };
 
   return (
-    <div className="relative flex flex-col h-full overflow-hidden">
+    <div className="relative flex flex-col overflow-hidden">
       {/* Editor */}
       <div className="flex-1 overflow-hidden">
         <ReactQuill

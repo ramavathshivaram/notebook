@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { memo, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import useSidebarStore from "@/store/useSidebarStore";
+import useSidebarStore from "@/store/sidebar.store.js";
 import Menu from "./Menu";
 import Profile from "./Profile";
 

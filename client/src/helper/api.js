@@ -1,10 +1,9 @@
 import API from "./axios.js";
 
-// -------------------- Auth APIs --------------------
+//! -------------------- Auth APIs --------------------
 
 export const loginApi = async (formData) => {
   const res = await API.post("/auth/login", formData);
-  console.log(res.data);
   return res.data;
 };
 
@@ -20,7 +19,6 @@ export const logoutApi = async () => {
 
 export const authCheckApi = async () => {
   const res = await API.get("/auth/check");
-  console.log(res.data)
   return res.data.data;
 };
 
@@ -50,7 +48,7 @@ export const updateUser = async (darkMode) => {
   return res.data.user;
 };
 
-// -------------------- Section APIs --------------------
+//! -------------------- Section APIs --------------------
 export const createSectionApi = async (title) => {
   const res = await API.post("section", { title });
   return res.data;
@@ -71,7 +69,7 @@ export const deleteSectionApi = async (sectionId) => {
   return res.data;
 };
 
-// -------------------- Page APIs --------------------
+//! -------------------- Page APIs --------------------
 export const createPageApi = async ({ title, sectionId }) => {
   const res = await API.post("page", { title, sectionId });
   return res.data;
@@ -97,7 +95,7 @@ export const deletePageApi = async (pageId) => {
   return res.data;
 };
 
-// -------------------- Canvas APIs --------------------
+//! -------------------- Canvas APIs --------------------
 export const createCanvasApi = async ({ title, sectionId }) => {
   const res = await API.post("canvas", { title, sectionId });
   return res.data;
@@ -123,16 +121,18 @@ export const deleteCanvasApi = async (canvasId) => {
   return res.data;
 };
 
-// -------------------- AI APIs --------------------
-export const generateAiNote = async (data) => {
-  const res = await API.post("/ai/generate-ai-note", data);
-  return res.data.message;
+//! -------------------- MESSAGES APIs --------------------
+
+export const getMessagesApi = async (resourceId, page = 1, limit = 10) => {
+  const res = await API.get(
+    `message/all/${resourceId}?page=${page}&limit=${limit}`,
+  );
+  return res.data.data;
 };
 
-export const generateCanvasDrawing = async (data) => {
-  // console.log(data);
-  const res = await API.post("/ai/generate-canvas-drawing", data);
-  // console.log(res.data);
-  // console.log("AI");
-  return res.data.canvas;
+//! -------------------- AI APIs --------------------
+
+export const askAiApi = async (data) => {
+  const res = await API.post("ai/ask", data);
+  return res.data.data;
 };

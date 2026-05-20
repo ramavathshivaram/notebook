@@ -7,8 +7,6 @@ import {
   createSectionApi,
 } from "../helper/api.js";
 
-import usePageStore from "../store/usePageStore";
-
 export const sectionsQueryKey = ["sections"];
 
 export const useSections = () => {
@@ -65,9 +63,6 @@ export const useRenameSection = () => {
 export const useDeleteSection = () => {
   const queryClient = useQueryClient();
 
-  const currentPage = usePageStore((s) => s.currentPage);
-
-  const setCurrentPage = usePageStore((s) => s.setCurrentPage);
 
   return useMutation({
     mutationFn: (sectionId) => deleteSectionApi(sectionId),
@@ -76,10 +71,6 @@ export const useDeleteSection = () => {
       await queryClient.cancelQueries({
         queryKey: sectionsQueryKey,
       });
-
-      if (currentPage) {
-        setCurrentPage(null);
-      }
 
       const previousSections = queryClient.getQueryData(sectionsQueryKey);
 
