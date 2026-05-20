@@ -17,10 +17,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import PhysicsHero from "../components/PhysicsHero";
-import BackGround from "../components/BackGround";
-import useAuthStore from "../store/auth.store.js";
-import { CardFooter } from "../components/ui/card.jsx";
+import BackGround from "@/components/common/BackGround";
+import useAuthStore from "@/store/auth.store.js";
+import { CardFooter } from "@/components/ui/card.jsx";
 import { Separator } from "@/components/ui/separator";
 
 // ✅ Schema

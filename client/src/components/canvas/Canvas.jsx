@@ -28,10 +28,13 @@ const Canvas = ({ canvas, sectionId }) => {
   const handleDelete = (e) => {
     e.stopPropagation();
 
+    if (isSelected) navigate("/notebook");
+    
     mutate({
       canvasId: canvas._id,
       sectionId,
     });
+
   };
 
   return (

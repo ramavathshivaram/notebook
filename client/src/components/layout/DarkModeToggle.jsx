@@ -4,20 +4,10 @@ import { Moon, Sun } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const getTheme = () => {
-  if (localStorage.theme === "dark") {
-    return true;
-  }
-
-  if (localStorage.theme === "light") {
-    return false;
-  }
-
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-};
-
 const DarkModeToggle = () => {
-  const [darkMode, setDarkMode] = useState(getTheme);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
 
   useEffect(() => {
     const root = document.documentElement;

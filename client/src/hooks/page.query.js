@@ -26,19 +26,22 @@ export const useAddPage = () => {
         sectionId,
       ]);
 
-      const newPage = {
-        _id: Date.now().toString(),
+      const tempId = `temp-${Date.now()}`;
+
+      const optimisticPage = {
+        _id: tempId,
         title,
         sectionId,
       };
 
       queryClient.setQueryData([...pagesQueryKey, sectionId], (old = []) => [
         ...old,
-        newPage,
+        optimisticPage,
       ]);
 
       return {
         previousPages,
+        tempId,
       };
     },
 
@@ -49,11 +52,11 @@ export const useAddPage = () => {
       );
     },
 
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables, context) => {
       queryClient.setQueryData(
         [...pagesQueryKey, variables.sectionId],
         (old = []) =>
-          old.map((page) => (page._id.includes("temp") ? data : page)),
+          old.map((page) => (page._id === context.tempId ? data : page)),
       );
     },
   });

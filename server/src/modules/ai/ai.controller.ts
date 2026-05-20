@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import type { Request, Response } from "express";
 
 import messageRepository from "#modules/message/message.repository.js";
+import invokeGraph from "./invokeGraph.js";
 
 const ask = asyncHandler(async (req: Request, res: Response) => {
   const { content, resourceId, resourceType } = req.body;
@@ -12,9 +13,11 @@ const ask = asyncHandler(async (req: Request, res: Response) => {
     resourceId,
   });
 
+  const response = await invokeGraph(content, resourceId);
+
   const assistantMessage = await messageRepository.createMessage({
     role: "assistant",
-    content: "hello",
+    content: response,
     resourceId,
   });
 

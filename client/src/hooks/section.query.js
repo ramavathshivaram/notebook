@@ -63,7 +63,6 @@ export const useRenameSection = () => {
 export const useDeleteSection = () => {
   const queryClient = useQueryClient();
 
-
   return useMutation({
     mutationFn: (sectionId) => deleteSectionApi(sectionId),
 
@@ -102,8 +101,10 @@ export const useAddSection = () => {
 
       const previousSections = queryClient.getQueryData(sectionsQueryKey);
 
+      const tempId = `temp-${Date.now()}`;
+
       const optimisticSection = {
-        _id: `temp-${Date.now()}`,
+        _id: tempId,
         title,
       };
 
@@ -114,7 +115,7 @@ export const useAddSection = () => {
 
       return {
         previousSections,
-        optimisticSection,
+        tempId,
       };
     },
 
@@ -126,9 +127,7 @@ export const useAddSection = () => {
 
     onSuccess: (section, _title, context) => {
       queryClient.setQueryData(sectionsQueryKey, (old = []) =>
-        old.map((sec) =>
-          sec._id === context.optimisticSection._id ? section : sec,
-        ),
+        old.map((sec) => (sec._id === context.tempId ? section : sec)),
       );
     },
   });

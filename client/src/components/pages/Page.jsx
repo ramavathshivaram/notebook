@@ -28,6 +28,8 @@ const Page = ({ page, sectionId }) => {
   const handleDelete = (e) => {
     e.stopPropagation();
 
+    if (isSelected) navigate("/notebook");
+
     mutate({
       pageId: page._id,
       sectionId,

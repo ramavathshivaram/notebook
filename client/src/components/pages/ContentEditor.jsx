@@ -12,9 +12,7 @@ import { Loader2, Check } from "lucide-react";
 const ContentEditor = ({ content, pageId, sectionId }) => {
   const [localContent, setLocalContent] = useState(content);
 
-  const [saved, setSaved] = useState(false);
-
-  const { mutate: updatePageMutate, isPending } = useUpdatePage();
+  const { mutate: updatePageMutate } = useUpdatePage();
 
   useEffect(() => {
     setLocalContent(content);
@@ -23,24 +21,13 @@ const ContentEditor = ({ content, pageId, sectionId }) => {
   // Debounced save
   const debouncedUpdate = useCallback(
     debounce((value) => {
-      updatePageMutate(
-        {
-          pageId,
-          sectionId,
-          updatedData: {
-            content: value,
-          },
+      updatePageMutate({
+        pageId,
+        sectionId,
+        updatedData: {
+          content: value,
         },
-        {
-          onSuccess: () => {
-            setSaved(true);
-
-            setTimeout(() => {
-              setSaved(false);
-            }, 2000);
-          },
-        },
-      );
+      });
     }, 800),
     [pageId, sectionId, updatePageMutate],
   );
@@ -52,9 +39,6 @@ const ContentEditor = ({ content, pageId, sectionId }) => {
 
   const handleChange = (value) => {
     setLocalContent(value);
-
-    setSaved(false);
-
     debouncedUpdate(value);
   };
 

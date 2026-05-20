@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post(
   "/",
-  // validateRequest(zodSchema.createSection),
+  validateRequest(zodSchema.createSectionSchema),
   sectionController.createSection,
 );
 
@@ -18,7 +18,7 @@ router.delete("/:sectionId", sectionController.deleteSection);
 
 router.patch(
   "/:sectionId",
-  // validateRequest(zodSchema.renameSection),
+  validateRequest(zodSchema.renameSectionSchema),
   sectionController.renameSection,
 );
 

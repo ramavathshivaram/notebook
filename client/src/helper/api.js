@@ -27,18 +27,18 @@ export const refreshTokenApi = async () => {
   return res.data.token;
 };
 
-export const forgotPasswordApi = async (email) => {
+export const forgotPasswordApi = async ({ email }) => {
   const res = await API.post("/auth/forgot", { email });
   return res.status >= 200 && res.status < 300;
 };
 
-export const verifyOTPApi = async ({ userId, otp }) => {
-  const res = await API.post("/auth/verify-otp", { userId, otp });
+export const verifyOTPApi = async ({ email, otp }) => {
+  const res = await API.post("/auth/verify-otp", { email, otp });
   return res.status === 200;
 };
 
-export const resetPasswordApi = async ({ userId, password }) => {
-  const res = await API.post("/auth/reset", { userId, password });
+export const resetPasswordApi = async ({ email, otp, password }) => {
+  const res = await API.post("/auth/reset", { email, otp, password });
   return res.status === 200;
 };
 
@@ -51,7 +51,7 @@ export const updateUser = async (darkMode) => {
 //! -------------------- Section APIs --------------------
 export const createSectionApi = async (title) => {
   const res = await API.post("section", { title });
-  return res.data;
+  return res.data.section;
 };
 
 export const getSectionsApi = async () => {
@@ -72,7 +72,8 @@ export const deleteSectionApi = async (sectionId) => {
 //! -------------------- Page APIs --------------------
 export const createPageApi = async ({ title, sectionId }) => {
   const res = await API.post("page", { title, sectionId });
-  return res.data;
+  // console.log(res.data)
+  return res.data.data;
 };
 
 export const getPageApi = async (pageId) => {
@@ -98,7 +99,7 @@ export const deletePageApi = async (pageId) => {
 //! -------------------- Canvas APIs --------------------
 export const createCanvasApi = async ({ title, sectionId }) => {
   const res = await API.post("canvas", { title, sectionId });
-  return res.data;
+  return res.data.data;
 };
 
 export const getCanvasApi = async (canvasId) => {

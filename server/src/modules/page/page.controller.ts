@@ -7,8 +7,6 @@ const createPage = asyncHandler(async (req: Request, res: Response) => {
 
   const page = await pageRepository.create(sectionId, title);
 
-  console.log(page)
-
   res.status(201).json({
     data: page,
     message: "Page created successfully",

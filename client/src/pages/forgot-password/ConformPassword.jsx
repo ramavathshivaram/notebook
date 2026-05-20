@@ -59,7 +59,6 @@ const ConformPassword = ({ onNext, onPrev, formData }) => {
               <FieldLabel htmlFor="conformPassword">ConformPassword</FieldLabel>
               <Input
                 id="conformPassword"
-                placeholder="abc@example.com"
                 type="password"
                 {...register("conformPassword", {
                   required: "conformPassword is required",

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -31,6 +31,12 @@ const ForgotPassword = lazy(
 );
 
 const App = () => {
+  useEffect(() => {
+    const isDark = localStorage.getItem("theme") === "dark";
+
+    document.documentElement.classList.toggle("dark", isDark);
+  }, []);
+
   return (
     <div className="select-none">
       <Suspense fallback={<LoadingHeader />}>
