@@ -3,6 +3,12 @@ import redis from "#configs/redis.js";
 import { queueConst } from "#utils/const.js";
 import messageApi from "#services/message.api.js";
 
+export interface IMessage {
+  role: string;
+  content: string;
+  resourceId: string;
+}
+
 interface CreateMessageJob extends Partial<IMessage> {}
 
 const messageJob = async (job: Job) => {

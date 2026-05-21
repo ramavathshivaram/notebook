@@ -3,6 +3,12 @@ import redis from "#configs/redis.js";
 import { queueConst } from "#utils/const.js";
 import pageApi from "#services/page.api.js";
 
+export interface IPage {
+  title: string;
+  content: string;
+  sectionId: string;
+}
+
 interface CreatePageJob extends Partial<IPage> {}
 
 interface UpdatePageJob {
