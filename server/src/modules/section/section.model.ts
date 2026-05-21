@@ -1,6 +1,7 @@
 import mongoose, { Types } from "mongoose";
 
 export interface ISection {
+   _id: Types.ObjectId;
   title: string;
   authId: Types.ObjectId;
 }

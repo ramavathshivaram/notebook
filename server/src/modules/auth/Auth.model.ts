@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 export interface IAuth {
+  _id: Types.ObjectId;
   email: string;
   userId: string;
   password: string;

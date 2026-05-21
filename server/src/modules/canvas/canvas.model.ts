@@ -1,6 +1,7 @@
 import mongoose, { Schema, Types } from "mongoose";
 
 export interface ICanvas {
+   _id: Types.ObjectId;
   title: string;
   content: string;
   sectionId: Types.ObjectId;

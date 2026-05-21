@@ -5,21 +5,10 @@
 
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "target": "ESNext",
 
-    "types": ["node"],
-    "lib": ["ES2020"],
+    "target": "ES2022",
+    "lib": ["ES2022"],
 
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
-    "strict": true,
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
     "paths": {
       "#configs/*": ["./src/configs/*"],
       "#middlewares/*": ["./src/middlewares/*"],
@@ -27,6 +16,25 @@
       "#services/*": ["./src/services/*"],
       "#modules/*": ["./src/modules/*"]
     },
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+
+    "types": ["node"],
+
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+
+    "sourceMap": true,
+
+    "declaration": true,
+    "declarationMap": true,
+
+    "strict": true,
+
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+
+    "noUncheckedSideEffectImports": true,
+
+    "moduleDetection": "force",
+
+    "skipLibCheck": true
   }
 }

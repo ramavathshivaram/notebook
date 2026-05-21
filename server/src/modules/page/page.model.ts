@@ -1,6 +1,7 @@
 import mongoose, { Types } from "mongoose";
 
 export interface IPage {
+  _id: Types.ObjectId;
   title: string;
   content: string;
   sectionId: Types.ObjectId;

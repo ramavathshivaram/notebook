@@ -51,7 +51,11 @@ const refreshTokenController = asyncHandler(
 const logout = asyncHandler(async (req: Request, res: Response) => {
   clearCookie(res, "refreshToken");
 
-  await deleteSession(req.authId);
+  if(!req.authId) {
+    throw new ApiError(401, "Unauthorized");
+  }
+
+  await deleteSession(req.?authId);
 
   res.json({
     message: "Logout successful",

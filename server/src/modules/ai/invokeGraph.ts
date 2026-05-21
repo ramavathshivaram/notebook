@@ -1,12 +1,17 @@
 import { HumanMessage } from "@langchain/core/messages";
+
 import graph from "./graph.js";
 
 const invokeGraph = async (content: string, resourceId: string) => {
   const messages = [new HumanMessage(content)];
 
   const config = {
-    configurable: { thread_id: resourceId },
-    context: { resourceId },
+    configurable: {
+      thread_id: resourceId,
+    },
+    context: {
+      resourceId,
+    },
   };
 
   const response = await graph.invoke(
@@ -16,7 +21,7 @@ const invokeGraph = async (content: string, resourceId: string) => {
     config,
   );
 
-  const lastMessage = response.messages.at(-1);
+  const lastMessage = response.messages[response.messages.length - 1];
 
   return lastMessage?.content ?? "";
 };

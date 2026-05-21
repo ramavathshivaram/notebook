@@ -36,7 +36,7 @@ jobs:
           push: true
           tags: ramavathshivaram/note-book-worker:latest
 
-      - name: Build and Push auth-service Image
+      - name: Build and Push server Image
         uses: docker/build-push-action@v6
         with:
           context: ./server

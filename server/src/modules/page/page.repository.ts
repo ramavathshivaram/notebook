@@ -5,13 +5,13 @@ const create = async (page: Partial<IPage>) => {
   return await Page.create(page);
 };
 
-const get = async (pageId: Pick<IPage, "_id">) => {
+const get = async (pageId: IPage["_id"]) => {
   const page = await Page.findById(pageId);
   if (!page) throw new ApiError(404, "page is not found");
   return page;
 };
 
-const getAllSectionPages = async (sectionId: Pick<IPage, "sectionId">) => {
+const getAllSectionPages = async (sectionId: IPage["sectionId"]) => {
   const pages = await Page.find({
     sectionId,
   })
@@ -21,15 +21,12 @@ const getAllSectionPages = async (sectionId: Pick<IPage, "sectionId">) => {
   return pages || [];
 };
 
-const deletePage = async (pageId: Pick<IPage, "_id">) => {
+const deletePage = async (pageId: IPage["_id"]) => {
   const page = await Page.findByIdAndDelete(pageId);
   return page;
 };
 
-const update = async (
-  pageId: Pick<IPage, "_id">,
-  updatedPage: Partial<IPage>,
-) => {
+const update = async (pageId: IPage["_id"], updatedPage: Partial<IPage>) => {
   const page = await Page.findByIdAndUpdate(pageId, updatedPage, {
     new: true,
   });

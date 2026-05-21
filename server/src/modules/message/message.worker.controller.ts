@@ -5,7 +5,7 @@ import asyncHandler from "express-async-handler";
 const create = asyncHandler(async (req: Request, res: Response) => {
   const message = await messageRepository.createMessage(req.body);
 
-  return res.status(201).json({
+  res.status(201).json({
     success: true,
     data: message,
   });

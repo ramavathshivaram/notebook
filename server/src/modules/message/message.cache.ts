@@ -6,6 +6,8 @@ import cacheService from "#services/cache.service.js";
 
 import messageRepository from "./message.repository.js";
 
+import type { IMessage } from "./message.model.js";
+
 const messageKey = (messageId: string) => `message:${messageId}`;
 
 const messagesKey = (resourceId: string, page: number, limit: number) =>

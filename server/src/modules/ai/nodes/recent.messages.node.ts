@@ -1,10 +1,34 @@
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
+import {
+  AIMessage,
+  HumanMessage,
+  type BaseMessage,
+} from "@langchain/core/messages";
+
 import messageCache from "#modules/message/message.cache.js";
 
-const recentMessagesNode = async (state, config) => {
-  const resourceId = config.context.resourceId;
+interface State {
+  messages: BaseMessage[];
+}
 
-  const messages = await messageCache.getMessages(resourceId, 1, 5);
+interface Config {
+  context?: {
+    resourceId?: string;
+  };
+}
+
+interface CachedMessage {
+  role: "assistant" | "user";
+  content: string;
+}
+
+const recentMessagesNode = async (_state: State, config: Config) => {
+  const resourceId = config?.context?.resourceId || "";
+
+  const messages = (await messageCache.getMessages(
+    resourceId,
+    1,
+    5,
+  )) as CachedMessage[];
 
   const formattedMessages = messages.reverse().map((message) => {
     if (message.role === "assistant") {

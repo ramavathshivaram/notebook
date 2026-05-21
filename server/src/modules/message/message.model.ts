@@ -1,6 +1,7 @@
 import mongoose, { Types } from "mongoose";
 
 export interface IMessage {
+   _id: Types.ObjectId;
   role: string;
   content: string;
   resourceId: Types.ObjectId;

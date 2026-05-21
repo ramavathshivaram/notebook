@@ -7,7 +7,7 @@ import messageCache from "./message.cache.js";
 const create = asyncHandler(async (req: Request, res: Response) => {
   const message = await messageCache.cacheMessage(req.body);
 
-  return res.status(201).json({
+  res.status(201).json({
     success: true,
     data: message,
   });
@@ -25,7 +25,7 @@ const getMessages = asyncHandler(async (req: Request, res: Response) => {
 
   const messages = await messageCache.getMessages(resourceId, page, limit);
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     data: messages,
   });

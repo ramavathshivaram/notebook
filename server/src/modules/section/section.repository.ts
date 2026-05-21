@@ -5,7 +5,7 @@ const createSection = async (section: Partial<ISection>) => {
   return res;
 };
 
-const getSections = async (authId: Pick<ISection, "authId">) => {
+const getSections = async (authId: ISection["authId"]) => {
   const res = await sectionModel
     .find({ authId })
     .select("title _id")
@@ -15,13 +15,13 @@ const getSections = async (authId: Pick<ISection, "authId">) => {
   return res;
 };
 
-const deleteSection = async (sectionId: Pick<ISection, "_id">) => {
+const deleteSection = async (sectionId: ISection["_id"]) => {
   const res = await sectionModel.findByIdAndDelete(sectionId);
   return res;
 };
 
 const renameSection = async (
-  sectionId: Pick<ISection, "_id">,
+  sectionId: ISection["_id"],
   title: string,
 ) => {
   const res = await sectionModel.findByIdAndUpdate(sectionId, { title });

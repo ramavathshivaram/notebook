@@ -21,7 +21,7 @@ const ask = asyncHandler(async (req: Request, res: Response) => {
     resourceId,
   });
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     data: assistantMessage,
   });
