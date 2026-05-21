@@ -3,9 +3,7 @@ import env from "#configs/env.js";
 import logger from "#configs/logger.js";
 
 export const redis = new (Redis as any)({
-  host: env.REDIS_HOST,
-  port: env.REDIS_PORT,
-
+  url: env.REDIS_URL,
   maxRetriesPerRequest: null,
   enableReadyCheck: true,
   retryStrategy: (times: number) => Math.min(times * 50, 2000),
