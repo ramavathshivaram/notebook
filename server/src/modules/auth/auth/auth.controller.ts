@@ -55,7 +55,7 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(401, "Unauthorized");
   }
 
-  await deleteSession(req.?authId);
+  await deleteSession(req?.authId);
 
   res.json({
     message: "Logout successful",

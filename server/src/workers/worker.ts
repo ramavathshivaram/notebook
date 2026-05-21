@@ -1,20 +1,17 @@
 import logger from "#configs/logger.js";
 import { Worker } from "bullmq";
-import { checkRedis, disconnectRedis } from "#configs/redis.js";
 import workerEventHandlers from "#utils/workerEventHandlers.js";
 
-import emailWorker from "#workers/email.worker.js";
-import pageWorker from "#workers/page.worker.js";
-import messageWorker from "#workers/message.worker.js";
+import emailWorker from "./email.worker.js";
+import pageWorker from "./page.worker.js";
+import messageWorker from "./message.worker.js";
 
 const workerFactories = [emailWorker, pageWorker, messageWorker];
 
 let workers: Worker[] = [];
 
-const startWorkers = async (): Promise<void> => {
+const start = async (): Promise<void> => {
   try {
-    await checkRedis();
-
     workers = workerFactories.map((createWorker: () => Worker) => {
       const worker = createWorker();
 
@@ -31,13 +28,11 @@ const startWorkers = async (): Promise<void> => {
   }
 };
 
-const gracefulShutdown = async (): Promise<void> => {
+const close = async (): Promise<void> => {
   logger.info("🛑 Shutting down workers...");
 
   try {
     await Promise.all(workers.map((worker) => worker.close()));
-
-    await disconnectRedis();
 
     logger.info("✅ All workers shut down cleanly");
 
@@ -49,20 +44,4 @@ const gracefulShutdown = async (): Promise<void> => {
   }
 };
 
-startWorkers();
-
-process.once("SIGINT", gracefulShutdown);
-
-process.once("SIGTERM", gracefulShutdown);
-
-process.once("uncaughtException", async (error) => {
-  logger.error("🚨 Uncaught Exception", error);
-
-  await gracefulShutdown();
-});
-
-process.once("unhandledRejection", async (reason) => {
-  logger.error("🚨 Unhandled Promise Rejection", reason);
-
-  await gracefulShutdown();
-});
+export default { start, close };

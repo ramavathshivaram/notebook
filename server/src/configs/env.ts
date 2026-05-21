@@ -6,8 +6,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production"]).default("development"),
   PORT: z.coerce.number().default(8080),
 
-  REDIS_HOST: z.string().default("127.0.0.1"),
-  REDIS_PORT: z.coerce.number().default(6379),
+  REDIS_URL: z.string().min(1, "REDIS_URL is required"),
+
+  BREVO_API_KEY: z.string().min(1, "BREVO_API_KEY is required"),
 
   ORIGIN: z.string().min(1, "ORIGIN is required"),
 

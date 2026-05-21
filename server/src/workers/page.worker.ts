@@ -1,7 +1,7 @@
 import { Job, Worker } from "bullmq";
 import redis from "#configs/redis.js";
 import { queueConst } from "#utils/const.js";
-import pageApi from "#services/page.api.js";
+import pageRepository from "#modules/page/page.repository.js";
 
 export interface IPage {
   title: string;
@@ -25,7 +25,7 @@ const pageJob = async (job: Job) => {
     case "createPage": {
       const data = job.data as CreatePageJob;
 
-      await pageApi.createPageApi(data);
+      await pageRepository.create(data);
 
       break;
     }
@@ -33,7 +33,7 @@ const pageJob = async (job: Job) => {
     case "updatePage": {
       const data = job.data as UpdatePageJob;
 
-      await pageApi.updatePageApi(data._id, data.updatedPage);
+      await pageRepository.update(data._id, data.updatedPage);
 
       break;
     }
@@ -41,7 +41,7 @@ const pageJob = async (job: Job) => {
     case "deletePage": {
       const data = job.data as DeletePageJob;
 
-      await pageApi.deletePageApi(data.deleteId);
+      await pageRepository.deletePage(data.deleteId);
 
       break;
     }

@@ -1,7 +1,7 @@
 import { Job, Worker } from "bullmq";
 import redis from "#configs/redis.js";
 import { queueConst } from "#utils/const.js";
-import messageApi from "#services/message.api.js";
+import messageRepository from "#modules/message/message.repository.js";
 
 export interface IMessage {
   role: string;
@@ -16,7 +16,7 @@ const messageJob = async (job: Job) => {
     case "createMessage": {
       const data = job.data as CreateMessageJob;
 
-      await messageApi.createMessageApi(data);
+      await messageRepository.createMessage(data);
 
       break;
     }
