@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    "target": "ES2022",
+    "lib": ["ES2022"],
+
+    "paths": {
+      "#configs/*": ["./src/configs/*"],
+      "#utils/*": ["./src/utils/*"],
+      "#services/*": ["./src/services/*"],
+      "#workers/*": ["./src/workers/*"]
+    },
+
+    "types": ["node"],
+
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+
+    "sourceMap": true,
+
+    "declaration": true,
+    "declarationMap": true,
+
+    "strict": true,
+
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+
+    "noUncheckedSideEffectImports": true,
+
+    "moduleDetection": "force",
+
+    "skipLibCheck": true,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

@@ -17,7 +17,7 @@ const authKey = (authId: string) => `auth-${authId}`;
 
 const refreshTokenController = asyncHandler(
   async (req: Request, res: Response) => {
-    const refreshToken = getCookie(req, "refreshToken");
+    const refreshToken: string = getCookie(req, "refreshToken");
 
     const refreshData: ITokenPayload = verifyToken(refreshToken);
 
@@ -51,7 +51,7 @@ const refreshTokenController = asyncHandler(
 const logout = asyncHandler(async (req: Request, res: Response) => {
   clearCookie(res, "refreshToken");
 
-  if(!req.authId) {
+  if (!req.authId) {
     throw new ApiError(401, "Unauthorized");
   }
 
@@ -64,9 +64,15 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const authCheck = asyncHandler(async (req: Request, res: Response) => {
-  const authResponse = await cacheService.cache(authKey(req.authId), () =>
-    authRepository.getAuthById(req.authId),
+  if (!req.authId) {
+    throw new ApiError(401, "Unauthorized");
+  }
+
+  const authResponse = await cacheService.cache(
+    authKey(JSON.stringify(req.authId)),
+    () => authRepository.getAuthById(req?.authId),
   );
+
   res.status(200).json({
     success: true,
     data: authResponse,

@@ -6,3 +6,4 @@ export interface ITokenPayload extends JwtPayload {
   tokenVersion: number;
   type: "access" | "refresh";
 }
+

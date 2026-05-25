@@ -1,10 +1,10 @@
 import ApiError from "#utils/ApiError.js";
+
 import Canvas, { type ICanvas } from "./canvas.model.js";
 
-
 const create = async (
-  sectionId: Pick<ICanvas, "sectionId">,
-  title: Pick<ICanvas, "title">,
+  sectionId: ICanvas["sectionId"],
+  title: ICanvas["title"],
 ) => {
   return await Canvas.create({
     title,
@@ -12,13 +12,17 @@ const create = async (
   });
 };
 
-const get = async (canvasId: Pick<ICanvas, "_id">) => {
+const get = async (canvasId: ICanvas["_id"]) => {
   const canvas = await Canvas.findById(canvasId);
-  if (!canvas) throw new ApiError(404, "canvas is not found");
+
+  if (!canvas) {
+    throw new ApiError(404, "canvas is not found");
+  }
+
   return canvas;
 };
 
-const getAllSectionCanvass = async (sectionId: Pick<ICanvas, "sectionId">) => {
+const getAllSectionCanvass = async (sectionId: ICanvas["sectionId"]) => {
   const canvass = await Canvas.find({
     sectionId,
   })
@@ -28,20 +32,24 @@ const getAllSectionCanvass = async (sectionId: Pick<ICanvas, "sectionId">) => {
   return canvass || [];
 };
 
-const deleteCanvas = async (canvasId: Pick<ICanvas, "_id">) => {
+const deleteCanvas = async (canvasId: ICanvas["_id"]) => {
   const canvas = await Canvas.findByIdAndDelete(canvasId);
+
   return canvas;
 };
 
 const update = async (
-  canvasId: Pick<ICanvas, "_id">,
+  canvasId: ICanvas["_id"],
   updatedcanvas: Partial<ICanvas>,
 ) => {
   const canvas = await Canvas.findByIdAndUpdate(canvasId, updatedcanvas, {
     new: true,
   });
 
-  if (!canvas) throw new ApiError(404, "canvas not found");
+  if (!canvas) {
+    throw new ApiError(404, "canvas not found");
+  }
+
   return canvas;
 };
 

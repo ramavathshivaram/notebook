@@ -40,6 +40,7 @@ dump.rdb
 
 .docker/
 
+.vscode
 .vscode/*
 !.vscode/extensions.json
 

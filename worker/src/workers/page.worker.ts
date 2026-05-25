@@ -2,6 +2,8 @@ import { Job, Worker } from "bullmq";
 import redis from "#configs/redis.js";
 import { queueConst } from "#utils/const.js";
 import pageRepository from "#modules/page/page.repository.js";
+import type { Types } from "mongoose";
+import logger from "#configs/logger.js";
 
 export interface IPage {
   title: string;
@@ -12,12 +14,12 @@ export interface IPage {
 interface CreatePageJob extends Partial<IPage> {}
 
 interface UpdatePageJob {
-  _id: string;
+  _id: Types.ObjectId;
   updatedPage: Partial<IPage>;
 }
 
 interface DeletePageJob {
-  deleteId: string;
+  deleteId: Types.ObjectId;
 }
 
 const pageJob = async (job: Job) => {
@@ -47,7 +49,7 @@ const pageJob = async (job: Job) => {
     }
 
     default:
-      throw new Error(`Unknown page job: ${job.name}`);
+      logger.error(`Unknown page job: ${job.name}`);
   }
 };
 

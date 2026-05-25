@@ -8,7 +8,6 @@ import loadHtml from "#utils/loadHtml.js";
 import { deleteSession, setSession } from "#services/session.service.js";
 import { emailQueue } from "#services/queues.js";
 
-// ---------- TYPES ----------
 interface ForgotPasswordBody {
   email: string;
 }
@@ -49,7 +48,7 @@ const forgotPassword = asyncHandler(
 
     await redis.set(`otp:${email}`, otp, "EX", 900);
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "OTP sent to your email",
       success: true,
     });
@@ -66,7 +65,7 @@ const verifyOTP = asyncHandler(
       throw new ApiError(404, "Invalid OTP");
     }
 
-    return res.json({ message: "OTP verified", success: true });
+    res.json({ message: "OTP verified", success: true });
   },
 );
 
@@ -91,7 +90,7 @@ const resetPassword = asyncHandler(
 
     await deleteSession(authResponse?._id);
 
-    return res.json({
+    res.json({
       message: "Password reset successful",
       success: true,
     });
