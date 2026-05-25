@@ -22,12 +22,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # - name: Build and Push Client Image
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: ./client
-      #     push: true
-      #     tags: ramavathshivaram/note-book-client:latest
+      - name: Build and Push Client Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./client
+          push: true
+          tags: ramavathshivaram/note-book-client:latest
 
       - name: Build and Push server Image
         uses: docker/build-push-action@v6

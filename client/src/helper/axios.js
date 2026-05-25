@@ -3,10 +3,10 @@ import { toast } from "sonner";
 import { refreshTokenApi } from "./api.js";
 import useAuthStore from "@/store/auth.store.js";
 
-const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "";
 
 const api = axios.create({
-  baseURL: `/api`,
+  baseURL: `${BASE_URL}/api`,
   withCredentials: true,
   timeout: 10000,
 });
