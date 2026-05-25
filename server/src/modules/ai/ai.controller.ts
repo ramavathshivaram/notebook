@@ -5,7 +5,7 @@ import invokeGraph from "./invokeGraph.js";
 import messageCache from "#modules/message/message.cache.js";
 
 const ask = asyncHandler(async (req: Request, res: Response) => {
-  const { content, resourceId, resourceType } = req.body;
+  const { content, resourceId } = req.body;
 
   await messageCache.cacheMessage({
     role: "user",

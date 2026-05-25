@@ -1,11 +1,10 @@
 import { Job, Worker } from "bullmq";
 import redis from "#configs/redis.js";
 import { queueConst } from "#utils/const.js";
-import pageRepository from "#modules/page/page.repository.js";
-import type { Types } from "mongoose";
 import logger from "#configs/logger.js";
 
 export interface IPage {
+  _id: string;
   title: string;
   content: string;
   sectionId: string;
@@ -14,12 +13,12 @@ export interface IPage {
 interface CreatePageJob extends Partial<IPage> {}
 
 interface UpdatePageJob {
-  _id: Types.ObjectId;
+  pageId: IPage["_id"];
   updatedPage: Partial<IPage>;
 }
 
 interface DeletePageJob {
-  deleteId: Types.ObjectId;
+  pageId: IPage["_id"];
 }
 
 const pageJob = async (job: Job) => {
@@ -27,23 +26,17 @@ const pageJob = async (job: Job) => {
     case "createPage": {
       const data = job.data as CreatePageJob;
 
-      await pageRepository.create(data);
-
       break;
     }
 
     case "updatePage": {
       const data = job.data as UpdatePageJob;
 
-      await pageRepository.update(data._id, data.updatedPage);
-
       break;
     }
 
     case "deletePage": {
       const data = job.data as DeletePageJob;
-
-      await pageRepository.deletePage(data.deleteId);
 
       break;
     }

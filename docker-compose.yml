@@ -1,0 +1,47 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - public
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./server/.env
+    restart: always
+    depends_on:
+      - redis
+    networks:
+      - public
+      - private
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    networks:
+      - private
+
+volumes:
+  redis_data:
+
+networks:
+  public:
+    driver: bridge
+
+  private:
+    driver: bridge
+    internal: true

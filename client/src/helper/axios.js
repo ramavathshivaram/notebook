@@ -6,7 +6,7 @@ import useAuthStore from "@/store/auth.store.js";
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
 
 const api = axios.create({
-  baseURL: `${BASE_URL}/api`,
+  baseURL: `/api`,
   withCredentials: true,
   timeout: 10000,
 });

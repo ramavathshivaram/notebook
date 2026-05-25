@@ -1,10 +1,10 @@
 import mongoose, { Types } from "mongoose";
 
 export interface IPage {
-  _id: Types.ObjectId;
+  _id: string;
   title: string;
   content: string;
-  sectionId: Types.ObjectId;
+  sectionId: string;
 }
 
 const pageSchema = new mongoose.Schema(

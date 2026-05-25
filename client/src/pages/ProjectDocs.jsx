@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { BookOpen, Pen, Layers, Sparkles, Zap, Lock } from "lucide-react";
-import BackGround from "../components/BackGround";
+import BackGround from "@/components/common/BackGround";
 
 const features = [
   {

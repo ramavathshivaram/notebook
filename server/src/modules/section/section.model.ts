@@ -1,9 +1,9 @@
 import mongoose, { Types } from "mongoose";
 
 export interface ISection {
-   _id: Types.ObjectId;
+  _id: string;
   title: string;
-  authId: Types.ObjectId;
+  authId: string;
 }
 
 const sectionSchema = new mongoose.Schema(

@@ -7,7 +7,7 @@ router.post("/", canvasController.createCanvas);
 
 router.get("/:canvasId", canvasController.getCanvas);
 
-router.get("/all/:sectionId", canvasController.getCanvass);
+router.get("/all/:sectionId", canvasController.getCanvases);
 
 router.patch("/:canvasId", canvasController.updateCanvas);
 

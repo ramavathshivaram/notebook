@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-import { Button } from "../ui/button.jsx";
-import { Input } from "../ui/input.jsx";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 import { cn } from "@/lib/utils";
 
@@ -19,8 +19,8 @@ import { useRenameSection, useDeleteSection } from "@/hooks/section.query.js";
 import { useAddPage } from "@/hooks/page.query.js";
 
 import { useAddCanvas } from "@/hooks/canvas.query.js";
-import PageList from "../pages/PageList.jsx";
-import CanvasList from "../canvas/canvasList.jsx";
+import PageList from "../pages/PageList";
+import CanvasList from "../canvas/CanvasList"
 
 const Section = ({ section }) => {
   const renameSectionMutate = useRenameSection().mutate;

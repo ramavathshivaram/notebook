@@ -2,6 +2,7 @@ import ApiError from "#utils/ApiError.js";
 
 import Canvas, { type ICanvas } from "./canvas.model.js";
 
+
 const create = async (
   sectionId: ICanvas["sectionId"],
   title: ICanvas["title"],

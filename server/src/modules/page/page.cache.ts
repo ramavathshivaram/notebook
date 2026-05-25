@@ -14,11 +14,10 @@ const cachePage = async (
   sectionId: IPage["sectionId"],
   title: IPage["title"],
 ) => {
-  const pageId = new mongoose.Types.ObjectId();
   const now = new Date().toISOString();
 
   const page = {
-    _id: pageId.toString(),
+    _id: new mongoose.Types.ObjectId().toString(),
     sectionId,
     title,
     content: "",

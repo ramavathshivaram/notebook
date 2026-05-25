@@ -13,16 +13,15 @@ const messageKey = (messageId: string) => `message:${messageId}`;
 const messagesKey = (resourceId: string, page: number, limit: number) =>
   `messages:${resourceId}:${page}:${limit}`;
 
-const cacheMessage = async (message) => {
-  const messageId = new mongoose.Types.ObjectId();
+const cacheMessage = async (message: IMessage) => {
 
   const now = new Date().toISOString();
 
   const cachedMessage = {
-    _id: messageId.toString(),
     createdAt: now,
     updatedAt: now,
     ...message,
+    _id: new mongoose.Types.ObjectId().toString(),
   };
 
   await cacheService.writeThroughCache(

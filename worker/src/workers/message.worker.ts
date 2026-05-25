@@ -1,7 +1,6 @@
 import { Job, Worker } from "bullmq";
 import redis from "#configs/redis.js";
 import { queueConst } from "#utils/const.js";
-import messageRepository from "#modules/message/message.repository.js";
 
 export interface IMessage {
   role: string;
@@ -15,8 +14,6 @@ const messageJob = async (job: Job) => {
   switch (job.name) {
     case "createMessage": {
       const data = job.data as CreateMessageJob;
-
-      await messageRepository.createMessage(data);
 
       break;
     }

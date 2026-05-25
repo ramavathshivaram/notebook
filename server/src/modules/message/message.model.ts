@@ -1,10 +1,10 @@
 import mongoose, { Types } from "mongoose";
 
 export interface IMessage {
-   _id: Types.ObjectId;
+  _id: string;
   role: string;
   content: string;
-  resourceId: Types.ObjectId;
+  resourceId: string;
 }
 
 const messageSchema = new mongoose.Schema(

@@ -1,10 +1,10 @@
 import mongoose, { Schema, Types } from "mongoose";
 
 export interface ICanvas {
-   _id: Types.ObjectId;
+  _id: string;
   title: string;
   content: string;
-  sectionId: Types.ObjectId;
+  sectionId: string;
 }
 
 const canvasSchema = new Schema(
