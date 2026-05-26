@@ -1,5 +1,6 @@
 import env from "#configs/env.js";
 import logger from "#configs/logger.js";
+import worker from "#workers/worker.js";
 import connectDB, { disconnectDB } from "#configs/mongoDB.js";
 import { checkRedis, disconnectRedis } from "#configs/redis.js";
 import app from "./app.js";
@@ -12,6 +13,8 @@ const serverInit = async () => {
 
     await checkRedis();
     await connectDB();
+    await worker.start();
+
 
     server = app.listen(env.PORT, () => {
       logger.info(`Server started on ${env.PORT}`);
@@ -30,8 +33,10 @@ const gracefulShutdown = async () => {
 
     if (server) {
       server.close(async () => {
+        await worker.close();
         await disconnectRedis();
         await disconnectDB();
+
 
         logger.info("Server closed");
         process.exit(0);

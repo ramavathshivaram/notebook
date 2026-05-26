@@ -5,9 +5,9 @@ import { checkRedis, disconnectRedis } from "#configs/redis.js";
 
 import workerEventHandlers from "#utils/workerEventHandlers.js";
 
-import emailWorker from "#workers/email.worker.js";
-import pageWorker from "#workers/page.worker.js";
-import messageWorker from "#workers/message.worker.js";
+import emailWorker from "./email.worker.js";
+import pageWorker from "./page.worker.js";
+import messageWorker from "./message.worker.js";
 
 const workerFactories = [emailWorker, pageWorker, messageWorker];
 
@@ -65,20 +65,4 @@ const close = async (signal: string): Promise<void> => {
   }
 };
 
-start();
-
-process.on("SIGINT", () => close("SIGINT"));
-
-process.on("SIGTERM", () => close("SIGTERM"));
-
-process.on("uncaughtException", async (error) => {
-  logger.error("❌ Uncaught Exception", error);
-
-  await close("uncaughtException");
-});
-
-process.on("unhandledRejection", async (reason) => {
-  logger.error("❌ Unhandled Rejection", reason);
-
-  await close("unhandledRejection");
-});
+export default { start, close };

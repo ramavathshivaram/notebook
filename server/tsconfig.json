@@ -14,7 +14,8 @@
       "#middlewares/*": ["./src/middlewares/*"],
       "#utils/*": ["./src/utils/*"],
       "#services/*": ["./src/services/*"],
-      "#modules/*": ["./src/modules/*"]
+      "#modules/*": ["./src/modules/*"],
+      "#workers/*": ["./src/workers/*"]
     },
 
     "types": ["node"],

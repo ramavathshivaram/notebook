@@ -14,7 +14,8 @@
     "#middlewares/*": "./dist/middlewares/*",
     "#modules/*": "./dist/modules/*",
     "#services/*": "./dist/services/*",
-    "#utils/*": "./dist/utils/*"
+    "#utils/*": "./dist/utils/*",
+    "#workers/*": "./dist/workers/*"
   },
   "author": "ramavath shiva ram",
   "license": "ISC",
