@@ -25,7 +25,17 @@ export const mainModel = createModel({
   temperature: 0.3,
 });
 
+export const chatModel = createModel({
+  model: MODELS.FAST,
+  temperature: 0.3,
+});
+
 export const intentModel = createModel({
   model: MODELS.FAST,
   temperature: 0.3,
+});
+
+export const pageModel = createModel({
+  model: MODELS.REASONING,
+  temperature: 0.1,
 });

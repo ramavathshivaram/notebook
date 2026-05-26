@@ -41,7 +41,8 @@ const updatePage = async (pageId: string, updatedPage: Partial<IPage>) => {
     pageKey(pageId),
     {
       pageId,
-      updatedPage: { ...updatedPage, updatedAt: new Date().toISOString() },
+      ...updatedPage,
+      updatedAt: new Date().toISOString(),
     },
     {
       queue: pageQueue,

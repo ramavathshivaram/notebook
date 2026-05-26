@@ -44,7 +44,7 @@ const updatePage = asyncHandler(
 
     res
       .status(200)
-      .json({ page, message: "Page updated successfully", status: true });
+      .json({ data: page, message: "Page updated successfully", status: true });
   },
 );
 

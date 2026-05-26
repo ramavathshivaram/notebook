@@ -34,11 +34,8 @@ const addAll = async (authId: string, values: ISection[]) => {
 const createSection = async (section: Partial<ISection>) => {
   const cachedSection = {
     _id: new Types.ObjectId().toString(),
-
     createdAt: new Date().toISOString(),
-
     updatedAt: new Date().toISOString(),
-
     ...section,
   };
 

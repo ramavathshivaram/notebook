@@ -22,13 +22,16 @@ const ask = asyncHandler(async (req: Request, res: Response) => {
 
   const assistantMessage = await messageCache.cacheMessage(resourceId, {
     role: "assistant",
-    content: response || "",
+    content:
+      response.type === "page" ? response.aiContent : response.chatResponse,
     resourceId,
   });
 
+  console.log("controller", response);
+
   res.status(200).json({
     success: true,
-    data: assistantMessage,
+    data: response,
   });
 });
 

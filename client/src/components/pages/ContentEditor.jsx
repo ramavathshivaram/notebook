@@ -1,24 +1,24 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import debounce from "lodash.debounce";
-
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import useEditorStore from "@/store/editor.store.js";
 import { useUpdatePage } from "@/hooks/page.query.js";
 
-import ReactQuill from "react-quill-new";
-
-import "react-quill-new/dist/quill.snow.css";
-
-import { Loader2, Check } from "lucide-react";
-
 const ContentEditor = ({ content, pageId, sectionId }) => {
-  const [localContent, setLocalContent] = useState(content);
+  const { editors, setContent } = useEditorStore();
+
+  const editorContent = editors[pageId]?.content ?? content;
 
   const { mutate: updatePageMutate } = useUpdatePage();
 
   useEffect(() => {
-    setLocalContent(content);
-  }, [content]);
+    setContent({
+      resourceId: pageId,
+      content,
+    });
+  }, [content, pageId, setContent]);
 
-  // Debounced save
   const debouncedUpdate = useCallback(
     debounce((value) => {
       updatePageMutate({
@@ -29,35 +29,49 @@ const ContentEditor = ({ content, pageId, sectionId }) => {
         },
       });
     }, 800),
+
     [pageId, sectionId, updatePageMutate],
   );
 
-  // Cleanup debounce
   useEffect(() => {
     return () => debouncedUpdate.cancel();
   }, [debouncedUpdate]);
 
   const handleChange = (value) => {
-    setLocalContent(value);
+    setContent({
+      resourceId: pageId,
+      content: value,
+    });
+
     debouncedUpdate(value);
   };
 
   return (
     <div className="relative flex flex-col overflow-hidden">
-      {/* Editor */}
       <div className="flex-1 overflow-hidden">
         <ReactQuill
           className="my-editor h-full"
           theme="snow"
-          value={localContent}
+          value={editorContent}
           onChange={handleChange}
           placeholder="Start speaking or typing..."
           modules={{
             toolbar: [
-              [{ header: [1, 2, false] }],
+              [
+                {
+                  header: [1, 2, false],
+                },
+              ],
               ["bold", "italic", "underline"],
               ["link"],
-              [{ list: "ordered" }, { list: "bullet" }],
+              [
+                {
+                  list: "ordered",
+                },
+                {
+                  list: "bullet",
+                },
+              ],
               ["clean"],
             ],
           }}

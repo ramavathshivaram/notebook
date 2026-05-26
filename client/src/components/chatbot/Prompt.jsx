@@ -4,7 +4,7 @@ import { Loader2, SendHorizonal } from "lucide-react";
 import { sendMessage } from "@/services/message.service.js";
 import useMessageStore from "@/store/message.store.js";
 
-const Prompt = ({ resourceId,resourceType }) => {
+const Prompt = ({ resourceId, resourceType }) => {
   const [message, setMessage] = React.useState("");
 
   const isLoading = useMessageStore((state) => state.loading);
@@ -16,13 +16,13 @@ const Prompt = ({ resourceId,resourceType }) => {
 
     if (!trimmedMessage || isLoading) return;
 
+    setMessage("");
+
     await sendMessage({
       content: trimmedMessage,
       resourceId,
-      resourceType
+      resourceType,
     });
-
-    setMessage("");
   };
 
   return (

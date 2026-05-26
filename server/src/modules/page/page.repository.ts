@@ -39,6 +39,7 @@ const update = async (pageId: IPage["_id"], updatedPage: Partial<IPage>) => {
     new: true,
   });
 
+  console.log(page)
   if (!page) throw new ApiError(404, "page not found");
   return page;
 };

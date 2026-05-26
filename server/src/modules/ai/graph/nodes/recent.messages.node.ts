@@ -8,16 +8,8 @@ const recentMessagesNode = async (_state: State, config: Config) => {
 
   const messages = await messageCache.getMessages(resourceId, 1, 5);
 
-  const recentMessages = messages.reverse().map((message) => {
-    if (message.role === "assistant") {
-      return new AIMessage(message.content);
-    }
-
-    return new HumanMessage(message.content);
-  });
-
   return {
-    recentMessages: recentMessages
+    recentMessages: messages
       .map((message) => `${message?.role}: ${message.content}`)
       .join("\n"),
   };

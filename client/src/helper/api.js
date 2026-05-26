@@ -88,12 +88,12 @@ export const getPagesApi = async (sectionId) => {
 
 export const updatePageApi = async (pageId, data) => {
   const res = await API.patch(`page/${pageId}`, data);
-  return res.data;
+  return res.data.data;
 };
 
 export const deletePageApi = async (pageId) => {
   const res = await API.delete(`page/${pageId}`);
-  return res.data;
+  return res.data.data;
 };
 
 //! -------------------- Canvas APIs --------------------

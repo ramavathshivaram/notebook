@@ -1,4 +1,5 @@
 import useMessageStore from "@/store/message.store.js";
+import useEditorStore from "@/store/editor.store.js";
 import { askAiApi } from "@/helper/api.js";
 
 const ROLE = {
@@ -9,6 +10,8 @@ const ROLE = {
 export const sendMessage = async ({ resourceId, content, resourceType }) => {
   const { addMessage, setLoading } = useMessageStore.getState();
 
+  const { applyOperation } = useEditorStore.getState();
+
   try {
     setLoading(true);
 
@@ -18,10 +21,37 @@ export const sendMessage = async ({ resourceId, content, resourceType }) => {
       resourceId,
     });
 
-    const data = await askAiApi({ resourceId, content, resourceType });
-    console.log(data)
+    const data = await askAiApi({
+      resourceId,
+      content,
+      resourceType,
+    });
 
-    addMessage(data);
+    if (data.type === "chat") {
+      addMessage({
+        role: ROLE.ASSISTANT,
+
+        content: data.chatResponse,
+
+        resourceId,
+      });
+
+      return data;
+    }
+
+    applyOperation({
+      resourceId,
+
+      operation: data,
+    });
+
+    addMessage({
+      role: ROLE.ASSISTANT,
+
+      content: data.aiContent,
+
+      resourceId,
+    });
 
     return data;
   } finally {
