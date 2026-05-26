@@ -1,29 +1,35 @@
 import { HumanMessage } from "@langchain/core/messages";
 
-import graph from "./graph.js";
+import graph from "./graph/graph.js";
 
-const invokeGraph = async (content: string, resourceId: string) => {
-  const messages = [new HumanMessage(content)];
+interface Resource {
+  resourceId: string;
+  resourceType: string;
+}
 
+const invokeGraph = async (
+  content: string,
+  { resourceId, resourceType }: Resource,
+) => {
   const config = {
     configurable: {
       thread_id: resourceId,
     },
+
     context: {
       resourceId,
+      resourceType,
     },
   };
 
   const response = await graph.invoke(
     {
-      messages,
+      content,
     },
     config,
   );
 
-  const lastMessage = response.messages[response.messages.length - 1];
-
-  return lastMessage?.content ?? "";
+  return response.messages.at(-1)?.content?.toString() || "";
 };
 
 export default invokeGraph;

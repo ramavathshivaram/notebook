@@ -15,7 +15,8 @@
     "#modules/*": "./dist/modules/*",
     "#services/*": "./dist/services/*",
     "#utils/*": "./dist/utils/*",
-    "#workers/*": "./dist/workers/*"
+    "#workers/*": "./dist/workers/*",
+    "#types/*": "./dist/types/*"
   },
   "author": "ramavath shiva ram",
   "license": "ISC",

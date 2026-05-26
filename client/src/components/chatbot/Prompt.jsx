@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Loader2, SendHorizonal } from "lucide-react";
 
 import { sendMessage } from "@/services/message.service.js";
@@ -53,4 +53,4 @@ const Prompt = ({ resourceId,resourceType }) => {
   );
 };
 
-export default Prompt;
+export default memo(Prompt);

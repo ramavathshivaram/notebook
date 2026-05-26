@@ -1,43 +1,36 @@
 import logger from "#configs/logger.js";
+
 import type { Worker } from "bullmq";
 
 const workerEventHandlers = (worker: Worker): void => {
-  const name = worker.name;
+  const workerName = worker.name;
 
   worker.on("ready", () => {
-    logger.info(`✅ Worker ready: ${name}`);
+    logger.info(`Worker ready: ${workerName}`);
   });
 
   worker.on("active", (job) => {
-    logger.info(`⚡ Job ${job.id} started in ${name}`);
+    logger.info(`Job ${job.name} (${job.id}) started in ${workerName}`);
   });
 
   worker.on("completed", (job) => {
-    logger.info(`✅ Job ${job.id} completed in ${name}`);
+    logger.info(`Job ${job.name} (${job.id}) completed in ${workerName}`);
   });
 
   worker.on("failed", (job, err) => {
-    logger.error(`❌ Job ${job?.id} failed in ${name}`, {
-      message: err?.message,
-    });
-  });
-
-  worker.on("stalled", (jobId) => {
-    logger.warn(`⚠️ Job ${jobId} stalled in ${name}`);
-  });
-
-  worker.on("error", (err) => {
-    logger.error(`🚨 Worker error in ${name}`, {
+    logger.error(`Job ${job?.name} (${job?.id}) failed in ${workerName}`, {
       message: err.message,
     });
   });
 
-  worker.on("closing", () => {
-    logger.info(`🔌 Worker closing: ${name}`);
+  worker.on("stalled", (jobId) => {
+    logger.warn(`Job ${jobId} stalled in ${workerName}`);
   });
 
-  worker.on("closed", () => {
-    logger.info(`🛑 Worker closed: ${name}`);
+  worker.on("error", (err) => {
+    logger.error(`Worker error in ${workerName}`, {
+      message: err.message,
+    });
   });
 };
 

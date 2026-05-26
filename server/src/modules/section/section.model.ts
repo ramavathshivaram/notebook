@@ -4,6 +4,8 @@ export interface ISection {
   _id: string;
   title: string;
   authId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const sectionSchema = new mongoose.Schema(

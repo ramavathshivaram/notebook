@@ -25,27 +25,7 @@ export const mainModel = createModel({
   temperature: 0.3,
 });
 
-export const checkerModel = createModel({
+export const intentModel = createModel({
   model: MODELS.FAST,
-  temperature: 0.1,
-});
-
-export const analysisModel = createModel({
-  model: MODELS.REASONING,
-  temperature: 0.2,
-});
-
-export const summaryModel = createModel({
-  model: MODELS.FAST,
-  temperature: 0.5,
-});
-
-export const titleModel = createModel({
-  model: MODELS.LIGHT,
-  temperature: 0.8,
-});
-
-export const suggestionModel = createModel({
-  model: MODELS.LIGHT,
-  temperature: 0.7,
+  temperature: 0.3,
 });

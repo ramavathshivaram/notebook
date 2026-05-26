@@ -1,8 +1,8 @@
 import type { BaseMessage } from "@langchain/core/messages";
 import { SystemMessage } from "@langchain/core/messages";
 
-import { mainModel } from "../llms.js";
-import { SYSTEM_PROMPT } from "../prompts.js";
+import { mainModel } from "../../llms.js";
+import { SYSTEM_PROMPT } from "../../prompts.js";
 
 interface State {
   messages: BaseMessage[];

@@ -1,68 +1,39 @@
 import logger from "#configs/logger.js";
-import { Worker } from "bullmq";
 
-import { checkRedis, disconnectRedis } from "#configs/redis.js";
+import { Worker } from "bullmq";
 
 import workerEventHandlers from "#utils/workerEventHandlers.js";
 
 import emailWorker from "./email.worker.js";
 import pageWorker from "./page.worker.js";
 import messageWorker from "./message.worker.js";
+import sectionWorker from "./section.worker.js";
 
-const workerFactories = [emailWorker, pageWorker, messageWorker];
+const workerFactories = [emailWorker, pageWorker, messageWorker, sectionWorker];
 
 let workers: Worker[] = [];
 
-let shuttingDown = false;
-
 const start = async (): Promise<void> => {
-  try {
-    await checkRedis();
+  workers = workerFactories.map((createWorker) => {
+    const worker = createWorker();
 
-    workers = workerFactories.map((createWorker: () => Worker) => {
-      const worker = createWorker();
+    workerEventHandlers(worker);
 
-      workerEventHandlers(worker);
+    return worker;
+  });
 
-      logger.info(`✅ Worker started: ${worker.name}`);
-
-      return worker;
-    });
-
-    logger.info("🚀 All workers started");
-  } catch (error) {
-    logger.error("❌ Worker startup failed", error);
-
-    process.exit(1);
-  }
+  logger.info("All workers started");
 };
 
-const close = async (signal: string): Promise<void> => {
-  if (shuttingDown) return;
+const close = async (): Promise<void> => {
+  logger.info("Closing workers...");
 
-  shuttingDown = true;
+  await Promise.all(workers.map((worker) => worker.close()));
 
-  logger.info(`🛑 Received ${signal}, shutting down workers...`);
-
-  try {
-    await Promise.all(
-      workers.map(async (worker) => {
-        logger.info(`Closing worker: ${worker.name}`);
-
-        await worker.close();
-      }),
-    );
-
-    logger.info("✅ All workers shut down cleanly");
-
-    await disconnectRedis();
-
-    process.exit(0);
-  } catch (error) {
-    logger.error("❌ Shutdown error", error);
-
-    process.exit(1);
-  }
+  logger.info("All workers closed");
 };
 
-export default { start, close };
+export default {
+  start,
+  close,
+};

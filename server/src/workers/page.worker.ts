@@ -1,7 +1,8 @@
 import { Job, Worker } from "bullmq";
 import redis from "#configs/redis.js";
-import { queueConst } from "#utils/const.js";
 import logger from "#configs/logger.js";
+import { queueConst } from "#utils/const.js";
+import pageRepository from "#modules/page/page.repository.js";
 
 export interface IPage {
   _id: string;
@@ -21,38 +22,39 @@ interface DeletePageJob {
   pageId: IPage["_id"];
 }
 
-const pageJob = async (job: Job) => {
-  switch (job.name) {
-    case "createPage": {
-      const data = job.data as CreatePageJob;
+type PageJobData = CreatePageJob | UpdatePageJob | DeletePageJob;
 
-      break;
-    }
+const pageJob = async (job: Job<PageJobData>) => {
+  switch (job.name) {
+    case "createPage":
+      return await pageRepository.create(job.data as CreatePageJob);
 
     case "updatePage": {
-      const data = job.data as UpdatePageJob;
+      const { pageId, updatedPage } = job.data as UpdatePageJob;
 
-      break;
+      return await pageRepository.update(pageId, updatedPage);
     }
 
-    case "deletePage": {
-      const data = job.data as DeletePageJob;
-
-      break;
-    }
+    case "deletePage":
+      return await pageRepository.deletePage(
+        (job.data as DeletePageJob).pageId,
+      );
 
     default:
-      logger.error(`Unknown page job: ${job.name}`);
+      throw new Error(`Unknown page job: ${job.name}`);
   }
 };
 
 const createPageWorker = () =>
-  new Worker(queueConst.PAGE, pageJob, {
+  new Worker<PageJobData>(queueConst.PAGE, pageJob, {
     connection: redis,
+
     concurrency: 5,
+
     removeOnComplete: {
       count: 100,
     },
+
     removeOnFail: {
       count: 500,
     },

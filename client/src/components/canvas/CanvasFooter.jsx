@@ -9,7 +9,6 @@ const CanvasFooter = ({ canvasRef, title, content, canvasId }) => {
   const [downloading, setDownloading] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Download canvas + background
   const handleDownload = async () => {
     if (downloading) return;
     setDownloading(true);

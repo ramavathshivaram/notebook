@@ -1,6 +1,7 @@
 import { Worker, Job, UnrecoverableError } from "bullmq";
 
 import redis from "#configs/redis.js";
+
 import logger from "#configs/logger.js";
 
 import sendEmail from "#services/send-email.js";
@@ -17,18 +18,16 @@ const emailJob = async (job: Job<EmailJobData>) => {
   const { email, subject, html } = job.data;
 
   try {
-    const messageId = await sendEmail(email, subject, html);
-
-    return messageId;
+    return await sendEmail(email, subject, html);
   } catch (error: any) {
     const status = error?.response?.status;
 
-    logger.error("❌ Email failed", {
+    logger.error("Email failed", {
       jobId: job.id,
       email,
-      attemptsMade: job.attemptsMade,
       status,
-      message: error?.message,
+      attemptsMade: job.attemptsMade,
+      message: error.message,
     });
 
     if (status === 400 || status === 401 || status === 403) {

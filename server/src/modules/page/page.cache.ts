@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 
 import { pageQueue } from "#services/queues.js";
 
@@ -10,14 +10,11 @@ import cacheService from "#services/cache.service.js";
 
 const pageKey = (pageId: string) => `page:${pageId}`;
 
-const cachePage = async (
-  sectionId: IPage["sectionId"],
-  title: IPage["title"],
-) => {
+const cachePage = async (sectionId: string, title: string) => {
   const now = new Date().toISOString();
 
   const page = {
-    _id: new mongoose.Types.ObjectId().toString(),
+    _id: new Types.ObjectId().toString(),
     sectionId,
     title,
     content: "",
@@ -29,6 +26,7 @@ const cachePage = async (
     queue: pageQueue,
     jobName: "createPage",
   });
+
   return page;
 };
 
@@ -42,8 +40,8 @@ const updatePage = async (pageId: string, updatedPage: Partial<IPage>) => {
   return await cacheService.updateCache(
     pageKey(pageId),
     {
-      ...updatedPage,
-      updatedAt: new Date().toISOString(),
+      pageId,
+      updatedPage: { ...updatedPage, updatedAt: new Date().toISOString() },
     },
     {
       queue: pageQueue,

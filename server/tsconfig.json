@@ -15,7 +15,8 @@
       "#utils/*": ["./src/utils/*"],
       "#services/*": ["./src/services/*"],
       "#modules/*": ["./src/modules/*"],
-      "#workers/*": ["./src/workers/*"]
+      "#workers/*": ["./src/workers/*"],
+      "#types/*": ["./src/types/*"]
     },
 
     "types": ["node"],

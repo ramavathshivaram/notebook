@@ -7,14 +7,12 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 
-import morganMiddleware from "#middlewares/morganMiddleware.js";
-import rateLimiterMiddleware, {
-  authLimiter,
-} from "#middlewares/rateLimiter.js";
 import health from "#utils/health.js";
 
+import morganMiddleware from "#middlewares/morganMiddleware.js";
 import notFoundRoute from "#middlewares/notFoundRoute.js";
 import errorHandler from "#middlewares/errorHandler.js";
+
 import authRouter from "#modules/auth/auth.routes.js";
 import sectionRouter from "#modules/section/section.route.js";
 import authenticate from "#middlewares/authenticate.js";
@@ -35,7 +33,6 @@ app.set("trust proxy", 1);
 
 //! Middlewares
 app.use(morganMiddleware);
-app.use(rateLimiterMiddleware(authLimiter));
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "1mb" }));
@@ -48,7 +45,7 @@ app.use(
   }),
 );
 
-app.get("/", async (req: Request, res: Response) => res.send("API running"));
+app.get("/", async (_: Request, res: Response) => res.send("API running"));
 
 app.get("/health", health);
 

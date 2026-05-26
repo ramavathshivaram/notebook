@@ -1,11 +1,11 @@
 import debounce from "lodash.debounce";
 import React, { useCallback, useState } from "react";
-import { useAddCanvas } from "@/hooks/canvas.query.js";
+import { useUpdateCanvas } from "@/hooks/canvas.query.js";
 import { Input } from "@/components/ui/input";
 
 const CanvasTitle = ({ title, canvasId, sectionId }) => {
   const [localTitle, setLocalTitle] = useState(title);
-  const { mutate: updatePageMutate, isLoading } = useAddCanvas();
+  const { mutate: updatePageMutate, isLoading } = useUpdateCanvas();
 
   const debouncedUpdate = useCallback(
     debounce((value) => {

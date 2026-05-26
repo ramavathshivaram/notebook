@@ -7,8 +7,8 @@ const envSchema = z.object({
 
   NODE_ENV: z.enum(["development", "production"]).default("development"),
 
-  ORIGIN: z.string().min(1, "ORIGIN is required"),
-
+  ORIGIN: z.string().min(1, "ORIGIN is required").default("http://localhost:5173"),
+  
   JWT_SECRET_KEY: z.string().min(1, "JWT_SECRET_KEY is required"),
 
   REDIS_HOST: z.string().min(1, "REDIS_HOST is required").default("127.0.0.1"),

@@ -26,6 +26,14 @@ const deletePage = async (pageId: IPage["_id"]) => {
   return page;
 };
 
+const deleteAll = async (sectionId: string) => {
+  const pages = await Page.deleteMany({
+    sectionId,
+  });
+
+  return pages;
+};
+
 const update = async (pageId: IPage["_id"], updatedPage: Partial<IPage>) => {
   const page = await Page.findByIdAndUpdate(pageId, updatedPage, {
     new: true,
@@ -41,4 +49,5 @@ export default {
   deletePage,
   update,
   getAllSectionPages,
+  deleteAll,
 };

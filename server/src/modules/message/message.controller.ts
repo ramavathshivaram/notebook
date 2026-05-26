@@ -4,16 +4,7 @@ import asyncHandler from "express-async-handler";
 import ApiError from "#utils/ApiError.js";
 import messageCache from "./message.cache.js";
 
-const create = asyncHandler(async (req: Request, res: Response) => {
-  const message = await messageCache.cacheMessage(req.body);
-
-  res.status(201).json({
-    success: true,
-    data: message,
-  });
-});
-
-const getMessages = asyncHandler(async (req: Request, res: Response) => {
+const getMessages = asyncHandler(async (req: Request<{ resourceId: string }>, res: Response) => {
   const { resourceId } = req.params;
 
   if (!resourceId) {
@@ -32,6 +23,5 @@ const getMessages = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export default {
-  create,
   getMessages,
 };

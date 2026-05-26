@@ -1,6 +1,6 @@
 import Message, { type IMessage } from "./message.model.js";
 
-const createMessage = async (message: IMessage) => {
+const createMessage = async (message: Partial<IMessage>) => {
   return await Message.create(message);
 };
 

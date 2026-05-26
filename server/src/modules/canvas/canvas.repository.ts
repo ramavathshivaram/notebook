@@ -2,7 +2,6 @@ import ApiError from "#utils/ApiError.js";
 
 import Canvas, { type ICanvas } from "./canvas.model.js";
 
-
 const create = async (
   sectionId: ICanvas["sectionId"],
   title: ICanvas["title"],
@@ -33,10 +32,16 @@ const getAllSectionCanvass = async (sectionId: ICanvas["sectionId"]) => {
   return canvass || [];
 };
 
-const deleteCanvas = async (canvasId: ICanvas["_id"]) => {
+const deleteCanvas = async (canvasId: string) => {
   const canvas = await Canvas.findByIdAndDelete(canvasId);
 
   return canvas;
+};
+
+const deleteAll = async (sectionId: string) => {
+  return await Canvas.deleteMany({
+    sectionId,
+  });
 };
 
 const update = async (
@@ -60,4 +65,5 @@ export default {
   deleteCanvas,
   update,
   getAllSectionCanvass,
+  deleteAll,
 };

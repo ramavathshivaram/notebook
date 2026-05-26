@@ -1,21 +1,26 @@
 import asyncHandler from "express-async-handler";
+
 import type { Request, Response } from "express";
 
 import invokeGraph from "./invokeGraph.js";
+
 import messageCache from "#modules/message/message.cache.js";
 
 const ask = asyncHandler(async (req: Request, res: Response) => {
-  const { content, resourceId } = req.body;
+  const { content, resourceId, resourceType } = req.body;
 
-  await messageCache.cacheMessage({
+  await messageCache.cacheMessage(resourceId, {
     role: "user",
     content,
     resourceId,
   });
 
-  const response = await invokeGraph(content, resourceId);
+  const response = await invokeGraph(content, {
+    resourceId,
+    resourceType,
+  });
 
-  const assistantMessage = await messageCache.cacheMessage({
+  const assistantMessage = await messageCache.cacheMessage(resourceId, {
     role: "assistant",
     content: response || "",
     resourceId,
