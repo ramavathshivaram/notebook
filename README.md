@@ -6,12 +6,21 @@
   <img src="https://img.shields.io/badge/MongoDB-Database-47A248?logo=mongodb&logoColor=white" />
   <img src="https://img.shields.io/badge/Redis-Cache-DC382D?logo=redis&logoColor=white" />
   <img src="https://img.shields.io/badge/Docker-DevOps-2496ED?logo=docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/AWS-Deployment-FF9900?logo=amazonaws&logoColor=white" />
   <img src="https://img.shields.io/badge/LangGraph-AI-black" />
 </p>
 
 <p align="center">
-  A modern full-stack AI-powered notebook application with rich text editing, canvas drawing, authentication, Docker deployment, and AI workflow orchestration using LangChain & LangGraph.
+  A modern full-stack AI-powered notebook application with rich text editing, canvas drawing, authentication, Docker deployment, AWS hosting, and AI workflow orchestration using LangChain & LangGraph.
 </p>
+
+---
+
+# 🌐 Live Demo
+
+| Platform | Link |
+|---|---|
+| 🚀 Application | http://ec2-65-2-177-67.ap-south-1.compute.amazonaws.com/ |
 
 ---
 
@@ -62,6 +71,19 @@
 | 🔐 JWT | Authentication |
 | 🤖 LangChain | AI Orchestration |
 | 🧠 LangGraph | Stateful AI Workflows |
+
+---
+
+# ☁️ AWS Deployment
+
+The application is deployed on:
+
+| Service | Purpose |
+|---|---|
+| ☁️ AWS EC2 | Application Hosting |
+| 🐳 Docker | Containerized Deployment |
+| 🔄 GitHub Actions | Automated CI/CD |
+| 📦 Docker Hub | Container Registry |
 
 ---
 
