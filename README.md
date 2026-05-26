@@ -1,68 +1,79 @@
 # 🧠 AI Notebook App
 
-A modern full-stack AI-powered notebook application built using the MERN stack with rich text editing, canvas drawing, authentication, AI integrations, Redis caching, Docker deployment, and CI/CD automation.
+<p align="center">
+  <img src="https://img.shields.io/badge/React-Frontend-61DAFB?logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node.js-Backend-339933?logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-Database-47A248?logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redis-Cache-DC382D?logo=redis&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker-DevOps-2496ED?logo=docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/LangGraph-AI-black" />
+</p>
+
+<p align="center">
+  A modern full-stack AI-powered notebook application with rich text editing, canvas drawing, authentication, Docker deployment, and AI workflow orchestration using LangChain & LangGraph.
+</p>
 
 ---
 
-# 🚀 Features
+# ✨ Features
 
-- 🔐 JWT Authentication
-- 📧 Email OTP Verification
-- 📝 Rich Text Notebook Editor
-- 🎨 Canvas Drawing Support
-- 🤖 AI Assistant Integration
-- 🌙 Dark Mode Support
-- ⚡ React Query Data Fetching
-- 📦 Redis Integration
-- 🐳 Dockerized Setup
-- ☁️ AWS EC2 Deployment
-- 🔄 GitHub Actions CI/CD
-- 📱 Fully Responsive UI
+| 🚀 Feature | 📖 Description |
+|---|---|
+| 🔐 Authentication | Secure JWT-based authentication |
+| 📧 OTP Verification | Email verification & password reset |
+| 📝 Rich Text Editor | Create and manage notebook pages |
+| 🎨 Canvas Drawing | Sketch diagrams and drawings |
+| 🤖 AI Workflow | AI-powered notebook assistant |
+| 🌙 Dark Mode | Light & dark theme support |
+| ⚡ Fast State Management | Zustand + React Query |
+| 📦 Redis Integration | Queue and caching support |
+| 🐳 Dockerized | Full containerized deployment |
+| ☁️ AWS Deployment | Production deployment on EC2 |
+| 🔄 CI/CD | Automated GitHub Actions workflow |
 
 ---
 
 # 🏗️ Tech Stack
 
-## Frontend
+## 🎨 Frontend
 
-- React 19
-- Vite
-- Tailwind CSS v4
-- React Router DOM
-- Zustand
-- React Query
-- React Hook Form
-- Motion
-- React Quill
-- React Sketch Canvas
-- Axios
-- Zod
+| Technology | Usage |
+|---|---|
+| ⚛️ React | UI Library |
+| ⚡ Vite | Frontend Build Tool |
+| 🎨 Tailwind CSS | Styling |
+| 🧠 Zustand | State Management |
+| 🔄 React Query | Server State |
+| 📝 React Quill | Rich Text Editor |
+| ✏️ React Sketch Canvas | Drawing Canvas |
 
 ---
 
-## Backend
+## ⚙️ Backend
 
-- Node.js
-- Express.js
-- TypeScript
-- MongoDB + Mongoose
-- Redis
-- BullMQ
-- JWT Authentication
-- Nodemailer
-- LangChain
-- Groq AI
-- Winston Logger
+| Technology | Usage |
+|---|---|
+| 🟢 Node.js | Runtime |
+| 🚀 Express.js | Backend Framework |
+| 🔷 TypeScript | Type Safety |
+| 🍃 MongoDB | Database |
+| 🔴 Redis | Cache & Queues |
+| 📦 BullMQ | Background Jobs |
+| 🔐 JWT | Authentication |
+| 🤖 LangChain | AI Orchestration |
+| 🧠 LangGraph | Stateful AI Workflows |
 
 ---
 
-## DevOps
+# 🧠 AI Architecture
 
-- Docker
-- Docker Compose
-- GitHub Actions
-- AWS EC2
-- NGINX
+The AI workflow system is powered using:
+
+- 🤖 LangChain
+- 🧠 LangGraph
+- 🔄 Stateful Workflow Graphs
+- 💬 Message-based Processing
+- 💾 Persistent Checkpointing
 
 ---
 
@@ -72,29 +83,20 @@ A modern full-stack AI-powered notebook application built using the MERN stack w
 note-book/
 │
 ├── client/
-│   ├── src/
-│   ├── public/
-│   └── Dockerfile
 │
 ├── server/
-│   ├── src/
-│   ├── dist/
-│   └── Dockerfile
 │
 ├── docker-compose.yml
 │
-├── .github/
-│   └── workflows/
-│       └── deploy.yml
-│
-└── README.md
+└── .github/
+    └── workflows/
 ```
 
 ---
 
 # ⚙️ Environment Variables
 
-## Server `.env`
+## 🖥️ Server `.env`
 
 ```env
 PORT=8080
@@ -103,21 +105,21 @@ NODE_ENV=production
 
 ORIGIN=http://client
 
-JWT_SECRET_KEY=your_secure_secret
+JWT_SECRET_KEY=your_secret
 
 REDIS_HOST=redis
 REDIS_PORT=6379
 
-GROQ_API_KEY=your_groq_api_key
+GROQ_API_KEY=your_groq_api
 
-BREVO_API_KEY=your_brevo_api_key
+BREVO_API_KEY=your_brevo_api
 
 MONGODB_URI=your_mongodb_uri
 ```
 
 ---
 
-## Client `.env`
+## 🌐 Client `.env`
 
 ```env
 VITE_BACKEND_URL=http://localhost:8080
@@ -125,93 +127,7 @@ VITE_BACKEND_URL=http://localhost:8080
 
 ---
 
-# 🐳 Docker Compose
-
-```yaml
-services:
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - server
-    networks:
-      - public
-
-  server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    env_file:
-      - ./server/.env
-    restart: unless-stopped
-    depends_on:
-      - redis
-    networks:
-      - public
-      - private
-
-  redis:
-    image: redis:alpine
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
-    networks:
-      - private
-
-volumes:
-  redis_data:
-
-networks:
-  public:
-    driver: bridge
-
-  private:
-    driver: bridge
-    internal: true
-```
-
----
-
-# 🚀 Installation
-
-## Clone Repository
-
-```bash
-git clone https://github.com/ramavathshivaram/notebook.git
-```
-
----
-
-## Backend Setup
-
-```bash
-cd server
-
-npm install
-
-npm run dev
-```
-
----
-
-## Frontend Setup
-
-```bash
-cd client
-
-npm install
-
-npm run dev
-```
-
----
-
-# 🐳 Run with Docker
+# 🐳 Docker Setup
 
 ```bash
 docker-compose up --build
@@ -219,11 +135,53 @@ docker-compose up --build
 
 ---
 
-# 🔄 CI/CD Pipeline
+# 📡 API Routes
 
-The project uses GitHub Actions for automated deployment.
+## 🔐 Authentication
 
-## Workflow
+| Method | Route |
+|---|---|
+| POST | `/api/auth/login` |
+| POST | `/api/auth/register` |
+| POST | `/api/auth/logout` |
+| GET | `/api/auth/check` |
+
+---
+
+## 📂 Sections
+
+| Method | Route |
+|---|---|
+| POST | `/api/section` |
+| GET | `/api/section/all` |
+| PATCH | `/api/section/:sectionId` |
+| DELETE | `/api/section/:sectionId` |
+
+---
+
+## 📄 Pages
+
+| Method | Route |
+|---|---|
+| POST | `/api/page` |
+| GET | `/api/page/:pageId` |
+| PATCH | `/api/page/:pageId` |
+| DELETE | `/api/page/:pageId` |
+
+---
+
+## 🎨 Canvas
+
+| Method | Route |
+|---|---|
+| POST | `/api/canvas` |
+| GET | `/api/canvas/:canvasId` |
+| PATCH | `/api/canvas/:canvasId` |
+| DELETE | `/api/canvas/:canvasId` |
+
+---
+
+# 🔄 CI/CD Workflow
 
 ```text
 GitHub Push
@@ -234,157 +192,33 @@ Docker Build
     ↓
 Docker Hub Push
     ↓
-EC2 Deployment
+AWS EC2 Deploy
 ```
 
 ---
 
-# 📡 API Endpoints
+# 🔐 Security
 
-## Authentication
-
-```http
-POST /api/auth/login
-POST /api/auth/register
-POST /api/auth/logout
-GET  /api/auth/check
-GET  /api/auth/refresh
-```
-
----
-
-## Sections
-
-```http
-POST   /api/section
-GET    /api/section/all
-PATCH  /api/section/:sectionId
-DELETE /api/section/:sectionId
-```
-
----
-
-## Pages
-
-```http
-POST   /api/page
-GET    /api/page/:pageId
-PATCH  /api/page/:pageId
-DELETE /api/page/:pageId
-```
-
----
-
-## Canvas
-
-```http
-POST   /api/canvas
-GET    /api/canvas/:canvasId
-PATCH  /api/canvas/:canvasId
-DELETE /api/canvas/:canvasId
-```
-
----
-
-## AI
-
-```http
-POST /api/ai/ask
-```
-
----
-
-# 🤖 AI Features
-
-The application integrates:
-
-- Groq AI
-- LangChain
-- OpenRouter Compatible APIs
-
-## Capabilities
-
-- AI Note Generation
-- Smart Writing Assistance
-- Context-aware Responses
-- AI Canvas Support
-
----
-
-# 🔐 Security Features
-
-- JWT Authentication
-- HTTP Only Cookies
-- Password Hashing
-- OTP Verification
-- Helmet Protection
-- CORS Protection
-- Environment Variable Security
-
----
-
-# 🖥️ Production Architecture
-
-```text
-React Client
-     ↓
-NGINX Reverse Proxy
-     ↓
-Express API Server
-     ↓
-Redis + MongoDB Atlas
-     ↓
-AI Services
-```
-
----
-
-# 📜 Scripts
-
-## Server
-
-```bash
-npm run dev
-npm run build
-npm run start
-```
-
----
-
-## Client
-
-```bash
-npm run dev
-npm run build
-npm run preview
-```
-
----
-
-# 🌟 Future Improvements
-
-- WebSocket Realtime Collaboration
-- AI Voice Notes
-- PDF Export
-- Shared Workspaces
-- Mobile App
-- Microservices Architecture
-- Kubernetes Deployment
+| 🛡️ Security Feature | 📖 Description |
+|---|---|
+| 🔑 JWT Authentication | Secure user sessions |
+| 🍪 HTTP Only Cookies | Safer authentication |
+| 🔒 Password Hashing | Secure password storage |
+| 🛡️ Helmet | Security headers protection |
+| 🌐 CORS | API access protection |
 
 ---
 
 # 👨‍💻 Author
 
-## Shiva Ram
+<p align="center">
+  <img src="https://img.shields.io/badge/Shiva%20Ram-Full%20Stack%20Developer-blue?style=for-the-badge" />
+</p>
 
-- GitHub: https://github.com/ramavathshivaram
-- Email: ramavathshiva6300@gmail.com
-
----
-
-# 📄 License
-
-MIT License
+| Platform | Link |
+|---|---|
+| 💻 GitHub | https://github.com/ramavathshivaram |
+| 📧 Email | ramavathshiva6300@gmail.com |
 
 ---
 
@@ -398,17 +232,6 @@ If you like this project:
 
 ---
 
-# 💙 Project Highlights
+# 📄 License
 
-This project demonstrates:
-
-- Full Stack Development
-- Docker & DevOps
-- CI/CD Automation
-- AI Integration
-- Redis Caching
-- Secure Authentication
-- Production Deployment
-- Scalable Architecture
-
-Perfect for portfolios, internships, and placement showcases.
+MIT License
