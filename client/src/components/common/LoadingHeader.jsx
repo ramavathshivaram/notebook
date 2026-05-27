@@ -1,20 +1,46 @@
 import React from "react";
+
 import { motion } from "framer-motion";
 
 const LoadingHeader = () => {
   return (
-    <div className="fixed top-0 left-0 right-0 w-full h-1 z-50 overflow-hidden">
+    <div
+      className="
+        fixed left-0 top-0 z-50 h-1 w-full overflow-hidden
+        bg-transparent
+      "
+    >
+      {/* Track */}
+      <div className="absolute inset-0 bg-border/40" />
+
+      {/* Animated Bar */}
       <motion.div
-        initial={{ x: 0 }}
-        animate={{
-          x: "100vh",
-        }}
+        initial={{ x: "-100%" }}
+        animate={{ x: "100vw" }}
         transition={{
-          duration: 1,
+          duration: 1.2,
           repeat: Infinity,
           ease: "linear",
         }}
-        className="h-0.75 w-50 bg-blue-600 rounded-full"
+        className="
+          absolute left-0 top-0 h-full w-40 rounded-full
+          bg-primary shadow-[0_0_12px_hsl(var(--primary))]
+        "
+      />
+
+      {/* Glow */}
+      <motion.div
+        initial={{ x: "-100%" }}
+        animate={{ x: "100vw" }}
+        transition={{
+          duration: 1.2,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+        className="
+          absolute left-0 top-0 h-full w-56 blur-md
+          bg-primary/40
+        "
       />
     </div>
   );

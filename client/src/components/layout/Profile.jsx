@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 import { useNavigate } from "react-router-dom";
 
-import { LogOut } from "lucide-react";
+import { LogOut, MoonStar } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -46,25 +46,47 @@ const Profile = () => {
   return (
     <HoverCard openDelay={150}>
       <HoverCardTrigger asChild>
-        <button className="rounded-full outline-none ring-offset-background transition focus-visible:ring-2 focus-visible:ring-ring">
-          <Avatar className="h-9 w-9 cursor-pointer border">
+        <button
+          className="
+            rounded-full outline-none transition
+            ring-offset-background
+            focus-visible:ring-2 focus-visible:ring-ring
+          "
+        >
+          <Avatar
+            className="
+              h-9 w-9 cursor-pointer border border-border
+              transition-transform duration-200 hover:scale-105
+            "
+          >
             <AvatarImage src={user?.avatar} alt={user?.userName} />
 
-            <AvatarFallback>{initials}</AvatarFallback>
+            <AvatarFallback className="bg-muted text-foreground">
+              {initials}
+            </AvatarFallback>
           </Avatar>
         </button>
       </HoverCardTrigger>
 
-      <HoverCardContent align="end" className="w-64 space-y-4">
+      <HoverCardContent
+        align="end"
+        className="
+          w-72 space-y-4 rounded-2xl border border-border
+          bg-popover p-4 text-popover-foreground shadow-xl
+        "
+      >
+        {/* User */}
         <div className="flex items-center gap-3">
-          <Avatar className="h-11 w-11">
-            <AvatarImage src={user?.avatar} alt={user?.name} />
+          <Avatar className="h-11 w-11 border border-border">
+            <AvatarImage src={user?.avatar} alt={user?.userName} />
 
-            <AvatarFallback>{initials}</AvatarFallback>
+            <AvatarFallback className="bg-muted text-foreground">
+              {initials}
+            </AvatarFallback>
           </Avatar>
 
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium">
+            <p className="truncate text-sm font-semibold text-foreground">
               {user?.userName || "User"}
             </p>
 
@@ -74,18 +96,29 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between rounded-lg border p-1 px-2">
-          <span className="text-sm font-medium">Theme</span>
+        {/* Theme */}
+        <div
+          className="
+            flex items-center justify-between rounded-xl
+            border border-border bg-muted/40 px-3 py-2
+          "
+        >
+          <div className="flex items-center gap-2">
+            <MoonStar className="h-4 w-4 text-muted-foreground" />
+
+            <span className="text-sm font-medium text-foreground">Theme</span>
+          </div>
 
           <DarkModeToggle />
         </div>
 
-        <motion.div whileTap={{ scale: 0.97 }}>
+        {/* Logout */}
+        <motion.div whileTap={{ scale: 0.98 }}>
           <Button
             size="sm"
             variant="destructive"
             onClick={handleLogout}
-            className="w-full justify-center gap-2"
+            className="w-full justify-center gap-2 rounded-xl"
           >
             <LogOut className="h-4 w-4" />
             Logout

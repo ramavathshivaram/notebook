@@ -1,14 +1,22 @@
+// TitleEditor.jsx
+
 import React, { useState, useCallback, useEffect, memo } from "react";
-import { Input } from "@/components/ui/input";
+
 import debounce from "lodash.debounce";
+
+import { Download, Loader2, Check, FileText } from "lucide-react";
+
+import { motion } from "motion/react";
+
+import { Input } from "@/components/ui/input";
+
+import { Button } from "@/components/ui/button";
+
+import { cn } from "@/lib/utils";
 
 import { useUpdatePage } from "@/hooks/page.query.js";
 
 import { download } from "@/helper/download.js";
-
-import { Button } from "../ui/button";
-
-import { Download, Loader2, Check } from "lucide-react";
 
 const TitleEditor = ({ title, pageId, sectionId }) => {
   const [localTitle, setLocalTitle] = useState(title);
@@ -33,10 +41,12 @@ const TitleEditor = ({ title, pageId, sectionId }) => {
         {
           pageId,
           sectionId,
+
           updatedData: {
             title: value,
           },
         },
+
         {
           onSuccess: () => {
             setSaved(true);
@@ -48,6 +58,7 @@ const TitleEditor = ({ title, pageId, sectionId }) => {
         },
       );
     }, 800),
+
     [pageId, sectionId, updatePageMutate],
   );
 
@@ -60,27 +71,91 @@ const TitleEditor = ({ title, pageId, sectionId }) => {
   };
 
   return (
-    <div className="border-b bg-background/80 backdrop-blur sticky top-0 z-10">
-      <div className="flex items-center justify-between gap-4 px-4 py-2">
-        {/* Title */}
-        <Input
-          value={localTitle}
-          onChange={(e) => handleChange(e.target.value)}
-          placeholder="Untitled Page"
-          className="text-3xl font-bold border-0 shadow-none bg-transparent px-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
-        />
+    <div
+      className="
+        sticky top-0 z-20
+        border-b border-border
+        bg-background/80
+        backdrop-blur-xl
+      "
+    >
+      <div
+        className="
+          flex items-center
+          justify-between gap-4
+          px-6 py-4
+        "
+      >
+        {/* Left */}
+        <div
+          className="
+            flex min-w-0 flex-1
+            items-center gap-4
+          "
+        >
+          {/* Icon */}
+          <motion.div
+            whileHover={{
+              scale: 1.05,
+            }}
+            className="
+              hidden h-11 w-11 shrink-0
+              items-center justify-center
+              rounded-2xl border border-border
+              bg-card shadow-sm
+              md:flex
+            "
+          >
+            <FileText className="h-5 w-5" />
+          </motion.div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2 shrink-0">
+          {/* Input */}
+          <Input
+            value={localTitle}
+            onChange={(e) => handleChange(e.target.value)}
+            placeholder="Untitled Page"
+            className={cn(
+              `
+                h-auto border-0 bg-transparent
+                px-0 text-3xl font-black
+                tracking-tight shadow-none
+                focus-visible:ring-0
+                focus-visible:ring-offset-0
+              `,
+            )}
+          />
+        </div>
+
+        {/* Right */}
+        <div
+          className="
+            flex shrink-0 items-center gap-3
+          "
+        >
           {/* Save Status */}
-          <div className="w-[90px] text-sm text-muted-foreground">
+          <div
+            className="
+              hidden w-[90px]
+              text-sm text-muted-foreground
+              md:block
+            "
+          >
             {isPending ? (
-              <div className="flex items-center gap-1">
+              <div
+                className="
+                  flex items-center gap-1
+                "
+              >
                 <Loader2 size={14} className="animate-spin" />
                 Saving
               </div>
             ) : saved ? (
-              <div className="flex items-center gap-1 text-green-500">
+              <div
+                className="
+                  flex items-center gap-1
+                  text-green-500
+                "
+              >
                 <Check size={14} />
                 Saved
               </div>
@@ -92,16 +167,20 @@ const TitleEditor = ({ title, pageId, sectionId }) => {
             variant="outline"
             onClick={handleDownload}
             disabled={downloading}
-            className="gap-2"
+            className="
+              h-10 rounded-2xl
+              border-border bg-card/60
+              backdrop-blur-xl
+            "
           >
             {downloading ? (
               <>
-                <Loader2 size={16} className="animate-spin" />
+                <Loader2 size={16} className="mr-2 animate-spin" />
                 Downloading
               </>
             ) : (
               <>
-                <Download size={16} />
+                <Download size={16} className="mr-2" />
                 Download
               </>
             )}

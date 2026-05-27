@@ -1,5 +1,7 @@
 import React from "react";
 
+import ListSkeleton from "@/skeletons/ListSkeleton";
+
 import { useGetCanvass } from "@/hooks/canvas.query.js";
 
 import Canvas from "./Canvas";
@@ -8,20 +10,19 @@ const CanvasList = ({ sectionId }) => {
   const { data: canvass = [], isLoading } = useGetCanvass(sectionId);
 
   if (isLoading) {
+    return <ListSkeleton count={10} />;
+  }
+
+  if (!canvass.length) {
     return (
-      <div className="space-y-1 px-2">
-        <div className="h-8 rounded-md bg-muted animate-pulse" />
-        <div className="h-8 rounded-md bg-muted animate-pulse" />
+      <div className="px-3 py-6 text-center text-xs text-zinc-500">
+        No canvases found
       </div>
     );
   }
 
-  if (!canvass.length) {
-    return <p className="px-3 py-1 text-xs text-muted-foreground">No canvass</p>;
-  }
-
   return (
-    <div className="space-y-0">
+    <div className="space-y-1 p-1">
       {canvass.map((canvas) => (
         <Canvas key={canvas._id} canvas={canvas} sectionId={sectionId} />
       ))}

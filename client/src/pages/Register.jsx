@@ -1,12 +1,32 @@
 import React, { useState } from "react";
+
 import { useForm } from "react-hook-form";
+
 import { z } from "zod";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Link, useNavigate } from "react-router-dom";
+
 import { toast } from "sonner";
+
 import { motion, AnimatePresence } from "motion/react";
+
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  BookOpen,
+  Sparkles,
+  Lock,
+  Zap,
+  User,
+} from "lucide-react";
+
 import { Button } from "@/components/ui/button";
+
 import { Card } from "@/components/ui/card";
+
 import {
   Form,
   FormField,
@@ -15,28 +35,52 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import BackGround from "@/components/common/BackGround";
-import useAuthStore from "@/store/auth.store.js";
-import { CardFooter } from "@/components/ui/card.jsx";
+
 import { Separator } from "@/components/ui/separator";
 
-// ✅ Schema
+import BackGround from "@/components/common/BackGround";
+
+import useAuthStore from "@/store/auth.store.js";
+
 const registerSchema = z.object({
   email: z.string().email("Enter a valid email"),
-  password: z.string().min(1, "Password is required"),
-  userName: z.string().min(1, "Username is required"),
+
+  password: z.string().min(6, "Password must be at least 6 characters"),
+
+  userName: z.string().min(2, "Username is required"),
 });
+
+const stats = [
+  {
+    icon: Zap,
+    label: "Fast",
+  },
+
+  {
+    icon: Lock,
+    label: "Secure",
+  },
+
+  {
+    icon: Sparkles,
+    label: "AI Powered",
+  },
+];
 
 const Register = () => {
   const register = useAuthStore((state) => state.register);
+
   const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
+
   const [errorShake, setErrorShake] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(registerSchema),
+
     defaultValues: {
       email: "",
       password: "",
@@ -46,159 +90,390 @@ const Register = () => {
 
   const onSubmit = async (values) => {
     try {
-      const response = await register(values);
+      await register(values);
+
+      toast.success("Account created ✨");
+
       navigate("/notebook");
     } catch (error) {
-      toast.error(error.message || "Login failed 😢");
+      toast.error(error.message || "Registration failed 😢");
+
       setErrorShake(true);
+
       setTimeout(() => setErrorShake(false), 600);
     }
   };
 
   return (
     <motion.div
-      className="w-screen h-screen flex items-center justify-center bg-gradient-to-br from-background via-background/80 to-card/80"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
+      className="
+        relative flex min-h-screen
+        items-center justify-center
+        overflow-hidden bg-background px-4
+      "
     >
+      {/* Background */}
       <BackGround />
+
+      {/* Overlay */}
+      <div
+        className="
+          absolute inset-0 pointer-events-none
+          bg-gradient-to-b
+          from-background/70
+          via-background/30
+          to-background/80
+        "
+      />
+
+      {/* Register Card */}
       <motion.div
-        animate={errorShake ? { x: [-10, 10, -10, 10, 0] } : {}}
+        animate={
+          errorShake
+            ? {
+                x: [-10, 10, -10, 10, 0],
+              }
+            : {}
+        }
         transition={{ duration: 0.4 }}
+        initial={{
+          opacity: 0,
+          scale: 0.96,
+          y: 20,
+        }}
+        whileInView={{
+          opacity: 1,
+          scale: 1,
+          y: 0,
+        }}
+        className="relative z-10 w-full max-w-md"
       >
-        <Card className="min-w-[400px] p-8 rounded-2xl shadow-lg border border-border/50 backdrop-blur-md bg-card/70">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-6 w-full"
+        <Card
+          className="
+            relative overflow-hidden rounded-[32px]
+            border border-border
+            bg-card/70 p-8
+            shadow-2xl backdrop-blur-2xl
+          "
+        >
+          {/* Glow */}
+          <div
+            className="
+              absolute inset-0 opacity-50
+              bg-gradient-to-br
+              from-primary/5 to-transparent
+            "
+          />
+
+          <div className="relative z-10">
+            {/* Logo */}
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0.8,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+              }}
+              transition={{
+                duration: 0.5,
+              }}
+              className="
+                mx-auto mb-6 flex h-16 w-16
+                items-center justify-center
+                rounded-2xl border border-border
+                bg-muted
+              "
             >
-              <motion.h1
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="text-3xl font-bold text-center"
+              <BookOpen className="h-7 w-7" />
+            </motion.div>
+
+            {/* Heading */}
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: -10,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.5,
+              }}
+              className="mb-8 text-center"
+            >
+              <h1
+                className="
+                  text-4xl font-black
+                  tracking-tight
+                "
               >
-                Register
-              </motion.h1>
+                Create Account
+              </h1>
 
-              <FormField
-                control={form.control}
-                name="userName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your username"
-                        {...field}
-                        className="transition-all focus:ring-2 focus:ring-primary/50"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <p
+                className="
+                  mt-2 text-sm
+                  text-muted-foreground
+                "
+              >
+                Start building your smart notebook workspace
+              </p>
+            </motion.div>
 
-              {/* Email */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your email"
-                        {...field}
-                        className="transition-all focus:ring-2 focus:ring-primary/50"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            {/* Form */}
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                {/* Username */}
+                <FormField
+                  control={form.control}
+                  name="userName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
 
-              {/* Password */}
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <div className="relative">
+                      <div className="relative">
+                        <User
+                          className="
+                            absolute left-4 top-1/2
+                            h-4 w-4 -translate-y-1/2
+                            text-muted-foreground
+                          "
+                        />
+
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your username"
+                            {...field}
+                            className="
+                              h-12 rounded-2xl
+                              border-border
+                              bg-background/60
+                              pl-11 backdrop-blur-sm
+                              focus-visible:ring-2
+                              focus-visible:ring-primary/20
+                            "
+                          />
+                        </FormControl>
+                      </div>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Email */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+
                       <FormControl>
                         <Input
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Enter password"
+                          placeholder="Enter your email"
                           {...field}
-                          className="pr-10 transition-all focus:ring-2 focus:ring-primary/50"
+                          className="
+                            h-12 rounded-2xl
+                            border-border
+                            bg-background/60
+                            px-4 backdrop-blur-sm
+                            focus-visible:ring-2
+                            focus-visible:ring-primary/20
+                          "
                         />
                       </FormControl>
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword((p) => !p)}
-                        className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition"
-                        aria-label={
-                          showPassword ? "Hide password" : "Show password"
-                        }
-                      >
-                        {showPassword ? (
-                          <EyeOff className="w-5 h-5" />
-                        ) : (
-                          <Eye className="w-5 h-5" />
-                        )}
-                      </button>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                disabled={form.formState.isSubmitting}
-                className="h-11 text-lg relative overflow-hidden"
-              >
-                <AnimatePresence>
-                  {form.formState.isSubmitting ? (
-                    <motion.div
-                      key="loading"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="flex items-center gap-2"
-                    >
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Get Starting...
-                    </motion.div>
-                  ) : (
-                    <motion.span
-                      key="text"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      Get Started →
-                    </motion.span>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </AnimatePresence>
-              </Button>
-            </form>
-          </Form>
-          <Separator />
-          <CardFooter className="w-full">
-            <div className="text-center w-full text-sm text-muted-foreground">
-              <span>Already have an account? </span>
-              <Link
-                to="/login"
-                className="font-medium text-primary hover:underline hover:text-primary/80 transition"
+                />
+
+                {/* Password */}
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+
+                      <div className="relative">
+                        <FormControl>
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Enter your password"
+                            {...field}
+                            className="
+                              h-12 rounded-2xl
+                              border-border
+                              bg-background/60
+                              px-4 pr-12
+                              backdrop-blur-sm
+                              focus-visible:ring-2
+                              focus-visible:ring-primary/20
+                            "
+                          />
+                        </FormControl>
+
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((p) => !p)}
+                          className="
+                            absolute right-4 top-1/2
+                            -translate-y-1/2
+                            text-muted-foreground
+                            transition hover:text-foreground
+                          "
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-5 w-5" />
+                          ) : (
+                            <Eye className="h-5 w-5" />
+                          )}
+                        </button>
+                      </div>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Submit */}
+                <Button
+                  type="submit"
+                  disabled={form.formState.isSubmitting}
+                  className="
+                    h-12 w-full rounded-2xl
+                    text-base font-semibold
+                    shadow-lg shadow-primary/20
+                    transition-all duration-300
+                    hover:scale-[1.02]
+                  "
+                >
+                  <AnimatePresence mode="wait">
+                    {form.formState.isSubmitting ? (
+                      <motion.div
+                        key="loading"
+                        initial={{
+                          opacity: 0,
+                        }}
+                        animate={{
+                          opacity: 1,
+                        }}
+                        exit={{
+                          opacity: 0,
+                        }}
+                        className="
+                          flex items-center gap-2
+                        "
+                      >
+                        <Loader2
+                          className="
+                            h-5 w-5 animate-spin
+                          "
+                        />
+                        Creating account...
+                      </motion.div>
+                    ) : (
+                      <motion.span
+                        key="text"
+                        initial={{
+                          opacity: 0,
+                        }}
+                        animate={{
+                          opacity: 1,
+                        }}
+                        exit={{
+                          opacity: 0,
+                        }}
+                      >
+                        Get Started →
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Button>
+              </form>
+            </Form>
+
+            {/* Separator */}
+            <div className="relative py-6">
+              <Separator />
+
+              <span
+                className="
+                  absolute left-1/2 top-1/2
+                  -translate-x-1/2 -translate-y-1/2
+                  bg-card px-3 text-xs
+                  text-muted-foreground
+                "
               >
-                Sign in
-              </Link>
+                OR
+              </span>
             </div>
-          </CardFooter>
+
+            {/* Footer */}
+            <div
+              className="
+                flex flex-col items-center gap-4
+              "
+            >
+              <div
+                className="
+                  text-sm text-muted-foreground
+                "
+              >
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  className="
+                    font-medium text-primary
+                    transition hover:underline
+                    hover:text-primary/80
+                  "
+                >
+                  Sign in
+                </Link>
+              </div>
+
+              {/* Stats */}
+              <div
+                className="
+                  mt-2 flex items-center
+                  justify-center gap-5
+                  text-xs text-muted-foreground
+                "
+              >
+                {stats.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <div
+                      key={item.label}
+                      className="
+                        flex items-center gap-1.5
+                      "
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+
+                      {item.label}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         </Card>
       </motion.div>
     </motion.div>

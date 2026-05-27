@@ -1,6 +1,8 @@
 import React, { memo, useCallback, useState } from "react";
 
-import { Eraser, Pen, Redo, RotateCcw, Undo } from "lucide-react";
+import { Eraser, Pen, Redo, RotateCcw, Undo, Palette } from "lucide-react";
+
+import { motion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
 
@@ -37,21 +39,31 @@ const CanvasHeader = ({
     canvasRef.current?.clearCanvas();
   }, [canvasRef]);
 
-  const handleStrokeWidth = useCallback(
-    (e) => {
-      setStrokeWidth(Number(e.target.value));
-    },
-    [setStrokeWidth],
-  );
-
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-background p-3 shadow-xs">
-      <div className="flex items-center gap-2">
+    <div
+      className="
+        flex flex-wrap items-center
+        justify-between gap-4
+        rounded-3xl border
+        border-border bg-card/80
+        p-4 shadow-sm
+        backdrop-blur-xl
+      "
+    >
+      {/* Left */}
+      <div
+        className="
+          flex items-center gap-2
+        "
+      >
         <Button
           size="icon"
           type="button"
           variant={!isEraseMode ? "default" : "outline"}
           onClick={() => handleModeChange(false)}
+          className="
+            rounded-2xl
+          "
         >
           <Pen className="h-4 w-4" />
         </Button>
@@ -61,21 +73,42 @@ const CanvasHeader = ({
           type="button"
           variant={isEraseMode ? "default" : "outline"}
           onClick={() => handleModeChange(true)}
+          className="
+            rounded-2xl
+          "
         >
           <Eraser className="h-4 w-4" />
         </Button>
       </div>
 
-      <div className="flex items-center gap-4">
-        <Button
-          size="icon"
-          type="button"
-          className="border"
+      {/* Center */}
+      <div
+        className="
+          flex items-center gap-5
+        "
+      >
+        {/* Color */}
+        <motion.button
+          whileTap={{
+            scale: 0.95,
+          }}
+          onClick={() => colorInputRef.current?.click()}
+          className="
+            relative flex h-11 w-11
+            items-center justify-center
+            rounded-2xl border
+            border-border shadow-sm
+          "
           style={{
             backgroundColor: strokeColor,
           }}
-          onClick={() => colorInputRef.current?.click()}
         >
+          <Palette
+            className="
+              h-4 w-4 text-white
+            "
+          />
+
           <input
             type="color"
             ref={colorInputRef}
@@ -83,32 +116,78 @@ const CanvasHeader = ({
             onChange={handleStrokeColorChange}
             className="sr-only"
           />
-        </Button>
+        </motion.button>
 
-        <div className="flex flex-col gap-1">
-          <label className="text-xs text-muted-foreground">Stroke</label>
+        {/* Stroke */}
+        <div
+          className="
+            flex items-center gap-3
+          "
+        >
+          <span
+            className="
+              text-sm text-muted-foreground
+            "
+          >
+            Stroke
+          </span>
 
           <input
             type="range"
             min="1"
             max="20"
             value={strokeWidth}
-            onChange={handleStrokeWidth}
-            className={cn("w-24 cursor-pointer")}
+            onChange={(e) => setStrokeWidth(Number(e.target.value))}
+            className={cn("w-28 cursor-pointer")}
           />
+
+          <span
+            className="
+              w-6 text-sm
+              text-muted-foreground
+            "
+          >
+            {strokeWidth}
+          </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Button size="icon" variant="outline" onClick={handleUndo}>
+      {/* Right */}
+      <div
+        className="
+          flex items-center gap-2
+        "
+      >
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={handleUndo}
+          className="
+            rounded-2xl
+          "
+        >
           <Undo className="h-4 w-4" />
         </Button>
 
-        <Button size="icon" variant="outline" onClick={handleRedo}>
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={handleRedo}
+          className="
+            rounded-2xl
+          "
+        >
           <Redo className="h-4 w-4" />
         </Button>
 
-        <Button size="icon" variant="outline" onClick={handleClear}>
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={handleClear}
+          className="
+            rounded-2xl
+          "
+        >
           <RotateCcw className="h-4 w-4" />
         </Button>
       </div>

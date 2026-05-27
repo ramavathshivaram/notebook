@@ -1,5 +1,7 @@
 import React from "react";
 
+import ListSkeleton from "@/skeletons/ListSkeleton";
+
 import { useGetPages } from "@/hooks/page.query.js";
 
 import Page from "./Page";
@@ -8,20 +10,19 @@ const PageList = ({ sectionId }) => {
   const { data: pages = [], isLoading } = useGetPages(sectionId);
 
   if (isLoading) {
+    return <ListSkeleton count={10} />;
+  }
+
+  if (!pages.length) {
     return (
-      <div className="space-y-1 px-2">
-        <div className="h-8 rounded-md bg-muted animate-pulse" />
-        <div className="h-8 rounded-md bg-muted animate-pulse" />
+      <div className="px-3 py-6 text-center text-xs text-zinc-500">
+        No pages found
       </div>
     );
   }
 
-  if (!pages.length) {
-    return <p className="px-3 py-1 text-xs text-muted-foreground">No pages</p>;
-  }
-
   return (
-    <div className="space-y-1">
+    <div className="space-y-1 p-1">
       {pages.map((page) => (
         <Page key={page._id} page={page} sectionId={sectionId} />
       ))}

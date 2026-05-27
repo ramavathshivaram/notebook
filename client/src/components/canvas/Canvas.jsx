@@ -29,43 +29,42 @@ const Canvas = ({ canvas, sectionId }) => {
     e.stopPropagation();
 
     if (isSelected) navigate("/notebook");
-    
+
     mutate({
       canvasId: canvas._id,
       sectionId,
     });
-
   };
 
   return (
     <motion.div
       layout
-      initial={{
-        opacity: 0,
-        scale: 0.95,
-      }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-      }}
-      exit={{
-        opacity: 0,
-        scale: 0.95,
-      }}
-      transition={{
-        duration: 0.2,
-      }}
-      className="group flex items-center gap-1 px-2"
+      initial={{ opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 4 }}
+      transition={{ duration: 0.18 }}
+      className="group flex items-center gap-1"
     >
       <Button
         variant="ghost"
         onClick={handleNavigate}
         className={cn(
-          "flex-1 justify-start text-sm transition-all hover:translate-x-1",
-          isSelected && "bg-muted text-blue-700",
+          `
+            h-9 flex-1 justify-start rounded-xl px-3
+            text-sm font-normal transition-all duration-200
+            hover:bg-accent hover:text-accent-foreground
+          `,
+          isSelected
+            ? "bg-accent text-accent-foreground shadow-sm"
+            : "text-muted-foreground",
         )}
       >
-        <PencilLine className="mr-2 h-4 w-4 shrink-0" />
+        <PencilLine
+          className={cn(
+            "mr-2 h-4 w-4 shrink-0",
+            isSelected ? "text-foreground" : "text-muted-foreground",
+          )}
+        />
 
         <span className="truncate">{canvas.title}</span>
       </Button>
@@ -75,12 +74,14 @@ const Canvas = ({ canvas, sectionId }) => {
         size="icon"
         disabled={isPending}
         onClick={handleDelete}
-        className={cn(
-          "opacity-0 transition-opacity duration-200",
-          "group-hover:opacity-100",
-        )}
+        className="
+          h-8 w-8 rounded-lg opacity-0
+          transition-all duration-200
+          hover:bg-accent hover:text-destructive
+          group-hover:opacity-100
+        "
       >
-        <Trash2 className="h-3 w-3 text-red-600" />
+        <Trash2 className="h-3.5 w-3.5" />
       </Button>
     </motion.div>
   );

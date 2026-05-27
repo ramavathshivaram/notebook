@@ -1,12 +1,48 @@
+// ContentEditor.jsx
+
 import React, { useEffect, useCallback } from "react";
+
 import debounce from "lodash.debounce";
+
 import ReactQuill from "react-quill-new";
+
 import "react-quill-new/dist/quill.snow.css";
+
+import { motion } from "motion/react";
+
 import usePageStore from "@/store/page.store.js";
+
 import { useUpdatePage } from "@/hooks/page.query.js";
+
+const toolbarOptions = [
+  [
+    {
+      header: [1, 2, 3, false],
+    },
+  ],
+
+  ["bold", "italic", "underline"],
+
+  ["blockquote", "code-block"],
+
+  ["link"],
+
+  [
+    {
+      list: "ordered",
+    },
+
+    {
+      list: "bullet",
+    },
+  ],
+
+  ["clean"],
+];
 
 const ContentEditor = ({ content, pageId, sectionId }) => {
   const editorContent = usePageStore((s) => s.content) || content;
+
   const setContent = usePageStore((s) => s.setContent);
 
   const { mutate: updatePageMutate } = useUpdatePage();
@@ -23,6 +59,7 @@ const ContentEditor = ({ content, pageId, sectionId }) => {
       updatePageMutate({
         pageId,
         sectionId,
+
         updatedData: {
           content: value,
         },
@@ -46,37 +83,37 @@ const ContentEditor = ({ content, pageId, sectionId }) => {
   };
 
   return (
-    <div className="relative flex flex-col overflow-hidden">
-      <div className="flex-1 overflow-hidden">
+    <motion.div
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+      className="
+        relative flex h-full
+        flex-col overflow-hidden
+      "
+    >
+      {/* Editor */}
+      <div
+        className="
+          note-editor flex-1 overflow-hidden
+          bg-background
+        "
+      >
         <ReactQuill
-          className="my-editor h-full"
+          className="h-full"
           theme="snow"
           value={editorContent}
           onChange={handleChange}
-          placeholder="Start speaking or typing..."
+          placeholder="Start writing your thoughts..."
           modules={{
-            toolbar: [
-              [
-                {
-                  header: [1, 2, false],
-                },
-              ],
-              ["bold", "italic", "underline"],
-              ["link"],
-              [
-                {
-                  list: "ordered",
-                },
-                {
-                  list: "bullet",
-                },
-              ],
-              ["clean"],
-            ],
+            toolbar: toolbarOptions,
           }}
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

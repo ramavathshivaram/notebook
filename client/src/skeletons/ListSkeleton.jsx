@@ -1,26 +1,26 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const ListSkeleton = ({ count = 5 }) => {
+const ListSkeleton = ({ count = 12 }) => {
   return (
-    <div className="space-y-3 p-2 w-full overflow-hidden">
-      {[...Array(count)].map((_, i) => (
-        <motion.div
+    <div className="w-full space-y-1.5 p-2">
+      {Array.from({ length: count }).map((_, i) => (
+        <Skeleton
           key={i}
-          initial={{ opacity: 0.3 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.8,
-            repeat: Infinity,
-            repeatType: "reverse",
-            delay: i * 0.1,
-          }}
-          className="flex flex-col space-y-2 p-3 bg-gray-200 rounded-md dark:bg-gray-700"
-        >
-          {/* Simulated lines for list item */}
-          <div className="h-4 w-3/4 bg-gray-300 rounded dark:bg-gray-600"></div>
-          <div className="h-3 w-1/2 bg-gray-300 rounded dark:bg-gray-600"></div>
-        </motion.div>
+          className={cn(
+            "h-7 rounded-lg ",
+            i % 5 === 0
+              ? "w-full"
+              : i % 5 === 1
+                ? "w-11/12"
+                : i % 5 === 2
+                  ? "w-10/12"
+                  : i % 5 === 3
+                    ? "w-8/12"
+                    : "w-9/12",
+          )}
+        />
       ))}
     </div>
   );

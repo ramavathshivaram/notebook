@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 
-import { ReactSketchCanvas } from "react-sketch-canvas";
+import { motion } from "motion/react";
 
-import { Card } from "../ui/card";
+import { ReactSketchCanvas } from "react-sketch-canvas";
 
 import CanvasHeader from "./CanvasHeader";
 
@@ -18,7 +18,19 @@ const CanvasContent = ({ content, title, canvasId }) => {
   const [strokeWidth, setStrokeWidth] = useState(3);
 
   return (
-    <div className="mt-2 flex max-w-5xl flex-col gap-2">
+    <motion.div
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+      className="
+        mx-auto flex max-w-7xl
+        flex-col gap-4
+      "
+    >
+      {/* Header */}
       <CanvasHeader
         canvasRef={canvasRef}
         colorInputRef={colorInputRef}
@@ -28,25 +40,49 @@ const CanvasContent = ({ content, title, canvasId }) => {
         handleStrokeColorChange={(e) => setStrokeColor(e.target.value)}
       />
 
-      <Card className="show-scroll w-full overflow-auto rounded-none p-0">
+      {/* Canvas */}
+      <div
+        className="
+          relative overflow-hidden
+          rounded-3xl border
+          border-border bg-card
+          shadow-sm
+        "
+      >
+        {/* Grid */}
+        <div
+          className="
+            pointer-events-none absolute inset-0
+            opacity-[0.04]
+            bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)]
+            bg-[size:28px_28px]
+            dark:bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)]
+          "
+        />
+
         <ReactSketchCanvas
           ref={canvasRef}
-          width="1000px"
+          width="100%"
+          height="75vh"
           strokeColor={strokeColor}
           strokeWidth={strokeWidth}
           backgroundImage={content}
-          canvasColor="white"
-          className="!aspect-video border-none"
+          canvasColor="transparent"
+          className="
+            relative z-10
+            !h-[75vh] !w-full
+          "
         />
-      </Card>
+      </div>
 
+      {/* Footer */}
       <CanvasFooter
         canvasRef={canvasRef}
         title={title}
         canvasId={canvasId}
         content={content}
       />
-    </div>
+    </motion.div>
   );
 };
 
