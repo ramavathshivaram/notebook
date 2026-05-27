@@ -26,8 +26,6 @@ const ask = asyncHandler(async (req: Request, res: Response) => {
     resourceId,
   });
 
-  console.log("controller", response);
-
   res.status(200).json({
     success: true,
     data: response,

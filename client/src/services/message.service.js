@@ -10,6 +10,7 @@ const ROLE = {
 export const sendMessage = async ({ resourceId, content, resourceType }) => {
   const { addMessage, setLoading } = useMessageStore.getState();
   const setContent = usePageStore.getState().setContent;
+  const setSuggestions = usePageStore.getState().setSuggestions;
 
   try {
     setLoading(true);
@@ -35,6 +36,11 @@ export const sendMessage = async ({ resourceId, content, resourceType }) => {
     if (data.resourceContent !== undefined) {
       setContent({ resourceId, content: data.resourceContent });
     }
+
+    if (data.suggestions) {
+      setSuggestions(data.suggestions);
+    }
+    
   } finally {
     setLoading(false);
   }

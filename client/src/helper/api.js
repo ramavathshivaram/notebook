@@ -42,12 +42,6 @@ export const resetPasswordApi = async ({ email, otp, password }) => {
   return res.status === 200;
 };
 
-export const updateUser = async (darkMode) => {
-  console.log(darkMode);
-  const res = await API.post("/update-user", { darkMode });
-  return res.data.user;
-};
-
 //! -------------------- Section APIs --------------------
 export const createSectionApi = async (title) => {
   const res = await API.post("section", { title });

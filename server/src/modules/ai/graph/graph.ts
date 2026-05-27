@@ -10,6 +10,7 @@ import chatFlow from "./flows/chat.flow.js";
 import pageFlow from "./flows/page.flow.js";
 import patchNode from "./nodes/patch.node.js";
 import savePageNode from "./nodes/save-page.node.js";
+import suggestionNode from "./nodes/suggestion.node.js";
 
 export const State = Annotation.Root({
   userInput: Annotation<string>(),
@@ -29,6 +30,7 @@ export const State = Annotation.Root({
     endIndex?: number | undefined;
   }>(),
   updatedResourceContent: Annotation<string>(),
+  suggestions: Annotation<string[]>(),
   error: Annotation<string>(),
 });
 
@@ -41,6 +43,7 @@ const graph = new StateGraph(State)
   .addNode("patchNode", patchNode)
   .addNode("savePageNode", savePageNode)
   .addNode("responseNode", responseNode)
+  .addNode("suggestionNode", suggestionNode)
 
   .addEdge(START, "contextNode")
   .addEdge("contextNode", "intentNode")
@@ -50,7 +53,8 @@ const graph = new StateGraph(State)
   .addEdge("pageFlow", "patchNode")
   .addEdge("patchNode", "savePageNode")
   .addEdge("savePageNode", "responseNode")
-  .addEdge("responseNode", END)
+  .addEdge("responseNode", "suggestionNode")
+  .addEdge("suggestionNode", END)
   .compile();
 
 export default graph;

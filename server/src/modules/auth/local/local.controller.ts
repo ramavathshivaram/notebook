@@ -51,8 +51,6 @@ const register = asyncHandler(
       userName,
     });
 
-    console.log(authResponse);
-
     return await setAuthCookiesAndRespond(
       res,
       authResponse,

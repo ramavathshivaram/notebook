@@ -8,6 +8,7 @@ interface Resource {
 interface Response {
   aiResponse: string;
   resourceContent: string | undefined;
+  suggestions: string[] | undefined;
 }
 
 const invokeGraph = async (

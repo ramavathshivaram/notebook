@@ -20,14 +20,14 @@ const createModel = ({
     temperature,
   });
 
-export const mainModel = createModel({
+export const chatModel = createModel({
   model: MODELS.REASONING,
-  temperature: 0.3,
+  temperature: 0.1,
 });
 
-export const chatModel = createModel({
-  model: MODELS.FAST,
-  temperature: 0.3,
+export const pageModel = createModel({
+  model: MODELS.REASONING,
+  temperature: 0.1,
 });
 
 export const intentModel = createModel({
@@ -40,7 +40,7 @@ export const plannerModel = createModel({
   temperature: 0.3,
 });
 
-export const pageModel = createModel({
-  model: MODELS.REASONING,
-  temperature: 0.1,
+export const suggestionModel = createModel({
+  model: MODELS.FAST,
+  temperature: 0.3,
 });

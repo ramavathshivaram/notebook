@@ -66,8 +66,6 @@ export const verifyToken = (token: string): ITokenPayload => {
 
     return decoded as ITokenPayload;
   } catch (error) {
-    console.log(error);
-
     throw new ApiError(401, "Invalid or expired token");
   }
 };

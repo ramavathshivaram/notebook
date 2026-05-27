@@ -19,6 +19,7 @@ export interface State {
     endIndex?: number | undefined;
   };
   updatedResourceContent: string;
+  suggestions: string[];
   error: string;
 }
 
