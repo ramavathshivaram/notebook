@@ -2,13 +2,12 @@ import React, { useEffect, useCallback } from "react";
 import debounce from "lodash.debounce";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import useEditorStore from "@/store/editor.store.js";
+import usePageStore from "@/store/page.store.js";
 import { useUpdatePage } from "@/hooks/page.query.js";
 
 const ContentEditor = ({ content, pageId, sectionId }) => {
-  const { editors, setContent } = useEditorStore();
-
-  const editorContent = editors[pageId]?.content ?? content;
+  const editorContent = usePageStore((s) => s.content) || content;
+  const setContent = usePageStore((s) => s.setContent);
 
   const { mutate: updatePageMutate } = useUpdatePage();
 

@@ -5,24 +5,15 @@ interface Resource {
   resourceType: string;
 }
 
-interface PageResponse {
-  type: "page";
-  operation: "update" | "replace" | "delete" | "insert";
-  html: string;
+interface Response {
   aiContent: string;
-  startIndex?: number | undefined;
-  endIndex?: number | undefined;
-}
-
-interface ChatResponse {
-  type: "chat";
-  chatResponse: string;
+  resourceContent: string | undefined;
 }
 
 const invokeGraph = async (
   userInput: string,
   { resourceId, resourceType }: Resource,
-): Promise<PageResponse | ChatResponse> => {
+): Promise<Response> => {
   const config = {
     configurable: {
       thread_id: resourceId,
@@ -43,15 +34,7 @@ const invokeGraph = async (
 
   console.log(response);
 
-  if (response.pageResponse) {
-    return response.pageResponse;
-  }
-
-  if (response.chatResponse) {
-    return response.chatResponse;
-  }
-
-  return response.pageResponse;
+  return response;
 };
 
 export default invokeGraph;

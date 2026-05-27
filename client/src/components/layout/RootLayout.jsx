@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import Header from "@/components/layout/Header";
 import NotebookSidebar from "@/components/layout/NotebookSidebar";
@@ -17,6 +17,9 @@ import { useEffect, useState } from "react";
 import ChatBotWrapper from "../chatbot/ChatBotWrapper";
 
 const RootLayout = () => {
+  const location = useLocation();
+
+  const [, , resourceType] = location.pathname.split("/");
   const [mobileView, setMobileView] = useState(window.innerWidth < 780);
 
   const isSidebarOpen = useSidebarStore((s) => s.isSidebarOpen);
@@ -77,19 +80,21 @@ const RootLayout = () => {
                 </div>
               </ResizablePanel>
 
-              <ResizableHandle withHandle />
-
-              {/* Chatbot */}
-              <ResizablePanel
-                defaultSize={25}
-                minSize={20}
-                maxSize={35}
-                className="overflow-hidden"
-              >
-                <div className="h-full overflow-hidden">
-                  <ChatBotWrapper />
-                </div>
-              </ResizablePanel>
+              {resourceType === "page" && (
+                <>
+                  <ResizableHandle withHandle />
+                  <ResizablePanel
+                    defaultSize={25}
+                    minSize={20}
+                    maxSize={35}
+                    className="overflow-hidden"
+                  >
+                    <div className="h-full overflow-hidden">
+                      <ChatBotWrapper />
+                    </div>
+                  </ResizablePanel>
+                </>
+              )}
             </ResizablePanelGroup>
           )}
         </div>

@@ -1,13 +1,24 @@
 import type { BaseMessage } from "langchain";
 
 export interface State {
-  resourceContent: string;
-  prompt: string;
   userInput: string;
+  resourceContent: string;
+  recentMessages: BaseMessage[];
   intent: string;
+  confidence: number;
   task: string;
-  todos: string[];
-  recentMessages: string;
+  recommendations: string[];
+  retrievedContext: string;
+  aiContent: string;
+  pageResponse: {
+    operation: "update" | "replace" | "delete" | "insert" | "append";
+    aiContent: string;
+    html: string;
+    startIndex?: number | undefined;
+    endIndex?: number | undefined;
+  };
+  updatedResourceContent: string;
+  error: string;
 }
 
 export interface Config {

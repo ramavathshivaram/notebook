@@ -1,81 +1,55 @@
 import { Annotation, StateGraph, START, END } from "@langchain/langgraph";
 
-import checkpointer from "./checkpointer.js";
-
-import llmNode from "./nodes/llm.node.js";
-import pageNode from "./nodes/page.node.js";
-import recentMessagesNode from "./nodes/recent.messages.node.js";
+import contextNode from "./nodes/context.node.js";
 import intentNode from "./nodes/intent.node.js";
-import pageLlmNode from "./nodes/page.llm.node.js";
-import chatNode from "./nodes/chat.node.js";
+import plannerNode from "./nodes/planner.node.js";
+import responseNode from "./nodes/response.node.js";
+import routeIntent from "./nodes/route-intent.node.js";
 
-const State = Annotation.Root({
-  resourceContent: Annotation<string>(),
+import chatFlow from "./flows/chat.flow.js";
+import pageFlow from "./flows/page.flow.js";
+import patchNode from "./nodes/patch.node.js";
+import savePageNode from "./nodes/save-page.node.js";
+
+export const State = Annotation.Root({
   userInput: Annotation<string>(),
+  resourceContent: Annotation<string>(),
+  recentMessages: Annotation<string[]>(),
   intent: Annotation<string>(),
+  confidence: Annotation<number>(),
   task: Annotation<string>(),
-  todos: Annotation<string[]>(),
-  recentMessages: Annotation<string>(),
-  chatResponse: Annotation<{
-    type: "chat";
-    chatResponse: string;
-  }>(),
+  retrievedContext: Annotation<string>(),
+  aiContent: Annotation<string>(),
   pageResponse: Annotation<{
-    type: "page";
-    operation: "update" | "replace" | "delete" | "insert";
-    html: string;
+    operation: "update" | "replace" | "delete" | "insert" | "append";
     aiContent: string;
-    startIndex?: number;
-    endIndex?: number;
+    html: string;
+    startIndex?: number | undefined;
+    endIndex?: number | undefined;
   }>(),
+  updatedResourceContent: Annotation<string>(),
+  error: Annotation<string>(),
 });
 
 const graph = new StateGraph(State)
-  .addNode("recentMessagesNode", recentMessagesNode)
+  .addNode("contextNode", contextNode)
   .addNode("intentNode", intentNode)
-  .addNode("pageNode", pageNode)
-  .addNode("pageLLmNode", pageLlmNode)
-  .addNode("llmNode", llmNode)
-  .addNode("chatNode", chatNode)
+  .addNode("plannerNode", plannerNode)
+  .addNode("chatFlow", chatFlow)
+  .addNode("pageFlow", pageFlow)
+  .addNode("patchNode", patchNode)
+  .addNode("savePageNode", savePageNode)
+  .addNode("responseNode", responseNode)
 
-  .addEdge(START, "recentMessagesNode")
-  .addEdge("recentMessagesNode", "intentNode")
-  .addConditionalEdges(
-    "intentNode",
-
-    (_state, config) => {
-      return config?.context?.resourceType === "page" ? "pageNode" : "llmNode";
-    },
-
-    {
-      pageNode: "pageNode",
-
-      llmNode: "llmNode",
-    },
-  )
-  .addConditionalEdges(
-    "pageNode",
-    (state, _config) => {
-      switch (state.intent) {
-        case "chat":
-        case "summarize":
-          return "chatNode";
-        default:
-          return "pageLLmNode";
-      }
-    },
-    {
-      chatNode: "chatNode",
-
-      pageLLmNode: "pageLLmNode",
-    },
-  )
-  .addEdge("pageLLmNode", END)
-  .addEdge("chatNode", END)
-  .addEdge("llmNode", END)
-
-  .compile({
-    checkpointer,
-  });
+  .addEdge(START, "contextNode")
+  .addEdge("contextNode", "intentNode")
+  .addEdge("intentNode", "plannerNode")
+  .addConditionalEdges("plannerNode", routeIntent)
+  .addEdge("chatFlow", "responseNode")
+  .addEdge("pageFlow", "patchNode")
+  .addEdge("patchNode", "savePageNode")
+  .addEdge("savePageNode", "responseNode")
+  .addEdge("responseNode", END)
+  .compile();
 
 export default graph;
