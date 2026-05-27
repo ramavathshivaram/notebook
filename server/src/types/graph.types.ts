@@ -7,9 +7,10 @@ export interface State {
   intent: string;
   confidence: number;
   task: string;
+  steps: string[];
   recommendations: string[];
   retrievedContext: string;
-  aiContent: string;
+  aiResponse: string;
   pageResponse: {
     operation: "update" | "replace" | "delete" | "insert" | "append";
     aiContent: string;

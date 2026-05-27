@@ -28,7 +28,7 @@ export const sendMessage = async ({ resourceId, content, resourceType }) => {
 
     addMessage({
       role: ROLE.ASSISTANT,
-      content: data.aiContent,
+      content: data.aiResponse,
       resourceId,
     });
 

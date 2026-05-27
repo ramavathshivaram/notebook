@@ -4,8 +4,7 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import CHAT_SYSTEM_PROMPT from "../prompts/chat.prompt.js";
 
 const chatFlow = async (state: State, _config: Config) => {
-  const { recentMessages, resourceContent, userInput } = state;
-  const trimmedContent = resourceContent.slice(0, 4000);
+  const { recentMessages, resourceContent, userInput, steps } = state;
 
   const response = await chatModel.invoke([
     new SystemMessage(CHAT_SYSTEM_PROMPT),
@@ -14,8 +13,11 @@ const chatFlow = async (state: State, _config: Config) => {
 Recent Messages:
 ${recentMessages}
 
+Steps:
+${steps.join("\n")}
+
 Notebook Content:
-${trimmedContent}
+${resourceContent}
 
 User Input:
 ${userInput}
@@ -23,7 +25,7 @@ ${userInput}
   ]);
 
   return {
-    aiContent: response.content,
+    aiResponse: response.content,
   };
 };
 

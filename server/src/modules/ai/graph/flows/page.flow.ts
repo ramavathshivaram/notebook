@@ -19,7 +19,8 @@ const responseFormat = z.object({
 const structuredModel = pageModel.withStructuredOutput(responseFormat);
 
 const pageFlow = async (state: State, _config: Config) => {
-  const { userInput, recentMessages, resourceContent, intent, task } = state;
+  const { userInput, recentMessages, resourceContent, intent, steps, task } =
+    state;
 
   const indexedText = createIndexedText(resourceContent);
 
@@ -33,25 +34,14 @@ ${intent || "None"}
 TASK:
 ${task || "None"}
 
+STEPS:
+${steps.join("\n")}
+
 RECENT MESSAGES:
 ${recentMessages || "None"}
 
 CURRENT HTML WITH INDEXES:
 ${indexedText}
-
-Rules:
-- startIndex and endIndex refer to RAW HTML string positions.
-- Indexes must match the ORIGINAL HTML exactly.
-- Preserve valid HTML structure.
-- Never break HTML tags.
-- Never cut inside tag syntax.
-- update replaces a partial HTML range.
-- replace replaces the entire document.
-- insert inserts HTML at a position.
-- delete removes an HTML range.
-- append adds content to the end.
-
-Return exactly ONE structured operation.
 `;
 
   const response = await structuredModel.invoke([

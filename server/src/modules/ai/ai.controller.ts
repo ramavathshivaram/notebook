@@ -20,9 +20,9 @@ const ask = asyncHandler(async (req: Request, res: Response) => {
     resourceType,
   });
 
-  const assistantMessage = await messageCache.cacheMessage(resourceId, {
+  await messageCache.cacheMessage(resourceId, {
     role: "assistant",
-    content: response.aiContent,
+    content: response.aiResponse,
     resourceId,
   });
 

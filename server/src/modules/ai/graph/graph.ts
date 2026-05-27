@@ -18,8 +18,9 @@ export const State = Annotation.Root({
   intent: Annotation<string>(),
   confidence: Annotation<number>(),
   task: Annotation<string>(),
+  steps: Annotation<string[]>(),
   retrievedContext: Annotation<string>(),
-  aiContent: Annotation<string>(),
+  aiResponse: Annotation<string>(),
   pageResponse: Annotation<{
     operation: "update" | "replace" | "delete" | "insert" | "append";
     aiContent: string;

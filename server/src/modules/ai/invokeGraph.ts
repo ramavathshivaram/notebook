@@ -6,7 +6,7 @@ interface Resource {
 }
 
 interface Response {
-  aiContent: string;
+  aiResponse: string;
   resourceContent: string | undefined;
 }
 

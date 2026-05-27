@@ -1,19 +1,19 @@
 import type { Config, State } from "#types/graph.types.js";
 
 const responseNode = async (state: State, config: Config) => {
-  const { updatedResourceContent } = state;
+  const { updatedResourceContent, aiResponse } = state;
 
   const aiContent = state?.pageResponse?.aiContent;
 
   if (aiContent) {
     return {
       resourceContent: updatedResourceContent,
-      aiContent,
+      aiResponse: aiContent,
     };
   }
 
   return {
-    aiContent,
+    aiResponse,
     resourceContent: undefined,
   };
 };

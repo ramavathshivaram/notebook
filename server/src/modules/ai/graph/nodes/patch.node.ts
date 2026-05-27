@@ -147,7 +147,7 @@ const patchNode = async (state: State, _config: Config) => {
   }
 
   return {
-    resourceContent: updatedHtml,
+    updatedResourceContent: updatedHtml,
   };
 };
 
