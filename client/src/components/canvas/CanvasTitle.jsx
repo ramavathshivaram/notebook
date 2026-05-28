@@ -1,12 +1,14 @@
-import debounce from "lodash.debounce";
+import React, { memo, useEffect, useState } from "react";
 
-import React, { memo, useCallback, useEffect, useState } from "react";
-
-import { Check, Loader2, PenTool } from "lucide-react";
+import { Check, Loader2, PenTool, Save, Sparkles } from "lucide-react";
 
 import { motion } from "motion/react";
 
 import { Input } from "@/components/ui/input";
+
+import { Badge } from "@/components/ui/badge";
+
+import { Button } from "@/components/ui/button";
 
 import { useUpdateCanvas } from "@/hooks/canvas.query.js";
 
@@ -21,124 +23,63 @@ const CanvasTitle = ({ title, canvasId, sectionId }) => {
     setLocalTitle(title);
   }, [title]);
 
-  const debouncedUpdate = useCallback(
-    debounce((value) => {
-      updateCanvasMutate(
-        {
-          canvasId,
-
-          updatedData: {
-            title: value,
-          },
-
-          sectionId,
+  const handleSave = () => {
+    updateCanvasMutate(
+      {
+        canvasId,
+        updatedData: {
+          title: localTitle,
         },
+        sectionId,
+      },
+      {
+        onSuccess: () => {
+          setSaved(true);
 
-        {
-          onSuccess: () => {
-            setSaved(true);
-
-            setTimeout(() => {
-              setSaved(false);
-            }, 2000);
-          },
+          setTimeout(() => {
+            setSaved(false);
+          }, 2000);
         },
-      );
-    }, 800),
-
-    [canvasId, updateCanvasMutate, sectionId],
-  );
-
-  const handleChange = (value) => {
-    setLocalTitle(value);
-
-    setSaved(false);
-
-    debouncedUpdate(value);
+      },
+    );
   };
 
   return (
-    <div
-      className="
-        sticky top-0 z-20
-        border-b border-border
-        bg-background/80
-        backdrop-blur-xl
-      "
-    >
-      <div
-        className="
-          flex items-center
-          justify-between gap-4
-          px-6 py-4
-        "
-      >
-        {/* Left */}
-        <div
-          className="
-            flex min-w-0 flex-1
-            items-center gap-4
-          "
-        >
+    <div className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-xl">
+      <div className="flex items-center justify-between gap-4 px-6 py-4">
+        <div className="flex min-w-0 flex-1 items-center gap-4">
           <motion.div
             whileHover={{
               scale: 1.05,
+              rotate: 4,
             }}
-            className="
-              hidden h-11 w-11
-              items-center justify-center
-              rounded-2xl border
-              border-border bg-card
-              shadow-sm md:flex
-            "
+            className="hidden h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card shadow-sm md:flex"
           >
             <PenTool className="h-5 w-5" />
           </motion.div>
 
-          <Input
-            value={localTitle}
-            onChange={(e) => handleChange(e.target.value)}
-            placeholder="Untitled Canvas"
-            className="
-              h-auto border-0
-              bg-transparent px-0
-              text-3xl font-black
-              tracking-tight
-              shadow-none
-              focus-visible:ring-0
-              focus-visible:ring-offset-0
-            "
-          />
-        </div>
+          <div className="min-w-0 flex-1">
+            <Input
+              value={localTitle}
+              onChange={(e) => setLocalTitle(e.target.value)}
+              placeholder="Untitled Canvas"
+              className="h-auto border-0 bg-transparent px-0 text-3xl font-black tracking-tight shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            />
 
-        {/* Status */}
-        <div
-          className="
-            hidden w-[90px]
-            text-sm text-muted-foreground
-            md:block
-          "
-        >
-          {isPending ? (
-            <div
-              className="
-                flex items-center gap-1
-              "
-            >
-              <Loader2 size={14} className="animate-spin" />
-              Saving
+            <div className="mt-1 flex items-center gap-2">
+              <Badge
+                variant="secondary"
+                className="rounded-full px-2 py-0 text-[10px]"
+              >
+                Canvas
+              </Badge>
+
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Sparkles className="h-3 w-3" />
+                Draw ideas visually
+              </div>
             </div>
-          ) : saved ? (
-            <div
-              className="
-                flex items-center gap-1
-                text-green-500
-              "
-            >
-              <Check size={14} />
-              Saved
-            </div>
-          ) : null}
+          </div>
         </div>
       </div>
     </div>

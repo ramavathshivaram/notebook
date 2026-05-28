@@ -1,119 +1,38 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo } from "react";
+import { motion } from "motion/react";
+import { useParams } from "react-router-dom";
+import ErrorMessage from "../common/ErrorMessage";
+import CanvasTitle from "./CanvasTitle";
+import CanvasContent from "./CanvasContent";
+import CanvasEditorSkeleton from "@/skeletons/CanvasEditorSkeleton";
+import { useGetCanvas } from "@/hooks/canvas.query.js";
 
-import { Eraser, Pen, Redo, RotateCcw, Undo } from "lucide-react";
+const CanvasEditor = () => {
+  const { canvasId } = useParams();
 
-import { Button } from "@/components/ui/button";
+  const { data: canvasPage, isLoading, error } = useGetCanvas(canvasId);
 
-import { cn } from "@/lib/utils";
-
-const CanvasHeader = ({
-  colorInputRef,
-  handleStrokeColorChange,
-  strokeColor,
-  strokeWidth,
-  setStrokeWidth,
-  canvasRef,
-}) => {
-  const [isEraseMode, setIsEraseMode] = useState(false);
-
-  const handleModeChange = useCallback(
-    (erase) => {
-      setIsEraseMode(erase);
-
-      canvasRef.current?.eraseMode(erase);
-    },
-    [canvasRef],
-  );
-
-  const handleUndo = useCallback(() => {
-    canvasRef.current?.undo();
-  }, [canvasRef]);
-
-  const handleRedo = useCallback(() => {
-    canvasRef.current?.redo();
-  }, [canvasRef]);
-
-  const handleClear = useCallback(() => {
-    canvasRef.current?.clearCanvas();
-  }, [canvasRef]);
-
-  const handleStrokeWidth = useCallback(
-    (e) => {
-      setStrokeWidth(Number(e.target.value));
-    },
-    [setStrokeWidth],
-  );
+  if (isLoading) return <CanvasEditorSkeleton />;
+  if (error) return <ErrorMessage message="Failed to load canvas" />;
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-background p-3 shadow-xs">
-      <div className="flex items-center gap-2">
-        <Button
-          size="icon"
-          type="button"
-          variant={!isEraseMode ? "default" : "outline"}
-          onClick={() => handleModeChange(false)}
-        >
-          <Pen className="h-4 w-4" />
-        </Button>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+      className="flex h-full flex-1 flex-col overflow-hidden bg-background"
+    >
+      <CanvasTitle
+        title={canvasPage?.title}
+        canvasId={canvasId}
+        sectionId={canvasPage?.sectionId}
+      />
 
-        <Button
-          size="icon"
-          type="button"
-          variant={isEraseMode ? "default" : "outline"}
-          onClick={() => handleModeChange(true)}
-        >
-          <Eraser className="h-4 w-4" />
-        </Button>
+      <div className="flex-1 overflow-auto px-6 py-5">
+        <CanvasContent content={canvasPage?.content} canvasId={canvasId} />
       </div>
-
-      <div className="flex items-center gap-4">
-        <Button
-          size="icon"
-          type="button"
-          className="border"
-          style={{
-            backgroundColor: strokeColor,
-          }}
-          onClick={() => colorInputRef.current?.click()}
-        >
-          <input
-            type="color"
-            ref={colorInputRef}
-            value={strokeColor}
-            onChange={handleStrokeColorChange}
-            className="sr-only"
-          />
-        </Button>
-
-        <div className="flex flex-col gap-1">
-          <label className="text-xs text-muted-foreground">Stroke</label>
-
-          <input
-            type="range"
-            min="1"
-            max="20"
-            value={strokeWidth}
-            onChange={handleStrokeWidth}
-            className={cn("w-24 cursor-pointer")}
-          />
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <Button size="icon" variant="outline" onClick={handleUndo}>
-          <Undo className="h-4 w-4" />
-        </Button>
-
-        <Button size="icon" variant="outline" onClick={handleRedo}>
-          <Redo className="h-4 w-4" />
-        </Button>
-
-        <Button size="icon" variant="outline" onClick={handleClear}>
-          <RotateCcw className="h-4 w-4" />
-        </Button>
-      </div>
-    </div>
+    </motion.div>
   );
 };
 
-export default memo(CanvasHeader);
+export default memo(CanvasEditor);
