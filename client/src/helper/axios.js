@@ -8,7 +8,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL || "";
 const api = axios.create({
   baseURL: `${BASE_URL}/api`,
   withCredentials: true,
-  timeout: 20000,
+  timeout: 60000,
 });
 
 const refreshFunc = async (originalRequest) => {

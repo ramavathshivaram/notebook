@@ -33,8 +33,6 @@ const invokeGraph = async (
     config,
   );
 
-  console.log(response);
-
   return response;
 };
 

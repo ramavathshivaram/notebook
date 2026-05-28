@@ -6,7 +6,7 @@ import Message from "./Message";
 
 import TypingSkeleton from "@/skeletons/TypingSkeleton";
 
-import EmptyState from "@/components/common/EmptyState";
+import EmptyMessagesState from "@/components/common/EmptyMessagesState";
 
 import useMessageStore from "@/store/message.store.js";
 
@@ -54,7 +54,7 @@ const Messages = () => {
         "
       >
         {!messages.length && !isLoading ? (
-          <EmptyState />
+          <EmptyMessagesState />
         ) : (
           <AnimatePresence initial={false}>
             {messages.map((message, index) => (

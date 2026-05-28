@@ -1,6 +1,5 @@
 import createRateLimiter from "#middlewares/rateLimiter.js";
 
-
 const askAiLimiter = createRateLimiter({
   keyPrefix: "askAI",
   points: 20,
@@ -8,5 +7,4 @@ const askAiLimiter = createRateLimiter({
   blockDuration: 60,
 });
 
-
-export default {askAiLimiter};
+export default { askAiLimiter };
