@@ -1,24 +1,24 @@
 import express from "express";
 
 import localController from "./local.controller.js";
-import rateLimiterMiddleware, {
-  authLimiter,
-} from "#middlewares/rateLimiter.js";
+
 import validateRequest from "#middlewares/validateRequest.js";
+import authLimitter from "#utils/limitters/auth.limitter.js";
+
 import zodSchema from "#utils/zodSchema.js";
 
 const localRouter: express.Router = express.Router();
 
 localRouter.post(
   "/register",
-  rateLimiterMiddleware(authLimiter),
+  authLimitter.registerLimiter,
   validateRequest(zodSchema.registerSchema),
   localController.register,
 );
 
 localRouter.post(
   "/login",
-  rateLimiterMiddleware(authLimiter),
+  authLimitter.loginLimiter,
   validateRequest(zodSchema.loginSchema),
   localController.login,
 );

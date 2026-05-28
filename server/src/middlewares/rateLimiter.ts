@@ -5,6 +5,7 @@ import asyncHandler from "express-async-handler";
 import type { NextFunction, Request, Response } from "express";
 
 import redis from "#configs/redis.js";
+
 import ApiError from "#utils/ApiError.js";
 
 interface LimitOptions {
@@ -15,11 +16,11 @@ interface LimitOptions {
 }
 
 const insuranceLimiter = new RateLimiterMemory({
-  points: 100,
-  duration: 60,
+  points: 50,
+  duration: 1,
 });
 
-const createLimiter = (options: LimitOptions) =>
+export const createLimiter = (options: LimitOptions) =>
   new RateLimiterRedis({
     storeClient: redis,
     insuranceLimiter,
@@ -27,41 +28,26 @@ const createLimiter = (options: LimitOptions) =>
     ...options,
   });
 
-export const authLimiter = createLimiter({
-  keyPrefix: "auth",
-  points: 100,
-  duration: 60,
-  blockDuration: 30,
-});
+const getClientKey = (req: Request) => {
+  if (req.authId) {
+    return `user:${req.authId}`;
+  }
 
-export const otpLimiter = createLimiter({
-  keyPrefix: "otp",
-  points: 5,
-  duration: 300,
-  blockDuration: 300,
-});
+  const forwardedFor = req.headers["x-forwarded-for"];
 
-export const refreshLimiter = createLimiter({
-  keyPrefix: "refresh",
-  points: 20,
-  duration: 60,
-  blockDuration: 60,
-});
+  if (typeof forwardedFor === "string") {
+    return `ip:${forwardedFor.split(",")[0].trim()}`;
+  }
 
-export const authCheckLimiter = createLimiter({
-  keyPrefix: "auth-check",
-  points: 60,
-  duration: 60,
-  blockDuration: 30,
-});
+  return `ip:${req.ip}`;
+};
 
 export const rateLimiterMiddleware = (limiter: RateLimiterRedis) =>
   asyncHandler(async (req: Request, _res: Response, next: NextFunction) => {
     try {
-      const key =
-        req.authId || req.ip || req.headers["x-forwarded-for"] || "anonymous";
+      const key = getClientKey(req);
 
-      await limiter.consume(String(key));
+      await limiter.consume(key);
 
       next();
     } catch {
@@ -69,4 +55,7 @@ export const rateLimiterMiddleware = (limiter: RateLimiterRedis) =>
     }
   });
 
-export default rateLimiterMiddleware;
+const createRateLimiter = (options: LimitOptions) =>
+  rateLimiterMiddleware(createLimiter(options));
+
+export default createRateLimiter;

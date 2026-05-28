@@ -1,11 +1,7 @@
 import express from "express";
 
 import authenticate from "#middlewares/authenticate.js";
-import {
-  rateLimiterMiddleware,
-  refreshLimiter,
-  authCheckLimiter,
-} from "#middlewares/rateLimiter.js";
+import authLimitter from "#utils/limitters/auth.limitter.js";
 
 import authController from "./auth.controller.js";
 
@@ -14,16 +10,21 @@ const authRouter = express.Router();
 authRouter.get(
   "/check",
   authenticate,
-  rateLimiterMiddleware(authCheckLimiter),
+  authLimitter.authCheckLimiter,
   authController.authCheck,
 );
 
 authRouter.get(
   "/refresh",
-  rateLimiterMiddleware(refreshLimiter),
+  authLimitter.refreshLimiter,
   authController.refreshTokenController,
 );
 
-authRouter.post("/logout", authenticate, authController.logout);
+authRouter.post(
+  "/logout",
+  authenticate,
+  authLimitter.logoutLimiter,
+  authController.logout,
+);
 
 export default authRouter;
