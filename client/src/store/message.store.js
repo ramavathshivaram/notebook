@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 const useMessageStore = create((set) => ({
   messages: [],
+
   loading: false,
 
   setLoading: (loading) => set({ loading }),
@@ -15,7 +16,7 @@ const useMessageStore = create((set) => ({
 
   addMessages: (messages) =>
     set((state) => ({
-      messages: [...state.messages, ...messages],
+      messages: [...messages, ...state.messages],
     })),
 
   clearMessages: () => set({ messages: [] }),

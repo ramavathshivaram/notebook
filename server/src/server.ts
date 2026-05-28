@@ -18,9 +18,7 @@ const serverInit = async () => {
     logger.info("Starting server...");
 
     await checkRedis();
-
     await connectDB();
-
     await worker.start();
 
     server.listen(env.PORT, () => {
@@ -37,24 +35,19 @@ serverInit();
 
 const gracefulShutdown = async (signal: string) => {
   if (isShuttingDown) return;
-
   isShuttingDown = true;
-
   logger.info(`${signal} received. Shutting down...`);
 
   try {
     server.close(async (err) => {
       if (err) {
         logger.error("Error while closing server", err);
-
         process.exit(1);
       }
 
       try {
         await worker.close();
-
         await disconnectRedis();
-
         await disconnectDB();
 
         logger.info("Graceful shutdown completed");

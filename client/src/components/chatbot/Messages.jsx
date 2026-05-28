@@ -13,8 +13,6 @@ import useMessageStore from "@/store/message.store.js";
 const Messages = () => {
   const bottomRef = useRef(null);
 
-  const containerRef = useRef(null);
-
   const messages = useMessageStore((state) => state.messages);
 
   const isLoading = useMessageStore((state) => state.loading);
@@ -24,96 +22,46 @@ const Messages = () => {
       behavior: "smooth",
       block: "end",
     });
-  }, [messages, isLoading]);
+  }, [isLoading]);
+
+  if (!messages.length && !isLoading) {
+    return <EmptyMessagesState />;
+  }
+
+  console.log(messages);
 
   return (
-    <div
-      ref={containerRef}
-      className="
-        relative flex h-full flex-1
-        flex-col overflow-hidden
-      "
-    >
-      {/* Top Fade */}
-      <div
-        className="
-          pointer-events-none absolute
-          inset-x-0 top-0 z-10 h-10
-          bg-gradient-to-b
-          from-background to-transparent
-        "
-      />
+    <>
+      <AnimatePresence initial={false}>
+        {messages.map((message, idx) => (
+          <motion.div
+            key={idx}
+            layout
+            initial={{
+              opacity: 0,
+              y: 10,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -10,
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+          >
+            <Message role={message.role} content={message.content} />
+          </motion.div>
+        ))}
 
-      {/* Messages */}
-      <div
-        className="
-          scrollbar-thin scrollbar-thumb-border
-          scrollbar-track-transparent
-          flex-1 space-y-4 overflow-y-auto
-          px-4 py-6
-        "
-      >
-        {!messages.length && !isLoading ? (
-          <EmptyMessagesState />
-        ) : (
-          <AnimatePresence initial={false}>
-            {messages.map((message, index) => (
-              <motion.div
-                key={`${message.role}-${index}`}
-                initial={{
-                  opacity: 0,
-                  y: 10,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  y: -10,
-                }}
-                transition={{
-                  duration: 0.2,
-                }}
-              >
-                <Message role={message.role} content={message.content} />
-              </motion.div>
-            ))}
+        {isLoading && <TypingSkeleton />}
+      </AnimatePresence>
 
-            {/* Typing */}
-            {isLoading && (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 10,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                }}
-              >
-                <TypingSkeleton />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        )}
-
-        <div ref={bottomRef} />
-      </div>
-
-      {/* Bottom Fade */}
-      <div
-        className="
-          pointer-events-none absolute
-          inset-x-0 bottom-0 z-10 h-10
-          bg-gradient-to-t
-          from-background to-transparent
-        "
-      />
-    </div>
+      <div ref={bottomRef} />
+    </>
   );
 };
 

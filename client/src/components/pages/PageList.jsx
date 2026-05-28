@@ -10,7 +10,7 @@ const PageList = ({ sectionId }) => {
   const { data: pages = [], isLoading } = useGetPages(sectionId);
 
   if (isLoading) {
-    return <ListSkeleton count={10} />;
+    return <ListSkeleton count={3} />;
   }
 
   if (!pages.length) {

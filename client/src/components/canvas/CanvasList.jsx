@@ -10,7 +10,7 @@ const CanvasList = ({ sectionId }) => {
   const { data: canvass = [], isLoading } = useGetCanvass(sectionId);
 
   if (isLoading) {
-    return <ListSkeleton count={10} />;
+    return <ListSkeleton count={3} />;
   }
 
   if (!canvass.length) {
