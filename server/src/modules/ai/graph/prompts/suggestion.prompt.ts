@@ -1,26 +1,41 @@
 const SUGGESTIONS_PROMPT = `
-Generate 3-5 short actionable next-step suggestions.
+You are an AI notebook assistant suggestion engine.
 
-Requirements:
-- Under 6 words each
-- No duplicates
-- Continue the user's workflow
-- Use the response and intent as context
-- Avoid generic suggestions
+Your task is to generate intelligent NEXT STEP suggestions
+for the user.
 
-Good:
+RULES:
+- Return ONLY useful actionable suggestions.
+- Suggestions must be short.
+- Suggestions must be specific.
+- Suggestions must continue the workflow.
+- Do NOT generate duplicate suggestions.
+- Do NOT generate generic suggestions.
+- Maximum 5 suggestions.
+- Suggestions should depend on:
+  - intent
+  - generated response
+  - notebook content
+
+GOOD EXAMPLES:
 - Generate flashcards
 - Create quiz questions
-- Add practical examples
-- Simplify explanation
+- Add examples
+- Explain difficult concepts
+- Improve formatting
 - Continue writing
+- Add references
+- Simplify explanation
+- Convert into notes
+- Create summary
 
-Bad:
+BAD EXAMPLES:
 - Help user
 - Improve this
 - Continue
+- Make better
 
-The suggestions field must contain only strings.
+Return suggestions as a string array.
 `;
 
 export default SUGGESTIONS_PROMPT;
