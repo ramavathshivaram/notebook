@@ -7,11 +7,16 @@ import usePageStore from "@/store/page.store.js";
 import { useUpdatePage } from "@/hooks/page.query.js";
 
 const toolbarOptions = [
-  [{ header: [1, 2, 3, false] }],
-  ["bold", "italic", "underline"],
+  [{ font: [] }],
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  ["bold", "italic", "underline", "strike"],
+  [{ color: [] }, { background: [] }],
+  [{ script: "sub" }, { script: "super" }],
+  [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+  [{ indent: "-1" }, { indent: "+1" }],
+  [{ align: [] }],
   ["blockquote", "code-block"],
   ["link"],
-  [{ list: "ordered" }, { list: "bullet" }],
   ["clean"],
 ];
 
@@ -20,20 +25,27 @@ const modules = {
 };
 
 const formats = [
+  "font",
   "header",
   "bold",
   "italic",
   "underline",
+  "strike",
+  "color",
+  "background",
+  "script",
+  "list",
+  "bullet",
+  "check",
+  "indent",
+  "align",
   "blockquote",
   "code-block",
   "link",
-  "list",
-  "bullet",
 ];
 
 const ContentEditor = ({ content, pageId, sectionId }) => {
   const editorContent = usePageStore((s) => s.content);
-
   const setContent = usePageStore((s) => s.setContent);
 
   const { mutate } = useUpdatePage();

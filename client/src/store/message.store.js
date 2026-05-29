@@ -19,7 +19,7 @@ const useMessageStore = create((set) => ({
       messages: [...messages, ...state.messages],
     })),
 
-  clearMessages: () => set({ messages: [] }),
+  clearMessages: () => set({ messages: [], loading: false }),
 }));
 
 export default useMessageStore;

@@ -23,8 +23,6 @@ const TopRef = ({ resourceId }) => {
       try {
         setIsLoading(true);
 
-        console.log(resourceId);
-
         const data = await getMessagesApi(resourceId, page, LIMIT);
 
         if (!data?.length) {

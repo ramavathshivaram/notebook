@@ -14,8 +14,11 @@ export interface IPage {
 interface CreatePageJob extends Partial<IPage> {}
 
 interface UpdatePageJob {
-  pageId: IPage["_id"];
-  updatedPage: Partial<IPage>;
+  _id: string;
+  title?: string;
+  content?: string;
+  updatedAt: string;
+  pageId: string;
 }
 
 interface DeletePageJob {
@@ -30,9 +33,8 @@ const pageJob = async (job: Job<PageJobData>) => {
       return await pageRepository.create(job.data as CreatePageJob);
 
     case "updatePage": {
-      const { pageId, updatedPage } = job.data as UpdatePageJob;
-
-      return await pageRepository.update(pageId, updatedPage);
+      const data = job.data as UpdatePageJob;
+      return await pageRepository.update(data.pageId, data);
     }
 
     case "deletePage":

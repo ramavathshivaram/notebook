@@ -14,7 +14,6 @@ const Messages = () => {
   const bottomRef = useRef(null);
 
   const messages = useMessageStore((state) => state.messages);
-
   const isLoading = useMessageStore((state) => state.loading);
 
   useEffect(() => {
@@ -22,13 +21,9 @@ const Messages = () => {
       behavior: "smooth",
       block: "end",
     });
-  }, [isLoading]);
+  }, [isLoading, messages]);
 
-  if (!messages.length && !isLoading) {
-    return <EmptyMessagesState />;
-  }
-
-  console.log(messages);
+  if (!messages.length && !isLoading) return <EmptyMessagesState />;
 
   return (
     <>

@@ -22,16 +22,13 @@ const getAllSectionPages = async (sectionId: IPage["sectionId"]) => {
 };
 
 const deletePage = async (pageId: IPage["_id"]) => {
-  const page = await Page.findByIdAndDelete(pageId);
-  return page;
+  return await Page.findByIdAndDelete(pageId);
 };
 
 const deleteAll = async (sectionId: string) => {
-  const pages = await Page.deleteMany({
+  return await Page.deleteMany({
     sectionId,
   });
-
-  return pages;
 };
 
 const update = async (pageId: IPage["_id"], updatedPage: Partial<IPage>) => {
@@ -39,7 +36,6 @@ const update = async (pageId: IPage["_id"], updatedPage: Partial<IPage>) => {
     new: true,
   });
 
-  console.log(page)
   if (!page) throw new ApiError(404, "page not found");
   return page;
 };

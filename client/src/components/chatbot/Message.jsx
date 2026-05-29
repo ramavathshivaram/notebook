@@ -1,38 +1,8 @@
 import React, { memo } from "react";
-
 import ReactMarkdown from "react-markdown";
-
 import remarkGfm from "remark-gfm";
-
 import { motion } from "motion/react";
-
-import { cn } from "@/lib/utils";
-
-const CodeBlock = ({ children, className, isUser, ...rest }) => {
-  const isInline = !className;
-
-  if (isInline) {
-    return (
-      <code
-        className={cn(
-          "rounded-md px-1.5 py-0.5 text-[13px]",
-          isUser ? "bg-white/10" : "bg-muted",
-        )}
-        {...rest}
-      >
-        {children}
-      </code>
-    );
-  }
-
-  return (
-    <pre className="overflow-x-auto rounded-2xl border border-border bg-background/60 p-4 text-sm">
-      <code className={className} {...rest}>
-        {children}
-      </code>
-    </pre>
-  );
-};
+import { cn } from "@/lib/utils.js";
 
 const Message = ({ role = "assistant", content }) => {
   const isUser = role === "user";
@@ -43,7 +13,7 @@ const Message = ({ role = "assistant", content }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
       className={cn(
-        "group flex w-full",
+        "group flex w-full my-1",
         isUser ? "justify-end" : "justify-start",
       )}
     >
@@ -75,7 +45,11 @@ const Message = ({ role = "assistant", content }) => {
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
-              code: (props) => <CodeBlock {...props} isUser={isUser} />,
+              code: ({ children }) => (
+                <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
+                  {children}
+                </code>
+              ),
 
               a: (props) => (
                 <a

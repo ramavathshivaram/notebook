@@ -1,12 +1,21 @@
-import React from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import ChatBot from "./ChatBot";
+import useMessageStore from "@/store/message.store.js";
 
 const ChatBotWrapper = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const [, , resourceType, resourceId] = location.pathname.split("/");
+  const clearMessages = useMessageStore((state) => state.clearMessages);
+
+  const [, , resourceType, resourceId] = pathname.split("/");
+
+  useEffect(() => {
+    if (resourceType && resourceId) {
+      clearMessages();
+    }
+  }, [resourceType, resourceId, clearMessages]);
 
   if (!resourceType || !resourceId) {
     return null;
@@ -14,7 +23,11 @@ const ChatBotWrapper = () => {
 
   return (
     <div className="h-full w-full overflow-hidden">
-      <ChatBot resourceType={resourceType} resourceId={resourceId} />
+      <ChatBot
+        key={`${resourceType}-${resourceId}`}
+        resourceType={resourceType}
+        resourceId={resourceId}
+      />
     </div>
   );
 };

@@ -20,7 +20,6 @@ const getPage = asyncHandler(
     const pageId = req.params.pageId;
 
     const page = await pageCache.getPage(pageId);
-
     res.status(200).json({ data: page, status: true });
   },
 );
