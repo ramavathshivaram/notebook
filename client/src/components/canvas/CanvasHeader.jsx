@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
+import { cn } from "@/lib/utils.js";
 
 import {
   Eraser,
@@ -15,6 +16,7 @@ import {
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 
 import { useUpdateCanvas } from "@/hooks/canvas.query.js";
@@ -196,7 +198,7 @@ const CanvasHeader = ({
           <Pipette className="h-4 w-4" />
         </Button>
 
-        <input
+        <Input
           type="color"
           ref={colorInputRef}
           value={strokeColor}
@@ -214,16 +216,17 @@ const CanvasHeader = ({
           style={{
             width: `${Math.max(strokeWidth, 4)}px`,
             height: `${Math.max(strokeWidth, 4)}px`,
+            background: strokeColor,
           }}
         />
-
         <Slider
           min={1}
           max={20}
           step={1}
           value={[strokeWidth]}
           onValueChange={([value]) => setStrokeWidth(value)}
-          className="flex-1"
+          className="flex-1 max-w-[100px]"
+          color={strokeColor}
         />
 
         <span className="w-12 text-right text-sm font-medium text-muted-foreground">
