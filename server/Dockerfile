@@ -22,6 +22,9 @@ RUN npm ci --omit=dev
 
 COPY --from=builder /server/dist ./dist
 
+COPY --from=builder /server/templates ./templates
+
+
 EXPOSE 8080
 
 CMD ["npm", "run", "start"]

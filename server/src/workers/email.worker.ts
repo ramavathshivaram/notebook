@@ -31,13 +31,13 @@ const emailJob = async (job: Job<EmailJobData>) => {
       case "send-otp-email": {
         const { otp } = job.data.data as OtpEmailData;
 
-        const html = await loadHtml("../templates/email.otp.ejs", { otp });
+        const html = await loadHtml("email.otp.ejs", { otp });
 
         return await sendEmail(email, subject, html);
       }
       case "send-register-email": {
         const { userName, email } = job.data.data as RegisterEmailData;
-        const html = await loadHtml("../templates/email.register.ejs", {
+        const html = await loadHtml("email.register.ejs", {
           userName,
           email,
         });
