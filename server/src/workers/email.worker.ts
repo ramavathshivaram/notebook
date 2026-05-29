@@ -1,37 +1,67 @@
 import { Worker, Job, UnrecoverableError } from "bullmq";
 
 import redis from "#configs/redis.js";
-
 import logger from "#configs/logger.js";
 
 import sendEmail from "#services/send-email.js";
 
 import { queueConst } from "#utils/const.js";
+import loadHtml from "#utils/loadHtml.js";
+
+interface OtpEmailData {
+  otp: string;
+}
+
+interface RegisterEmailData {
+  userName: string;
+  email: string;
+}
 
 interface EmailJobData {
   email: string;
   subject: string;
-  html: string;
+  data: OtpEmailData | RegisterEmailData;
 }
 
 const emailJob = async (job: Job<EmailJobData>) => {
-  const { email, subject, html } = job.data;
+  const { email, subject } = job.data;
 
   try {
-    return await sendEmail(email, subject, html);
+    switch (job.name) {
+      case "send-otp-email": {
+        const { otp } = job.data.data as OtpEmailData;
+
+        const html = await loadHtml("../templates/email.otp.ejs", { otp });
+
+        return await sendEmail(email, subject, html);
+      }
+      case "send-register-email": {
+        const { userName, email } = job.data.data as RegisterEmailData;
+        const html = await loadHtml("../templates/email.register.ejs", {
+          userName,
+          email,
+        });
+        return await sendEmail(email, subject, html);
+      }
+
+      default:
+        throw new UnrecoverableError(`Unknown email job type: ${job.name}`);
+    }
   } catch (error: any) {
     const status = error?.response?.status;
 
-    logger.error("Email failed", {
+    logger.error("Email job failed", {
       jobId: job.id,
+      jobName: job.name,
       email,
       status,
       attemptsMade: job.attemptsMade,
-      message: error.message,
+      message: error?.message,
+      stack: error?.stack,
     });
 
-    if (status === 400 || status === 401 || status === 403) {
-      throw new UnrecoverableError(`Permanent email failure: ${status}`);
+    if ([400, 401, 403, 404].includes(status)) {
+      throw new UnrecoverableError(`Permanent email failure (${status})`);
     }
 
     throw error;
@@ -41,13 +71,10 @@ const emailJob = async (job: Job<EmailJobData>) => {
 const createEmailWorker = () =>
   new Worker<EmailJobData>(queueConst.SEND_EMAIL, emailJob, {
     connection: redis,
-
     concurrency: 5,
-
     removeOnComplete: {
       count: 100,
     },
-
     removeOnFail: {
       count: 500,
     },

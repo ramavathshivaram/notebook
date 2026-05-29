@@ -6,6 +6,7 @@ import { hashPassword, isPasswordMatched } from "#services/password.service.js";
 
 import authRepository from "../auth.repository.js";
 import setAuthCookiesAndRespond from "#services/setAuthCookiesAndRespond.service.js";
+import { emailQueue } from "#services/queues.js";
 
 interface LoginBody {
   email: string;
@@ -50,6 +51,19 @@ const register = asyncHandler(
       password: hashedPassword,
       userName,
     });
+
+    await emailQueue.add(
+      "send-register-email",
+      {
+        email,
+        subject: "Registration successful",
+        data: {
+          userName,
+          email,
+        },
+      },
+      { priority: 3 },
+    );
 
     return await setAuthCookiesAndRespond(
       res,

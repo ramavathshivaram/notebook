@@ -1,37 +1,37 @@
 services:
   client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
+    build: ./client
     ports:
       - "80:80"
     depends_on:
       - server
+    restart: unless-stopped
+    mem_limit: 64m
     networks:
       - public
 
   server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    build: ./server
     ports:
       - "8080:8080"
     env_file:
       - ./server/.env
-    restart: always
     depends_on:
       - redis
+    restart: unless-stopped
+    mem_limit: 256m
     networks:
       - public
       - private
 
   redis:
     image: redis:alpine
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
+    restart: unless-stopped
+    mem_limit: 128m
     volumes:
       - redis_data:/data
-    restart: always
     networks:
       - private
 
@@ -41,7 +41,6 @@ volumes:
 networks:
   public:
     driver: bridge
-
   private:
     driver: bridge
     internal: true

@@ -5,8 +5,6 @@ import {
   Pen,
   Redo,
   Undo,
-  Minus,
-  Plus,
   Pipette,
   Download,
   Save,
@@ -17,7 +15,7 @@ import {
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 
 import { useUpdateCanvas } from "@/hooks/canvas.query.js";
 
@@ -43,15 +41,12 @@ const CanvasHeader = ({
   const { mutateAsync: updateCanvasContent } = useUpdateCanvas();
 
   const [isEraseMode, setIsEraseMode] = useState(false);
-
   const [downloading, setDownloading] = useState(false);
-
   const [saving, setSaving] = useState(false);
 
   const handleModeChange = useCallback(
     (erase) => {
       setIsEraseMode(erase);
-
       canvasRef.current?.eraseMode(erase);
     },
     [canvasRef],
@@ -69,14 +64,6 @@ const CanvasHeader = ({
     canvasRef.current?.clearCanvas();
   }, [canvasRef]);
 
-  const increaseStroke = useCallback(() => {
-    setStrokeWidth((prev) => Math.min(prev + 1, 20));
-  }, [setStrokeWidth]);
-
-  const decreaseStroke = useCallback(() => {
-    setStrokeWidth((prev) => Math.max(prev - 1, 1));
-  }, [setStrokeWidth]);
-
   const handleDownload = async () => {
     if (downloading) return;
 
@@ -90,10 +77,11 @@ const CanvasHeader = ({
       const link = document.createElement("a");
 
       link.href = image;
-
       link.download = `${title || "canvas"}.png`;
 
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     } catch {
       toast.error("Download failed");
     } finally {
@@ -122,7 +110,7 @@ const CanvasHeader = ({
       });
 
       toast.success("Canvas saved");
-    } catch (err) {
+    } catch {
       toast.error("Failed to save");
     } finally {
       setSaving(false);
@@ -130,7 +118,7 @@ const CanvasHeader = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-background p-3 shadow-sm">
+    <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-border bg-background p-3 shadow-sm">
       {/* Tools */}
       <div className="flex items-center gap-2">
         <Button
@@ -179,6 +167,8 @@ const CanvasHeader = ({
         </Button>
       </div>
 
+      <div className="hidden h-6 w-px bg-border lg:block" />
+
       {/* Colors */}
       <div className="flex items-center gap-2">
         {colors.map((color) => (
@@ -186,16 +176,14 @@ const CanvasHeader = ({
             key={color}
             type="button"
             onClick={() =>
-              handleStrokeColorChange({
-                target: {
-                  value: color,
-                },
-              })
+              handleStrokeColorChange({ target: { value: color } })
             }
-            className="h-7 w-7 rounded-full border border-border transition hover:scale-110"
-            style={{
-              backgroundColor: color,
-            }}
+            className={`h-7 w-7 rounded-full border transition-all hover:scale-110 ${
+              strokeColor === color
+                ? "ring-2 ring-primary ring-offset-2"
+                : "border-border"
+            }`}
+            style={{ backgroundColor: color }}
           />
         ))}
 
@@ -206,44 +194,47 @@ const CanvasHeader = ({
           onClick={() => colorInputRef.current?.click()}
         >
           <Pipette className="h-4 w-4" />
-
-          <Input
-            type="color"
-            ref={colorInputRef}
-            value={strokeColor}
-            onChange={handleStrokeColorChange}
-            className="sr-only"
-          />
         </Button>
+
+        <input
+          type="color"
+          ref={colorInputRef}
+          value={strokeColor}
+          onChange={handleStrokeColorChange}
+          className="hidden"
+        />
       </div>
 
-      {/* Stroke */}
-      <div className="flex items-center gap-2">
-        <Button
-          size="icon"
-          type="button"
-          variant="outline"
-          onClick={decreaseStroke}
-        >
-          <Minus className="h-4 w-4" />
-        </Button>
+      <div className="hidden h-6 w-px bg-border lg:block" />
 
-        <div className="flex min-w-14 items-center justify-center rounded-lg border border-border px-3 py-1 text-sm font-medium">
+      {/* Stroke Width */}
+      <div className="flex min-w-[240px] flex-1 items-center gap-3">
+        <div
+          className="shrink-0 rounded-full bg-foreground transition-all"
+          style={{
+            width: `${Math.max(strokeWidth, 4)}px`,
+            height: `${Math.max(strokeWidth, 4)}px`,
+          }}
+        />
+
+        <Slider
+          min={1}
+          max={20}
+          step={1}
+          value={[strokeWidth]}
+          onValueChange={([value]) => setStrokeWidth(value)}
+          className="flex-1"
+        />
+
+        <span className="w-12 text-right text-sm font-medium text-muted-foreground">
           {strokeWidth}px
-        </div>
-
-        <Button
-          size="icon"
-          type="button"
-          variant="outline"
-          onClick={increaseStroke}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
+        </span>
       </div>
+
+      <div className="hidden h-6 w-px bg-border lg:block" />
 
       {/* Actions */}
-      <div className="flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-2">
         <Button
           type="button"
           variant="outline"

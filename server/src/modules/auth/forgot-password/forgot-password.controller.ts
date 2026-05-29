@@ -4,7 +4,6 @@ import ApiError from "#utils/ApiError.js";
 import { hashPassword, generateOTP } from "#services/password.service.js";
 import authRepository from "../auth.repository.js";
 import redis from "#configs/redis.js";
-import loadHtml from "#utils/loadHtml.js";
 import { deleteSession, setSession } from "#services/session.service.js";
 import { emailQueue } from "#services/queues.js";
 
@@ -40,8 +39,7 @@ const forgotPassword = asyncHandler(
       {
         email,
         subject: "OTP Verification",
-        html: await loadHtml("../templetes/email.otp.ejs", { otp }),
-        text: `Your OTP is ${otp}`,
+        data: { otp },
       },
       { priority: 1 },
     );

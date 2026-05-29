@@ -8,6 +8,7 @@ import helmet from "helmet";
 import compression from "compression";
 
 import health from "#utils/health.js";
+import bullBoard from "#configs/bullBoard.js";
 
 import morganMiddleware from "#middlewares/morganMiddleware.js";
 import notFoundRoute from "#middlewares/notFoundRoute.js";
@@ -48,6 +49,8 @@ app.use(
 app.get("/", async (_: Request, res: Response) => res.send("API running"));
 
 app.get("/health", health);
+
+app.use("/admin/queues", bullBoard.getRouter());
 
 app.use("/api/auth", authRouter);
 
