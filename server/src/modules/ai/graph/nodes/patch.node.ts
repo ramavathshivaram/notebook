@@ -1,148 +1,105 @@
 import type { Config, State } from "#types/graph.types.js";
 
-const applyReplace = ({
-  originalHtml,
-  html,
-}: {
-  originalHtml: string;
-  html: string;
-}) => {
-  return html;
-};
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max);
 
-const applyUpdate = ({
-  originalHtml,
-  startIndex,
-  endIndex,
-  html,
-}: {
-  originalHtml: string;
-  startIndex: number;
-  endIndex: number;
-  html: string;
-}) => {
-  return (
-    originalHtml.slice(0, startIndex) + html + originalHtml.slice(endIndex)
-  );
-};
+const validateRange = (
+  startIndex: number,
+  endIndex: number,
+  htmlLength: number,
+) => {
+  if (startIndex < 0 || endIndex < 0) {
+    return "Indexes cannot be negative.";
+  }
 
-const applyInsert = ({
-  originalHtml,
-  startIndex,
-  html,
-}: {
-  originalHtml: string;
-  startIndex: number;
-  html: string;
-}) => {
-  return (
-    originalHtml.slice(0, startIndex) + html + originalHtml.slice(startIndex)
-  );
-};
+  if (startIndex > endIndex) {
+    return "startIndex must be <= endIndex.";
+  }
 
-const applyDelete = ({
-  originalHtml,
-  startIndex,
-  endIndex,
-}: {
-  originalHtml: string;
-  startIndex: number;
-  endIndex: number;
-}) => {
-  return originalHtml.slice(0, startIndex) + originalHtml.slice(endIndex);
-};
+  if (endIndex > htmlLength) {
+    return "Index exceeds document length.";
+  }
 
-const applyAppend = ({
-  originalHtml,
-  html,
-}: {
-  originalHtml: string;
-  html: string;
-}) => {
-  return originalHtml + html;
+  return null;
 };
 
 const patchNode = async (state: State, _config: Config) => {
   const pageResponse = state.pageResponse;
 
   if (!pageResponse) {
-    return {
-      error: "Missing page response.",
-    };
+    return { error: "Missing page response." };
   }
 
-  const { operation, startIndex, endIndex, html } = pageResponse;
-
   const originalHtml = state.resourceContent || "<p><br></p>";
+
+  const { operation, startIndex, endIndex, html = "" } = pageResponse;
 
   let updatedHtml = originalHtml;
 
   switch (operation) {
     case "replace":
-      updatedHtml = applyReplace({
-        originalHtml,
-        html,
-      });
+      updatedHtml = html;
+      break;
+
+    case "append":
+      updatedHtml = originalHtml + html;
+      break;
+
+    case "insert":
+      if (startIndex == null) {
+        return { error: "Insert requires startIndex." };
+      }
+
+      if (startIndex < 0 || startIndex > originalHtml.length) {
+        return { error: "Invalid insert index." };
+      }
+
+      updatedHtml =
+        originalHtml.slice(0, startIndex) +
+        html +
+        originalHtml.slice(startIndex);
 
       break;
 
     case "update":
-      if (startIndex === undefined || endIndex === undefined) {
-        return {
-          error: "Update operation requires indexes.",
-        };
+      if (startIndex == null || endIndex == null) {
+        return { error: "Update requires indexes." };
       }
 
-      updatedHtml = applyUpdate({
-        originalHtml,
-        startIndex,
-        endIndex,
-        html,
-      });
+      {
+        const error = validateRange(startIndex, endIndex, originalHtml.length);
 
-      break;
-
-    case "insert":
-      if (startIndex === undefined) {
-        return {
-          error: "Insert operation requires startIndex.",
-        };
+        if (error) {
+          return { error };
+        }
       }
 
-      updatedHtml = applyInsert({
-        originalHtml,
-        startIndex,
-        html,
-      });
+      updatedHtml =
+        originalHtml.slice(0, startIndex) + html + originalHtml.slice(endIndex);
 
       break;
 
     case "delete":
-      if (startIndex === undefined || endIndex === undefined) {
-        return {
-          error: "Delete operation requires indexes.",
-        };
+      if (startIndex == null || endIndex == null) {
+        return { error: "Delete requires indexes." };
       }
 
-      updatedHtml = applyDelete({
-        originalHtml,
-        startIndex,
-        endIndex,
-      });
+      {
+        const error = validateRange(startIndex, endIndex, originalHtml.length);
 
-      break;
+        if (error) {
+          return { error };
+        }
+      }
 
-    case "append":
-      updatedHtml = applyAppend({
-        originalHtml,
-        html,
-      });
+      updatedHtml =
+        originalHtml.slice(0, startIndex) + originalHtml.slice(endIndex);
 
       break;
 
     default:
       return {
-        error: "Unsupported operation.",
+        error: `Unsupported operation: ${operation}`,
       };
   }
 
