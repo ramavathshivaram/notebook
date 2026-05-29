@@ -29,10 +29,10 @@ const intentNode = async (state: State, _config: Config) => {
 
   const input = `
 [RECENT_MESSAGES]
-${recentMessages}
+${recentMessages || "None"}
 
 [RESOURCE_CONTENT]
-${resourceContent}
+${resourceContent || "None"}
 
 [USER_INPUT]
 ${userInput}
