@@ -71,12 +71,12 @@ const emailJob = async (job: Job<EmailJobData>) => {
 const createEmailWorker = () =>
   new Worker<EmailJobData>(queueConst.SEND_EMAIL, emailJob, {
     connection: redis,
-    concurrency: 5,
+    concurrency: 10,
     removeOnComplete: {
-      count: 100,
+      age: 0,
     },
     removeOnFail: {
-      count: 500,
+      count: 100,
     },
   });
 

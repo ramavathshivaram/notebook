@@ -78,6 +78,7 @@ VITE_BACKEND_URL=http://server:8080
 ## 🐳 Run with Docker
 
 ```bash
+cd docker
 docker compose up --build -d
 ```
 

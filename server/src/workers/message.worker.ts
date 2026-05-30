@@ -29,14 +29,13 @@ const createMessageWorker = () =>
   new Worker<CreateMessageJob>(queueConst.MESSAGE, messageJob, {
     connection: redis,
 
-    concurrency: 5,
+    concurrency: 50,
 
     removeOnComplete: {
-      count: 100,
+      age: 0,
     },
-
     removeOnFail: {
-      count: 500,
+      count: 100,
     },
   });
 

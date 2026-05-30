@@ -58,14 +58,13 @@ const createSectionWorker = () =>
   new Worker<SectionJobData>(queueConst.SECTION, sectionJob, {
     connection: redis,
 
-    concurrency: 5,
+    concurrency: 20,
 
     removeOnComplete: {
-      count: 100,
+      age: 0,
     },
-
     removeOnFail: {
-      count: 500,
+      count: 100,
     },
   });
 

@@ -1,25 +1,23 @@
 services:
   client:
-    build: ./client
+    build: ../client
     ports:
       - "80:80"
     depends_on:
       - server
-    restart: unless-stopped
-    mem_limit: 64m
+    restart: always
     networks:
       - public
 
   server:
-    build: ./server
+    build: ../server
     ports:
       - "8080:8080"
     env_file:
-      - ./server/.env
+      - ./.env
     depends_on:
       - redis
-    restart: unless-stopped
-    mem_limit: 256m
+    restart: always
     networks:
       - public
       - private
@@ -28,8 +26,7 @@ services:
     image: redis:alpine
     expose:
       - "6379"
-    restart: unless-stopped
-    mem_limit: 128m
+    restart: always
     volumes:
       - redis_data:/data
     networks:
