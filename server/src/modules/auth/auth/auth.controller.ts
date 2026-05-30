@@ -12,6 +12,7 @@ import ApiError from "#utils/ApiError.js";
 import type { ITokenPayload } from "../../../types/type.js";
 import authRepository from "../auth.repository.js";
 import cacheService from "#services/cache.service.js";
+import { REFRESH_TOKEN_EXPIRES_IN } from "#utils/const.js";
 
 const authKey = (authId: string) => `auth-${authId}`;
 
@@ -36,7 +37,9 @@ const refreshTokenController = asyncHandler(
     const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
       generateTokens(authId, tokenVersion);
 
-    setCookie(res, "refreshToken", newRefreshToken);
+    setCookie(res, "refreshToken", newRefreshToken, {
+      maxAge: REFRESH_TOKEN_EXPIRES_IN,
+    });
 
     await setSession(authId, session.tokenVersion);
 

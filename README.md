@@ -10,250 +10,99 @@
   <img src="https://img.shields.io/badge/LangGraph-AI-black" />
 </p>
 
+> AI-powered notebook application with rich text editing, canvas drawing, authentication, LangGraph workflows, Docker deployment, and AWS hosting.
+
+## 🌐 Live Demo
+
+🔗 http://ec2-65-2-177-67.ap-south-1.compute.amazonaws.com/
+
+## ✨ Features
+
+- 🔐 JWT Authentication & OTP Verification
+- 📝 Rich Text Editor & Notebook Management
+- 🎨 Canvas Drawing
+- 🤖 AI Assistant (LangChain + LangGraph)
+- 🌙 Dark Mode
+- ⚡ Zustand + React Query
+- 📦 Redis Caching & Queues
+- 🐳 Dockerized Deployment
+- ☁️ AWS EC2 Hosting
+- 🔄 GitHub Actions CI/CD
+
+## 📊 Performance
+
+- 👥 100 Concurrent Users
+- ⚡ 278.57 Requests/sec
+- 🕒 354ms Avg Latency
+- 🎯 54ms P50
+- 📉 1131ms P99
+- ✅ 7362 Successful Requests
+- 🛡️ 0 Server Errors
+
 <p align="center">
-  A modern full-stack AI-powered notebook application with rich text editing, canvas drawing, authentication, Docker deployment, AWS hosting, and AI workflow orchestration using LangChain & LangGraph.
+  <img src="./Outputs/Load_test_result.png" width="600">
 </p>
 
----
+## 🏗️ Tech Stack
 
-# 🌐 Live Demo
+**Frontend:** React, Vite, Tailwind CSS, Zustand, React Query, React Quill, React Sketch Canvas
 
-| Platform | Link |
-|---|---|
-| 🚀 Application | http://ec2-65-2-177-67.ap-south-1.compute.amazonaws.com/ |
+**Backend:** Node.js, Express.js, TypeScript, MongoDB, Redis, BullMQ, JWT
 
----
+**AI:** LangChain, LangGraph
 
-# ✨ Features
+**DevOps:** Docker, Nginx, AWS EC2, Docker Hub, GitHub Actions
 
-| 🚀 Feature | 📖 Description |
-|---|---|
-| 🔐 Authentication | Secure JWT-based authentication |
-| 📧 OTP Verification | Email verification & password reset |
-| 📝 Rich Text Editor | Create and manage notebook pages |
-| 🎨 Canvas Drawing | Sketch diagrams and drawings |
-| 🤖 AI Workflow | AI-powered notebook assistant |
-| 🌙 Dark Mode | Light & dark theme support |
-| ⚡ Fast State Management | Zustand + React Query |
-| 📦 Redis Integration | Queue and caching support |
-| 🐳 Dockerized | Full containerized deployment |
-| ☁️ AWS Deployment | Production deployment on EC2 |
-| 🔄 CI/CD | Automated GitHub Actions workflow |
+## 🧠 AI Workflow
 
----
+<p align="center">
+  <img src="./Outputs/LangGraph-flow.png" width="450">
+</p>
 
-# 🏗️ Tech Stack
-
-## 🎨 Frontend
-
-| Technology | Usage |
-|---|---|
-| ⚛️ React | UI Library |
-| ⚡ Vite | Frontend Build Tool |
-| 🎨 Tailwind CSS | Styling |
-| 🧠 Zustand | State Management |
-| 🔄 React Query | Server State |
-| 📝 React Quill | Rich Text Editor |
-| ✏️ React Sketch Canvas | Drawing Canvas |
-
----
-
-## ⚙️ Backend
-
-| Technology | Usage |
-|---|---|
-| 🟢 Node.js | Runtime |
-| 🚀 Express.js | Backend Framework |
-| 🔷 TypeScript | Type Safety |
-| 🍃 MongoDB | Database |
-| 🔴 Redis | Cache & Queues |
-| 📦 BullMQ | Background Jobs |
-| 🔐 JWT | Authentication |
-| 🤖 LangChain | AI Orchestration |
-| 🧠 LangGraph | Stateful AI Workflows |
-
----
-
-# ☁️ AWS Deployment
-
-The application is deployed on:
-
-| Service | Purpose |
-|---|---|
-| ☁️ AWS EC2 | Application Hosting |
-| 🐳 Docker | Containerized Deployment |
-| 🔄 GitHub Actions | Automated CI/CD |
-| 📦 Docker Hub | Container Registry |
-
----
-
-# 🧠 AI Architecture
-
-The AI workflow system is powered using:
-
-- 🤖 LangChain
-- 🧠 LangGraph
-- 🔄 Stateful Workflow Graphs
-- 💬 Message-based Processing
-- 💾 Persistent Checkpointing
-
----
-
-# 📁 Project Structure
-
-```bash
-note-book/
-│
-├── client/
-│
-├── server/
-│
-├── docker-compose.yml
-│
-└── .github/
-    └── workflows/
-```
-
----
-
-# ⚙️ Environment Variables
-
-## 🖥️ Server `.env`
+## ⚙️ Environment
 
 ```env
 PORT=8080
-
-NODE_ENV=production
-
-ORIGIN=http://client
-
 JWT_SECRET_KEY=your_secret
-
 REDIS_HOST=redis
 REDIS_PORT=6379
-
-GROQ_API_KEY=your_groq_api
-
-BREVO_API_KEY=your_brevo_api
-
-MONGODB_URI=your_mongodb_uri
+GROQ_API_KEY=your_key
+BREVO_API_KEY=your_key
+MONGODB_URI=your_uri
 ```
-
----
-
-## 🌐 Client `.env`
 
 ```env
-VITE_BACKEND_URL=http://localhost:8080
+VITE_BACKEND_URL=http://server:8080
 ```
 
----
-
-# 🐳 Docker Setup
+## 🐳 Run with Docker
 
 ```bash
-docker-compose up --build
+docker compose up --build -d
 ```
 
----
+## 📡 API Modules
 
-# 📡 API Routes
+- 🔐 Authentication
+- 📂 Sections
+- 📄 Pages
+- 🎨 Canvas
 
-## 🔐 Authentication
-
-| Method | Route |
-|---|---|
-| POST | `/api/auth/login` |
-| POST | `/api/auth/register` |
-| POST | `/api/auth/logout` |
-| GET | `/api/auth/check` |
-
----
-
-## 📂 Sections
-
-| Method | Route |
-|---|---|
-| POST | `/api/section` |
-| GET | `/api/section/all` |
-| PATCH | `/api/section/:sectionId` |
-| DELETE | `/api/section/:sectionId` |
-
----
-
-## 📄 Pages
-
-| Method | Route |
-|---|---|
-| POST | `/api/page` |
-| GET | `/api/page/:pageId` |
-| PATCH | `/api/page/:pageId` |
-| DELETE | `/api/page/:pageId` |
-
----
-
-## 🎨 Canvas
-
-| Method | Route |
-|---|---|
-| POST | `/api/canvas` |
-| GET | `/api/canvas/:canvasId` |
-| PATCH | `/api/canvas/:canvasId` |
-| DELETE | `/api/canvas/:canvasId` |
-
----
-
-# 🔄 CI/CD Workflow
+## 🔄 CI/CD
 
 ```text
-GitHub Push
-    ↓
-GitHub Actions
-    ↓
-Docker Build
-    ↓
-Docker Hub Push
-    ↓
-AWS EC2 Deploy
+GitHub → Actions → Docker Build → Docker Hub → AWS EC2
 ```
 
----
+## 🔐 Security
 
-# 🔐 Security
+JWT • HTTP-Only Cookies • Password Hashing • Helmet • CORS
 
-| 🛡️ Security Feature | 📖 Description |
-|---|---|
-| 🔑 JWT Authentication | Secure user sessions |
-| 🍪 HTTP Only Cookies | Safer authentication |
-| 🔒 Password Hashing | Secure password storage |
-| 🛡️ Helmet | Security headers protection |
-| 🌐 CORS | API access protection |
+## 👨‍💻 Author
 
----
+- 💻 GitHub: https://github.com/ramavathshivaram
+- 📧 Email: ramavathshiva6300@gmail.com
 
-# 👨‍💻 Author
+## 📄 License
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Shiva%20Ram-Full%20Stack%20Developer-blue?style=for-the-badge" />
-</p>
-
-| Platform | Link |
-|---|---|
-| 💻 GitHub | https://github.com/ramavathshivaram |
-| 📧 Email | ramavathshiva6300@gmail.com |
-
----
-
-# ⭐ Support
-
-If you like this project:
-
-- ⭐ Star the repository
-- 🍴 Fork the project
-- 🧠 Contribute new features
-
----
-
-# 📄 License
-
-MIT License
+MIT License © 2026 Shiva Ram

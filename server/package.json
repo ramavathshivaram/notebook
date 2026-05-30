@@ -7,7 +7,8 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "jest"
+    "test": "jest",
+    "load-test":"node test/load-test.js"
   },
   "imports": {
     "#configs/*": "./dist/configs/*",
@@ -50,6 +51,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/autocannon": "^7.12.7",
     "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
@@ -58,6 +60,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.8.0",
+    "autocannon": "^8.0.0",
     "jest": "^30.2.0",
     "nodemon": "^3.1.10",
     "tsconfig-paths": "^4.2.0",

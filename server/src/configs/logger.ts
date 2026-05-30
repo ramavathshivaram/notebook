@@ -1,3 +1,4 @@
+import env from "#configs/env.js";
 import { createLogger, format, Logger, transports } from "winston";
 
 const { combine, timestamp, printf, colorize, errors, json } = format;
@@ -16,7 +17,7 @@ const logger: Logger = createLogger({
   transports: [
     new transports.Console({
       format: combine(
-        colorize(),
+        env.isProd ? format.uncolorize() : colorize(),
         timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
         logFormat,
       ),

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { type ConnectOptions } from "mongoose";
 import env from "#configs/env.js";
 import logger from "#configs/logger.js";
 
@@ -14,9 +14,9 @@ mongoose.connection.on("error", (error) => {
   logger.error("MongoDB connection error:", error);
 });
 
-const mongoOptions = {
+const mongoOptions: ConnectOptions = {
   minPoolSize: 5,
-  maxPoolSize: 10,
+  maxPoolSize: 20,
 
   maxIdleTimeMS: 30000,
   serverSelectionTimeoutMS: 5000,
@@ -26,20 +26,26 @@ const mongoOptions = {
   retryWrites: true,
 };
 
-const connectDB = async (retries: number = 5, delay: number = 5000): Promise<void> => {
+const connectDB = async (
+  retries: number = 5,
+  delay: number = 2000,
+): Promise<void> => {
   const MONGODB_URI = env.MONGODB_URI;
 
   try {
     await mongoose.connect(MONGODB_URI, mongoOptions);
   } catch (error) {
     if (retries === 0) {
-      logger.error("No retries left. Exiting...");
+      logger.error("MongoDB connection failed. No retries left.");
       process.exit(1);
     }
 
-    logger.warn(`Retrying MongoDB connection in ${delay / 1000}s...`);
+    logger.warn(
+      `Retrying MongoDB connection in ${delay / 1000}s (${retries} retries left)...`,
+    );
 
-    setTimeout(() => connectDB(retries - 1, delay), delay);
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    await connectDB(retries - 1, delay);
   }
 };
 
