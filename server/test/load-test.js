@@ -9,7 +9,11 @@ const credentials = {
 };
 
 async function login() {
-  const { data } = await axios.post(`${BASE_URL}/auth/login`, credentials);
+  const { data } = await axios.post(
+    `${BASE_URL}/auth/login`,
+    credentials,
+  );
+
   return data.token;
 }
 
@@ -17,7 +21,7 @@ async function createSection(token) {
   const { data } = await axios.post(
     `${BASE_URL}/section`,
     {
-      title: `LoadTest-${Date.now()}`,
+      title: `Section-${Date.now()}`,
     },
     {
       headers: {
@@ -43,7 +47,7 @@ async function createPage(token, sectionId) {
     },
   );
 
-  return data.data?._id ?? data.page?._id;
+  return data.page?._id ?? data.data?._id;
 }
 
 async function createCanvas(token, sectionId) {
@@ -60,7 +64,7 @@ async function createCanvas(token, sectionId) {
     },
   );
 
-  return data.data?._id ?? data.canvas?._id;
+  return data.canvas?._id ?? data.data?._id;
 }
 
 async function deletePage(token, pageId) {
@@ -107,28 +111,28 @@ async function setup() {
     sectionId,
     pageId,
     canvasId,
-    resourceId: pageId,
   };
 }
 
-async function cleanup(resources) {
-  await deletePage(resources.token, resources.pageId);
-  await deleteCanvas(resources.token, resources.canvasId);
-  await deleteSection(resources.token, resources.sectionId);
+async function cleanup(resource) {
+  await deletePage(resource.token, resource.pageId);
+  await deleteCanvas(resource.token, resource.canvasId);
+  await deleteSection(resource.token, resource.sectionId);
 }
 
-const resources = await setup();
+const resource = await setup();
 
-console.log(resources);
+console.log("Setup Complete");
+console.table(resource);
 
 const instance = autocannon({
   url: "http://localhost:8080",
 
-  connections: 100,
-  duration: 30,
+  connections: 500,
+  duration: 60,
 
   headers: {
-    Authorization: `Bearer ${resources.token}`,
+    Authorization: `Bearer ${resource.token}`,
   },
 
   requests: [
@@ -144,37 +148,33 @@ const instance = autocannon({
 
     {
       method: "GET",
-      path: `/api/page/${resources.pageId}`,
+      path: `/api/page/${resource.pageId}`,
     },
 
     {
       method: "PATCH",
-      path: `/api/page/${resources.pageId}`,
-
+      path: `/api/page/${resource.pageId}`,
       headers: {
-        Authorization: `Bearer ${resources.token}`,
+        Authorization: `Bearer ${resource.token}`,
         "content-type": "application/json",
       },
-
       body: JSON.stringify({
-        title: "Updated Page",
+        title: `Updated-${Date.now()}`,
       }),
     },
 
     {
       method: "GET",
-      path: `/api/canvas/${resources.canvasId}`,
+      path: `/api/canvas/${resource.canvasId}`,
     },
 
     {
       method: "PATCH",
-      path: `/api/canvas/${resources.canvasId}`,
-
+      path: `/api/canvas/${resource.canvasId}`,
       headers: {
-        Authorization: `Bearer ${resources.token}`,
+        Authorization: `Bearer ${resource.token}`,
         "content-type": "application/json",
       },
-
       body: JSON.stringify({
         data: [],
       }),
@@ -182,21 +182,7 @@ const instance = autocannon({
 
     {
       method: "GET",
-      path: `/api/message/all/${resources.resourceId}?page=1&limit=10`,
-    },
-
-    {
-      method: "POST",
-      path: "/api/ai/ask",
-
-      headers: {
-        Authorization: `Bearer ${resources.token}`,
-        "content-type": "application/json",
-      },
-
-      body: JSON.stringify({
-        message: "Explain Kafka partitions",
-      }),
+      path: `/api/message/all/${resource.pageId}?page=1&limit=20`,
     },
   ],
 });
@@ -204,17 +190,24 @@ const instance = autocannon({
 autocannon.track(instance);
 
 instance.on("done", async (result) => {
+  console.log("\n===== STATUS CODES =====");
+
   console.table(result.statusCodeStats);
 
-  console.log({
-    requestsPerSec: result.requests.average,
-    latency: result.latency.average,
-    throughput: result.throughput.average,
-    errors: result.errors,
-    non2xx: result.non2xx,
+  console.log("\n===== PERFORMANCE =====");
+
+  console.table({
+    "Requests/sec": result.requests.average.toFixed(2),
+    "Latency Avg(ms)": result.latency.average.toFixed(2),
+    "Latency P50(ms)": result.latency.p50.toFixed(2),
+    "Latency P95(ms)": result.latency.p95.toFixed(2),
+    "Latency P99(ms)": result.latency.p99.toFixed(2),
+    "Throughput(bytes/sec)": result.throughput.average.toFixed(2),
+    Errors: result.errors,
+    Non2xx: result.non2xx,
   });
 
-  await cleanup(resources);
+  await cleanup(resource);
 
   process.exit(0);
 });
