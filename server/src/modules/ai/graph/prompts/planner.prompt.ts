@@ -86,3 +86,5 @@ If the request is conversational and requires no document modification:
   "route to chat workflow"
 ]
 `;
+
+export default PLANNER_PROMPT
