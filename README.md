@@ -45,11 +45,11 @@
 
 ## 🏗️ Tech Stack
 
-**Frontend:** React, Vite, Tailwind CSS, Zustand, React Query, React Quill, React Sketch Canvas
+**Frontend:** React, Vite, Tailwind CSS, Zustand, TanStack React Query, React Quill, React Sketch Canvas
 
-**Backend:** Node.js, Express.js, TypeScript, MongoDB, Redis, BullMQ, JWT
+**Backend:** Node.js, Express.js, TypeScript, MongoDB, Redis, BullMQ, JWT Authentication
 
-**AI:** LangChain, LangGraph
+**AI:** LangChain, LangGraph, Groq
 
 **DevOps:** Docker, Nginx, AWS EC2, Docker Hub, GitHub Actions
 
