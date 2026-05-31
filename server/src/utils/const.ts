@@ -12,13 +12,14 @@ export const queueConst: QueueConst = {
   MESSAGE: "MESSAGE",
 };
 
-export const COOKIE_EXPIRES_IN: number = 24 * 60 * 60 * 1000;
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
 
-export const ACCESS_TOKEN_EXPIRES_IN: number = 60 * 60 * 1000;
-export const REFRESH_TOKEN_EXPIRES_IN: number = 7 * 24 * 60 * 60;
-
-export const OTP_EXPIRES_IN: number = 15 * 60 * 1000;
-
-export const SESSION_TTL: number = 24 * 60 * 60 * 1000;
-
-export const DEFAULT_TTL = 60 * 60 * 1000;
+export const OTP_EXPIRES_IN = 15 * MINUTE;
+export const ACCESS_TOKEN_EXPIRES_IN = HOUR;
+export const COOKIE_EXPIRES_IN = DAY;
+export const SESSION_TTL = DAY;
+export const DEFAULT_TTL = HOUR;
+export const REFRESH_TOKEN_EXPIRES_IN = 7 * DAY;
