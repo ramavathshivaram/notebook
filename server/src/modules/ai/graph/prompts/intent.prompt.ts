@@ -80,3 +80,5 @@ Never:
 - Generate content
 - Generate analysis text
 `;
+
+export default INTENT_PROMPT
