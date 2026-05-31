@@ -150,3 +150,5 @@ Validation:
 - Ensure indexes are safe.
 - Ensure no extra text exists outside the JSON object.
 `;
+
+export default PAGE_SYSTEM_PROMPT
