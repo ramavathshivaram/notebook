@@ -55,3 +55,5 @@ Bad:
 Output:
 Return only a JSON array of strings.
 `;
+
+export default SUGGESTIONS_PROMPT
