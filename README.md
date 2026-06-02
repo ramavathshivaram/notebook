@@ -29,15 +29,15 @@
 - ☁️ AWS EC2 Hosting
 - 🔄 GitHub Actions CI/CD
 
-## 📊 Performance
+## 📊 Performance & Scalability
 
-- 👥 100 Concurrent Users
-- ⚡ 278.57 Requests/sec
-- 🕒 354ms Avg Latency
-- 🎯 54ms P50
-- 📉 1131ms P99
-- ✅ 7362 Successful Requests
-- 🛡️ 0 Server Errors
+| Metric                            | Result    |
+| --------------------------------- | --------- |
+| Requests/sec                      | 278.57    |
+| Average Latency                   | 354ms     |
+| P50 Latency                       | 54ms      |
+| P99 Latency                       | 1131ms    |
+| Estimated Active Concurrent Users | ~800–1200 |
 
 <p align="center">
   <img src="./Outputs/Load_test_result.png" width="600">

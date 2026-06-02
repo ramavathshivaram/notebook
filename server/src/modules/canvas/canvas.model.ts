@@ -23,12 +23,15 @@ const canvasSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Section",
       required: true,
+      index: true,
     },
   },
   {
     timestamps: true,
   },
 );
+
+
 
 const Canvas = mongoose.model<ICanvas>("Canvas", canvasSchema);
 
