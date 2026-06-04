@@ -40,7 +40,7 @@
 | Estimated Active Concurrent Users | ~800–1200 |
 
 <p align="center">
-  <img src="./Outputs/Load_test_result.png" width="600">
+  <img src="./outputs/v2/Load_test_result.png" width="600">
 </p>
 
 ## 🏗️ Tech Stack
@@ -56,7 +56,7 @@
 ## 🧠 AI Workflow
 
 <p align="center">
-  <img src="./Outputs/LangGraph-flow.png" width="450">
+  <img src="./outputs/v2/LangGraph-flow.png" width="450">
 </p>
 
 ## ⚙️ Environment
