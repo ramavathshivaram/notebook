@@ -38,7 +38,8 @@ const patchNode = async (state: State, _config: Config) => {
 
   switch (operation) {
     case "replace":
-      updatedHtml = html;
+      updatedHtml =
+        originalHtml.slice(0, startIndex) + html + originalHtml.slice(endIndex);
       break;
 
     case "append":
